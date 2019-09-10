@@ -1,9 +1,3 @@
-# This file is a template, and might need editing before it works on your project.
-# This is the Gradle build system for JVM applications
-# https://gradle.org/
-# https://github.com/gradle/gradle
-image: gradle:alpine
-
 stages:
     - build
     - test
@@ -13,12 +7,13 @@ stages:
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
-before_script:
-  - export GRADLE_USER_HOME=`pwd`/.gradle
-
-build:
+build_project:
   stage: build
-  script: gradle --build-cache assemble
+  image: gradle:alpine
+  script:
+    - echo "Building Project"
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - gradle --build-cache assemble
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
@@ -26,9 +21,13 @@ build:
       - build
       - .gradle
 
-test:
+run_tests:
   stage: test
-  script: gradle check
+  image: gradle:alpine
+  script: 
+    - echo "Running tests"
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - gradle check
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -36,27 +35,27 @@ test:
       - build
       - .gradle
 
-review:
+deploy_staging:
   stage: deploy
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
   script:
+    - echo "Deploying to staging server"
     - web_deploy_script
     - echo $CI_ENVIRONMENT_URL > environment_url.txt
   artifacts:
     paths:
       - environment_url.txt
   only:
-    - branches
-  except:
     - master
 
 browser_performance:
   stage: browser_performance
   image: docker:git
   variables:
-    URL: http://cyio.mlu.li/
+#    URL: http://cyio.mlu.li/
+    URL: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
   services:
     - docker:stable-dind
   script:
