@@ -4,10 +4,12 @@
 # https://github.com/gradle/gradle
 image: gradle:alpine
 
-# Disable the Gradle daemon for Continuous Integration servers as correctness
-# is usually a priority over speed in CI environments. Using a fresh
-# runtime for each build is more reliable since the runtime is completely
-# isolated from any previous builds.
+stages:
+    - build
+    - test
+    - deploy
+    - browser_performance
+
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
@@ -34,11 +36,27 @@ test:
       - build
       - .gradle
 
+review:
+  stage: deploy
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
+  script:
+    - web_deploy_script
+    - echo $CI_ENVIRONMENT_URL > environment_url.txt
+  artifacts:
+    paths:
+      - environment_url.txt
+  only:
+    - branches
+  except:
+    - master
+
 browser_performance:
   stage: browser_performance
   image: docker:git
   variables:
-    URL: https://example.com
+    URL: http://cyio.mlu.li/
   services:
     - docker:stable-dind
   script:
