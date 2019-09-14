@@ -18,13 +18,14 @@ build-maven-project:
   stage: build
   script:
     # - mvn $MAVEN_CLI_OPTS compile
-    - mvn compile
+    - cd backend
+    - mvn --batch-mode --show-version compile
 
 test-springboot:
   stage: test
   script:
     # - mvn $MAVEN_CLI_OPTS test
-    - mvn test
+    - mvn --batch-mode --show-version test
 
 # deploy_server_backend:
 #   stage: deploy
