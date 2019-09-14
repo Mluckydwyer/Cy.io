@@ -9,18 +9,18 @@ variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-cache_repository:
+cache-repository:
   stage: cache
   paths:
     - .m2/repository/
     - target/
 
-build_maven_project:
+build-maven-project:
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile
 
-test_springboot:
+test-springboot:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
