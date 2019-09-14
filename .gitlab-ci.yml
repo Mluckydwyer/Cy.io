@@ -1,71 +1,68 @@
 stages:
-    - test
+    - cache
     - build
-    - deploy
-    - browser_performance
+    - test
+    # - deploy
+    # - browser_performance
 
 variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-build_project:
+cache_repository:
+  stage: cache
+  paths:
+    - .m2/repository/
+    - target/
+
+build_maven_project:
   stage: build
-  image: gradle:alpine
   script:
-    - echo "Building Project"
-    - export GRADLE_USER_HOME=`pwd`/.gradle
-    - gradle --build-cache assemble
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: push
-    paths:
-      - build
-      - .gradle
+    - mvn $MAVEN_CLI_OPTS compile
 
-run_tests:
+test_springboot:
   stage: test
-  image: gradle:alpine
-  script: 
-    - echo "Running tests"
-    - export GRADLE_USER_HOME=`pwd`/.gradle
-    - gradle check
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - build
-      - .gradle
-
-deploy_staging:
-  stage: deploy
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
   script:
-    - echo "Deploying to staging server"
-    - web_deploy_script
-    - echo $CI_ENVIRONMENT_URL > environment_url.txt
-  artifacts:
-    paths:
-      - environment_url.txt
-  only:
-    - master
+    - mvn $MAVEN_CLI_OPTS test
 
-browser_performance:
-  stage: browser_performance
-  image: docker:git
-  variables:
-#    URL: http://cyio.mlu.li/
-    URL: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
-  services:
-    - docker:stable-dind
-  script:
-    - mkdir gitlab-exporter
-    - wget -O ./gitlab-exporter/index.js https://gitlab.com/gitlab-org/gl-performance/raw/master/index.js
-    - mkdir sitespeed-results
-    - docker run --shm-size=1g --rm -v "$(pwd)":/sitespeed.io sitespeedio/sitespeed.io:6.3.1 --plugins.add ./gitlab-exporter --outputFolder sitespeed-results $URL
-    - mv sitespeed-results/data/performance.json performance.json
-  artifacts:
-    paths:
-      - sitespeed-results/
-    reports:
-      performance: performance.json
+# deploy_server_backend:
+#   stage: deploy
+#   script:
+#     - mvn $MAVEN_CLI_OPTS deploy
+#   only:
+#     - master
+
+# deploy_staging:
+#   stage: deploy
+#   environment:
+#     name: review/$CI_COMMIT_REF_SLUG
+#     url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
+#   script:
+#     - echo "Deploying to staging server"
+#     - web_deploy_script
+#     - echo $CI_ENVIRONMENT_URL > environment_url.txt
+#   artifacts:
+#     paths:
+#       - environment_url.txt
+#   only:
+#     - master
+
+# browser_performance:
+#   stage: browser_performance
+#   image: docker:git
+#   variables:
+# #    URL: http://cyio.mlu.li/
+#     URL: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
+#   services:
+#     - docker:stable-dind
+#   script:
+#     - mkdir gitlab-exporter
+#     - wget -O ./gitlab-exporter/index.js https://gitlab.com/gitlab-org/gl-performance/raw/master/index.js
+#     - mkdir sitespeed-results
+#     - docker run --shm-size=1g --rm -v "$(pwd)":/sitespeed.io sitespeedio/sitespeed.io:6.3.1 --plugins.add ./gitlab-exporter --outputFolder sitespeed-results $URL
+#     - mv sitespeed-results/data/performance.json performance.json
+#   artifacts:
+#     paths:
+#       - sitespeed-results/
+#     reports:
+#       performance: performance.json
