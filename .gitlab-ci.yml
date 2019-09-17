@@ -2,7 +2,7 @@ image: maven:latest
 
 stages:
     - cache
-    - web-deploy
+    # - web-deploy
     - build
     - test
 
@@ -15,13 +15,13 @@ cache:
     - .m2/repository/
     - target/
 
-deploy-frontend-site:
-  stage: web-deploy
-  script:
-    - rm -rf /var/www/html/
-    - pwd
-    - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-#    - cp -rf frontend/ /var/www/html/
+# deploy-frontend-site:
+#   stage: web-deploy
+#   script:
+#     - rm -rf /var/www/html/
+#     - pwd
+#     - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+# #    - cp -rf frontend/ /var/www/html/
 
 build-maven-project:
   stage: build
