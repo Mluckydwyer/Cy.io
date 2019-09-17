@@ -18,7 +18,8 @@ cache:
 deploy-frontend-site:
   stage: web-deploy
   script:
-    - cp frontend/ /var/www/html/
+    - rm -rf /var/www/html/
+    - cp -rf frontend/ /var/www/html/
 
 build-maven-project:
   stage: build
