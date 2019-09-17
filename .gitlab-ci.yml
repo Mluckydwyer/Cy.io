@@ -20,7 +20,7 @@ deploy-frontend-site:
   script:
     - rm -rf /var/www/html/
     - pwd
-    - docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+    - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
 #    - cp -rf frontend/ /var/www/html/
 
 build-maven-project:
