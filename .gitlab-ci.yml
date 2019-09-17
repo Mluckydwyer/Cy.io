@@ -2,6 +2,7 @@ image: maven:latest
 
 stages:
     - cache
+    - web-deploy
     - build
     - test
 
@@ -13,6 +14,11 @@ cache:
   paths:
     - .m2/repository/
     - target/
+
+deploy-frontend-site:
+  stage: web-deploy
+  script:
+    - cp /frontend/ /var/www/html/
 
 build-maven-project:
   stage: build
