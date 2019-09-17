@@ -19,7 +19,9 @@ deploy-frontend-site:
   stage: web-deploy
   script:
     - rm -rf /var/www/html/
-    - cp -rf frontend/ /var/www/html/
+    - pwd
+    - docker cp gitlab-runner:/frontend /var/www/html/
+#    - cp -rf frontend/ /var/www/html/
 
 build-maven-project:
   stage: build
