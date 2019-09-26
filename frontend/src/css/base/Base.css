@@ -1,0 +1,91 @@
+/*
+  Colors:
+    https://coolors.co/f06449-4e6766-5ab1bb-a5c882-ede6e3
+    https://coolors.co/20bf55-0b4f6c-01baef-fbfbff-757575 ** This one
+*/
+
+/*----- Muted Text Bootstrap Override-----*/
+.text-muted {
+    color: #757575 !important;
+}
+
+/*----- Button Bootstrap Override-----*/
+.btn {
+    transition: box-shadow .15s ease;
+}
+
+.btn:hover {
+    color: #FFF6F2 !important;
+}
+
+.raised-btn {
+    box-shadow: 0 1px 2px #757575;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 1;
+    margin: 0 .5em 0 0;
+    padding: 1em;
+    transition: box-shadow .15s ease;
+}
+
+.raised-btn:hover {
+    box-shadow: 0 3px 10px #777777;
+}
+
+/*----- Primary & Secondary (Green & Red) Buttons Highlight Bootstrap Override -----*/
+.btn-prim-cyio {
+    background-color: #01BAEF !important;
+    color: #FBFBFF;
+}
+
+.btn-sec-cyio {
+    background-color: #757575 !important;
+    transform: rotate(180deg);
+}
+
+.main-content {
+    background-color: #20BF55 !important;
+    color: #FBFBFF;
+}
+
+.games-list-cyio {
+    background-color: #757575 !important;
+}
+
+.card-cyio {
+    background-color: #0B4F6C;
+    color: #FBFBFF;
+}
+
+.btn-outline-primary-cyio {
+    color: #FBFBFF;
+    background-color: #20BF55;
+    border-color: #20BF55;
+}
+
+.btn-outline-primary-cyio:hover {
+    color: #20BF55;
+    background-color: #757575;
+    border-color: #20BF55;
+}
+
+.btn-outline-secondary-cyio {
+    color: #FBFBFF;
+    background-color: #01BAEF;
+    border-color: #01BAEF;
+}
+
+.btn-outline-secondary-cyio:hover {
+    color: #01BAEF;
+    background-color: #757575;
+    border-color: #01BAEF;
+}
+
+/*----- General -----*/
+a {
+    color: #01BAEF;
+}
+
+a:hover {
+    color: #20BF55;
+}
