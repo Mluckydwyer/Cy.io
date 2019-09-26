@@ -2,13 +2,15 @@ image: maven:latest
 
 stages:
     - cache
-    # - web-deploy
-    - build
     - test
+    - build
+    - deploy
+# - web-deploy
 
-# variables:
-#   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-#   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+variables:
+    MAVEN_CLI_OPTS: "--batch-mode --show-version"
+    SPRING_PROFILES_ACTIVE: gitlab-ci
 
 cache:
   paths:
@@ -25,16 +27,18 @@ cache:
 
 build-maven-project:
   stage: build
+  parallel: 3
+  retry: 2
   script:
-    # - mvn $MAVEN_CLI_OPTS compile
     - cd backend
-    - mvn --batch-mode --show-version compile
+    - mvn $MAVEN_CLI_OPTS compile
 
 test-springboot:
   stage: test
+  parallel: 3
+  allow_failure: true
   script:
-    # - mvn $MAVEN_CLI_OPTS test
-    - mvn --batch-mode --show-version test
+    - mvn $MAVEN_CLI_OPTS test
 
 # deploy_server_backend:
 #   stage: deploy
@@ -43,20 +47,41 @@ test-springboot:
 #   only:
 #     - master
 
-# deploy_staging:
-#   stage: deploy
-#   environment:
-#     name: review/$CI_COMMIT_REF_SLUG
-#     url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
-#   script:
-#     - echo "Deploying to staging server"
-#     - web_deploy_script
-#     - echo $CI_ENVIRONMENT_URL > environment_url.txt
-#   artifacts:
-#     paths:
-#       - environment_url.txt
-#   only:
-#     - master
+deploy_prod:
+  stage: deploy
+  when: manual
+  retry: 2
+  environment:
+    name: prod/$CI_COMMIT_REF_SLUG
+    # url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
+  script:
+    - echo "Deploying to prod server"
+    - mvn $MAVEN_CLI_OPTS clean package
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - master
+
+deploy_review:
+  stage: deploy
+  retry: 2
+  script:
+    - echo "Deploy a review app"
+    - ls
+    - ls /target
+    # - java -jar target/*.jar
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    # url: https://$CI_ENVIRONMENT_SLUG.example.com
+  artifacts:
+    paths:
+        - target/*.jar
+  only:
+    - branches
+  except:
+    - master
+
 
 # browser_performance:
 #   stage: browser_performance
