@@ -11,7 +11,8 @@ Use Cyio;
 
 # Create the table to store the listing of all games
 Create Table Games (
-	title varchar(50),
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    title varchar(50),
     blurb varchar(400),
     about text,
 	gameID varchar(50),
@@ -21,7 +22,8 @@ Create Table Games (
 
 # Create thubnail registry table
 Create Table Thumbnails (
-	thumbnailID varchar(50),
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    thumbnailID varchar(50),
     uri varchar(500),
     altText varchar(500)
 );
