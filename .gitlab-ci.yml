@@ -56,6 +56,7 @@ deploy_prod:
     # url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
   script:
     - echo "Deploying to prod server"
+    - cd backend
     - mvn $MAVEN_CLI_OPTS clean package
   artifacts:
     paths:
