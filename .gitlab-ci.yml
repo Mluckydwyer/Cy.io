@@ -2,14 +2,15 @@ image: maven:latest
 
 stages:
     - cache
-    # - web-deploy
     - test
     - build
     - deploy
+# - web-deploy
 
-# variables:
-#   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-#   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+variables:
+    MAVEN_CLI_OPTS: "--batch-mode --show-version"
+    SPRING_PROFILES_ACTIVE: gitlab-ci
 
 cache:
   paths:
@@ -29,17 +30,15 @@ build-maven-project:
   parallel: 3
   retry: 2
   script:
-    # - mvn $MAVEN_CLI_OPTS compile
     - cd backend
-    - mvn --batch-mode --show-version compile
+    - mvn $MAVEN_CLI_OPTS compile
 
 test-springboot:
   stage: test
   parallel: 3
   allow_failure: true
   script:
-    # - mvn $MAVEN_CLI_OPTS test
-    - mvn --batch-mode --show-version test
+    - mvn $MAVEN_CLI_OPTS test
 
 # deploy_server_backend:
 #   stage: deploy
@@ -57,9 +56,11 @@ deploy_prod:
     # url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
   script:
     - echo "Deploying to prod server"
+    - cd backend
+    - mvn $MAVEN_CLI_OPTS clean package
   artifacts:
     paths:
-      - environment_url.txt
+      - target/*.jar
   only:
     - master
 
@@ -68,9 +69,15 @@ deploy_review:
   retry: 2
   script:
     - echo "Deploy a review app"
+    - ls
+    - ls /target
+    # - java -jar target/*.jar
   environment:
     name: review/$CI_COMMIT_REF_NAME
     # url: https://$CI_ENVIRONMENT_SLUG.example.com
+  artifacts:
+    paths:
+        - target/*.jar
   only:
     - branches
   except:
