@@ -1,5 +1,7 @@
 package com.cyio.backend;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,5 +18,16 @@ public class GameController {
 		return new Game(counter.incrementAndGet(),
 					String.format(template,title));
 	}
+
+	@RequestMapping("/gamelist")
+	public List<Game> gameList(@RequestParam(value="searchtitle", defaultValue = "*") String title){
+		Game g1 = new Game(counter.incrementAndGet(), String.format(template,title));
+		Game g2 = new Game(counter.incrementAndGet(), "Space Invader");
+		List<Game> ret = new ArrayList<Game>();
+		ret.add(g1);
+		ret.add(g2);
+		return ret;
+	}
+
 
 }
