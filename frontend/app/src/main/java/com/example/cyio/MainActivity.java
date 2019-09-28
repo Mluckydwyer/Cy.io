@@ -3,9 +3,11 @@ package com.example.cyio;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.android.volley.Request;
@@ -17,10 +19,12 @@ import com.example.cyio.app.AppController;
 
 import org.json.JSONObject;
 
+import static android.widget.TextView.BufferType.EDITABLE;
+
 public class MainActivity extends AppCompatActivity
 {
     Button gamelist, leaderboard;
-
+    EditText tex;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         gamelist = (Button) findViewById(R.id.gamelist);
         leaderboard = (Button) findViewById(R.id.leaderboard);
+        tex = (EditText) findViewById(R.id.editText);
 
 
         gamelist.setOnClickListener(new View.OnClickListener()
@@ -35,9 +40,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Log.d("myTag","before code runs");
                 respond();
-                Log.d("myTag", "after code runs");
+
             }
         });
 
@@ -62,7 +66,10 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(JSONObject response)
                     {
-                        Log.d(TAG, response.toString());
+                        String res = response.toString();
+                        CharSequence ch = res;
+                        Log.d(TAG, res);
+                        tex.setText(ch, EDITABLE);
                     }
                 },new Response.ErrorListener()
                 {
