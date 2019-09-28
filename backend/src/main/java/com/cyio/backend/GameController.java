@@ -13,12 +13,14 @@ public class GameController {
 	private static final String template = "Title: %s";
 	private final AtomicLong counter = new AtomicLong();
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/restexample")
 	public Game game(@RequestParam(value = "title", defaultValue = "cy.io") String title){
 		return new Game(counter.incrementAndGet(),
 					String.format(template,title));
 	}
 
+    @CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/gamelist")
 	public List<Game> gameList(@RequestParam(value="searchtitle", defaultValue = "*") String title){
 		Game g1 = new Game(counter.incrementAndGet(), String.format(template,title));
