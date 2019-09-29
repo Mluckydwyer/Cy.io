@@ -58,6 +58,7 @@ deploy_prod:
     - echo "Deploying to prod server"
     - cd backend
     - mvn $MAVEN_CLI_OPTS clean package
+    - ls target/
   artifacts:
     paths:
       - target/*.jar
