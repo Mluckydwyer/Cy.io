@@ -1,0 +1,13 @@
+[Unit]
+Description=Cy.io Spring Boot Server Service
+After=mysqld.service
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=dwyer
+ExecStart=/usr/bin/env java -jar /path/to/server.php
+
+[Install]
+WantedBy=multi-user.target

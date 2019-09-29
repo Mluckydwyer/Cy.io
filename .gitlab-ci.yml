@@ -60,9 +60,8 @@ deploy_prod:
     - mvn $MAVEN_CLI_OPTS clean package
     - ls target/
     - mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
-    - echo ${project.version}
-    - VERSION=$(mvn --non-recursive help:evaluate -Dexpression=project.version | grep -v '\[.*')
-    - echo $VERSION
+    # - systemctl start Cyio-SB
+    # - systemctl enable Cyio-SB
 
   artifacts:
     paths:
