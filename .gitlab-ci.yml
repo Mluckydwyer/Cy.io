@@ -59,9 +59,14 @@ deploy_prod:
     - cd backend
     - mvn $MAVEN_CLI_OPTS clean package
     - ls target/
+    - mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
+    - echo ${project.version}
+    - VERSION=$(mvn --non-recursive help:evaluate -Dexpression=project.version | grep -v '\[.*')
+    - echo $VERSION
+
   artifacts:
     paths:
-      - target/*.jar
+      - target/backend-$VERSION.jar
   only:
     - master
 
@@ -70,7 +75,8 @@ deploy_review:
   retry: 2
   script:
     - echo "Deploy a review app"
-    - ls
+    - cd backend
+    - mvn $MAVEN_CLI_OPTS clean package
     - ls /target
     # - java -jar target/*.jar
   environment:
