@@ -11,6 +11,8 @@ stages:
 variables:
     MAVEN_CLI_OPTS: "--batch-mode --show-version"
     SPRING_PROFILES_ACTIVE: gitlab-ci
+    OUTPUT_JAR_PROD: "backend-prod"
+    OUTPUT_JAR_DEV: "backend-dev-build"
 
 cache:
   paths:
@@ -57,9 +59,10 @@ deploy_prod:
   script:
     - echo "Deploying to prod server"
     - cd backend
-    - mvn $MAVEN_CLI_OPTS clean package
+    - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_PROD clean package
     - ls target/
-    - mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
+    - echo ${project.version}
+    # - mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
     # - systemctl start Cyio-SB
     # - systemctl enable Cyio-SB
 
@@ -73,11 +76,11 @@ deploy_review:
   stage: deploy
   retry: 2
   script:
-    - echo "Deploy a review app"
+    - echo "Deploy development backend"
     - cd backend
-    - mvn $MAVEN_CLI_OPTS clean package
+    - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_DEV clean package
     - ls /target
-    # - java -jar target/*.jar
+    - echo ${project.version}
   environment:
     name: review/$CI_COMMIT_REF_NAME
     # url: https://$CI_ENVIRONMENT_SLUG.example.com
