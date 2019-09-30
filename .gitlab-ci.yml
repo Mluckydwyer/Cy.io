@@ -79,7 +79,7 @@ deploy_review:
     - echo "Deploy development backend"
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_DEV clean package
-    - ls /target
+    - ls target/
     - echo ${project.version}
   environment:
     name: review/$CI_COMMIT_REF_NAME
