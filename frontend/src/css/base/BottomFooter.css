@@ -1,0 +1,16 @@
+footer {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+footer p {
+    margin-bottom: .25rem;
+}
+
+.footer-cyio {
+    background-color: #0B4F6C !important;
+    color: #FBFBFF;
+    border-style: dashed;
+    border-width: 4px 0 0 0;
+    border-color: #01BAEF;
+}
