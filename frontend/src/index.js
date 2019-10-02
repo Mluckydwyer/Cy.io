@@ -21,18 +21,7 @@ ReactDOM.render(
     , document.getElementById('root'));
 
 
-let gamesReq = new XMLHttpRequest();
-gamesReq.onreadystatechange = function() {
-    if (gamesReq.readyState === 4 && gamesReq.status === 200) { // On sucessful response
-        console.log(gamesReq.responseText);
-        let parsed = JSON.parse(gamesReq.responseText);
 
-    } else if (gamesReq.status >= 400){ // Handle errors
-        console.log("An error occurred when contacting Cy.io APIs");
-    }
-};
-gamesReq.open("GET", "http://localhost:8080/gamelist");
-gamesReq.send();
 
 // ReactDOM.render(
 //
