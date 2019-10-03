@@ -3,8 +3,8 @@ import '../../css/home/GameCardList.css';
 import GameCard from "./GameCard";
 
 class GameCardList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             cards: [],
             isLoading: false,
@@ -28,13 +28,19 @@ class GameCardList extends Component {
                 this.setState({ cards:data, isLoading : false })
             })
             .catch(error => this.setState({error, isLoading : false}));
+        
     }
     
     render() {
-        const {cards, isLoading} = this.state;
         
         console.log(this.state);
-        return <GameCard/>;
+        console.log(this.state.cards[0]);
+        const cards = this.state.cards.map((card)=>
+            <GameCard key = {card.gameID}
+                      value = {card}/>
+        );
+        console.log(cards);
+        return cards;
     }
 }
 
