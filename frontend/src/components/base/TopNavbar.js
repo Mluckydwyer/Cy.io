@@ -7,7 +7,7 @@ function TopNavbar() {
             <div className="collapse bg-dark nav-cyio" id="navbarHeader">
                 <div className="container">
                     <div className="row">
-                        This will show ehn the hamburger icon is pressed!
+                        This will show when the hamburger icon is pressed!
                     </div>
                 </div>
             </div>
