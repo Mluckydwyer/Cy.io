@@ -7,22 +7,34 @@ class GameCardList extends Component {
         super();
         this.state = {
             cards: [],
+            isLoading: false,
+            error: null,
         };
     }
     
     componentDidMount() {
-        const API = 'http://localhost:8080/gamelist';
+        const API = 'http://coms-309-nv-4.misc.iastate.edu:8080/gamelist';
+        this.setState({isLoading : true});
         fetch(API)
-            .then(results => {
-                return results.json();
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                else {
+                    throw new Error('Something went wrong...');
+                }
             })
-            .then(data => this.setState({ cards: data.cards}));
+            .then(data => {
+                this.setState({ cards:data, isLoading : false })
+            })
+            .catch(error => this.setState({error, isLoading : false}));
     }
     
     render() {
-        const {cards} = this.state;
-        console.log(cards);
-        return GameCard();
+        const {cards, isLoading} = this.state;
+        
+        console.log(this.state);
+        return <GameCard/>;
     }
 }
 
@@ -33,7 +45,7 @@ export default GameCardList;
 /*
 let gamesReq = new XMLHttpRequest();
 gamesReq.onreadystatechange = function() {
-    if (gamesReq.readyState === 4 && gamesReq.status === 200) { // On sucessful response
+    if (gamesReq.readyState === 4 && gamesReq.status === 200) { // On successful response
         console.log(gamesReq.responseText);
         let parsed = JSON.parse(gamesReq.responseText);
         
