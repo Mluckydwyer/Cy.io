@@ -19,7 +19,9 @@ ReactDOM.render(
         <BottomFooter/>
     </div>
     , document.getElementById('root'));
-// ReactDOM.render(<ScrollingBanner />, document.getElementById('root'));
-// ReactDOM.render(<GameCardList />, document.getElementById('root'));
-// ReactDOM.render(<BottomFooter />, document.getElementById('root'));
+
+
+// ReactDOM.render(
+//
+// , document.getElementById('card-root'));
 
