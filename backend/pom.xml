@@ -6,10 +6,10 @@
 	
 	<groupId>com.cyio</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>backend</name>
-	<description>Cyio backend</description>
-
+	<description>Cyio Backend</description>
+	<packaging>jar</packaging>
 
 <parent>
 		<groupId>org.springframework.boot</groupId>
@@ -66,11 +66,24 @@
 	</dependencies>
 
 	<build>
-		<finalName>${project.build.finalName}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<finalName>${project.build.finalName}</finalName>
+							<classifier>spring-boot</classifier>
+							<mainClass>
+								org.baeldung.executable.ExecutableMavenJar
+							</mainClass>
+						</configuration>
+					</execution>
+				</executions>
             </plugin>
         </plugins>
     </build>
