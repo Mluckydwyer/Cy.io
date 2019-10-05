@@ -9,10 +9,10 @@ stages:
 
 
 variables:
-    MAVEN_CLI_OPTS: "--batch-mode --show-version"
+    MAVEN_CLI_OPTS: "--batch-mode"
     SPRING_PROFILES_ACTIVE: gitlab-ci
-    OUTPUT_JAR_PROD: "backend-prod"
-    OUTPUT_JAR_DEV: "backend-dev-build"
+    OUTPUT_JAR_PROD: "cyio-backend-prod"
+    OUTPUT_JAR_DEV: "cyio-backend-dev"
 
 cache:
   paths:
@@ -27,88 +27,60 @@ cache:
 #     - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
 # #    - cp -rf frontend/ /var/www/html/
 
-build-maven-project:
+Build Maven Backend:
   stage: build
   parallel: 3
-  retry: 2
   script:
     - cd backend
     - mvn $MAVEN_CLI_OPTS compile
 
-test-springboot:
+Test Springboot:
   stage: test
   parallel: 3
   allow_failure: true
   script:
     - mvn $MAVEN_CLI_OPTS test
 
-# deploy_server_backend:
-#   stage: deploy
-#   script:
-#     - mvn $MAVEN_CLI_OPTS deploy
-#   only:
-#     - master
-
-deploy_prod:
+Deploy to Prod Environment:
   stage: deploy
-  when: manual
   retry: 2
   environment:
     name: prod/$CI_COMMIT_REF_SLUG
     # url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
   script:
-    - echo "Deploying to prod server"
+    - echo "Deploying Production Backend Server"
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_PROD clean package
     - ls target/
-    - echo ${project.version}
-    # - mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
-    # - systemctl start Cyio-SB
-    # - systemctl enable Cyio-SB
+    - systemctl stop cyio-prod
+    - cp target/$OUTPUT_JAR_PROD.jar /home/server-files/prod/
+    - systemctl stop cyio-prod
+    - systemctl enable cyio-prod
 
   artifacts:
     paths:
-      - target/backend-$VERSION.jar
+      - target/$OUTPUT_JAR_PROD.jar
   only:
     - master
 
-deploy_review:
+Deploy to Dev Environment:
   stage: deploy
   retry: 2
   script:
-    - echo "Deploy development backend"
+    - echo "Deploying Development Backend Server"
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_DEV clean package
     - ls target/
-    - echo ${project.version}
+    - systemctl stop cyio-dev
+    - cp target/$OUTPUT_JAR_DEV.jar /home/server-files/dev/
+    - systemctl stop cyio-dev
+    - systemctl enable cyio-dev
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    # url: https://$CI_ENVIRONMENT_SLUG.example.com
   artifacts:
     paths:
-        - target/*.jar
+        - target/$OUTPUT_JAR_DEV.jar
   only:
     - branches
   except:
     - master
-
-
-# browser_performance:
-#   stage: browser_performance
-#   image: docker:git
-#   variables:
-# #    URL: http://cyio.mlu.li/
-#     URL: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
-#   services:
-#     - docker:stable-dind
-#   script:
-#     - mkdir gitlab-exporter
-#     - wget -O ./gitlab-exporter/index.js https://gitlab.com/gitlab-org/gl-performance/raw/master/index.js
-#     - mkdir sitespeed-results
-#     - docker run --shm-size=1g --rm -v "$(pwd)":/sitespeed.io sitespeedio/sitespeed.io:6.3.1 --plugins.add ./gitlab-exporter --outputFolder sitespeed-results $URL
-#     - mv sitespeed-results/data/performance.json performance.json
-#   artifacts:
-#     paths:
-#       - sitespeed-results/
-#     reports:
-#       performance: performance.json
