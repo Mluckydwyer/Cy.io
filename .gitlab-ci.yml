@@ -39,6 +39,7 @@ Test Springboot:
   parallel: 3
   allow_failure: true
   script:
+    - cd backend
     - mvn $MAVEN_CLI_OPTS test
 
 Deploy to Prod Environment:
