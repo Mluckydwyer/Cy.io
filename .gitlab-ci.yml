@@ -29,14 +29,12 @@ cache:
 
 Build Maven Backend:
   stage: build
-  parallel: 3
   script:
     - cd backend
     - mvn $MAVEN_CLI_OPTS compile
 
 Test Springboot:
   stage: test
-  parallel: 3
   allow_failure: true
   script:
     - cd backend
