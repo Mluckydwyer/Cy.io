@@ -1,0 +1,104 @@
+/*
+https://coolors.co/f06449-4e6766-5ab1bb-a5c882-ede6e3
+*/
+
+
+.jumbotron {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    margin-bottom: 0;
+    background-color: #fff;
+}
+@media (min-width: 768px) {
+    .jumbotron {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+}
+
+.jumbotron p:last-child {
+    margin-bottom: 0;
+}
+
+.jumbotron-heading {
+    font-weight: 300;
+}
+
+.jumbotron .container {
+    max-width: 40rem;
+}
+
+.nav-cyio {
+    background-color: #5AB1BB !important;
+    color: #EDE6E3;
+}
+
+.nav-arrow-cyio {
+    border: 0;
+}
+
+.footer-cyio {
+    background-color: #4E6766 !important;
+    color: #EDE6E3;
+    border-style: dashed;
+    border-width: 4px 0 0 0;
+    border-color: #F06449;
+}
+
+.btn-prim-cyio {
+    background-color: #F06449 !important;
+    border-color: #F06449 !important;
+    color: #EDE6E3;
+}
+
+.btn-sec-cyio {
+    background-color: #4E6766 !important;
+    transform: rotate(180deg);
+}
+
+.main-content {
+    background-color: #A5C882 !important;
+    color: #EDE6E3;
+}
+
+.games-list-cyio {
+    background-color: #4E6766 !important;
+}
+
+.card-cyio {
+    background-color: #5AB1BB;
+    color: #EDE6E3;
+}
+
+.btn-outline-primary-cyio {
+    color: #EDE6E3;
+    background-color: #A5C882;
+    border-color: #A5C882;
+}
+
+.btn-outline-primary-cyio:hover {
+    color: #A5C882;
+    background-color: #4E6766;
+    border-color: #A5C882;
+}
+
+.btn-outline-secondary-cyio {
+    color: #EDE6E3;
+    background-color: #F06449;
+    border-color: #F06449;
+}
+
+.btn-outline-secondary-cyio:hover {
+    color: #F06449;
+    background-color: #4E6766;
+    border-color: #F06449;
+}
+
+footer {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+footer p {
+    margin-bottom: .25rem;
+}
