@@ -66,6 +66,7 @@
 	</dependencies>
 
 	<build>
+<!--		<finalName>cyio-backend</finalName>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -73,5 +74,21 @@
             </plugin>
         </plugins>
     </build>
+
+<!--	<profiles>-->
+<!--		<profile>-->
+<!--			<id>dev</id>-->
+<!--			<properties>-->
+<!--				<activeByDefault>true</activeByDefault>-->
+<!--				<name>dev-build</name>-->
+<!--			</properties>-->
+<!--		</profile>-->
+<!--		<profile>-->
+<!--			<id>prod</id>-->
+<!--			<properties>-->
+<!--				<name>prod-build</name>-->
+<!--			</properties>-->
+<!--		</profile>-->
+<!--	</profiles>-->
 
 </project>
