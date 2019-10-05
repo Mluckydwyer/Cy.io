@@ -64,6 +64,7 @@ Deploy to Prod Environment:
 
 Deploy to Dev Environment:
   stage: deploy
+  when: manual
   retry: 2
   script:
     - echo "Deploying Development Backend Server"
