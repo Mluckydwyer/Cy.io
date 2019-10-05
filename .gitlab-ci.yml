@@ -49,11 +49,12 @@ Deploy to Prod Environment:
     - echo "Deploying Production Backend Server"
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_PROD clean package
+    - echo $OUTPUT_JAR_PROD
     - ls target/
-    - systemctl stop cyio-prod
-    - cp target/$OUTPUT_JAR_PROD.jar /home/server-files/prod/
-    - systemctl stop cyio-prod
-    - systemctl enable cyio-prod
+    - sudo systemctl stop cyio-prod
+    - sudo cp target/$OUTPUT_JAR_PROD.jar /home/server-files/prod/
+    - sudo systemctl stop cyio-prod
+    - sudo systemctl enable cyio-prod
 
   artifacts:
     paths:
@@ -69,11 +70,12 @@ Deploy to Dev Environment:
     - echo "Deploying Development Backend Server"
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_DEV clean package
+    - echo $OUTPUT_JAR_DEV
     - ls target/
-    - systemctl stop cyio-dev
-    - cp target/$OUTPUT_JAR_DEV.jar /home/server-files/dev/
-    - systemctl stop cyio-dev
-    - systemctl enable cyio-dev
+    - sudo systemctl stop cyio-dev
+    - sudo cp target/$OUTPUT_JAR_DEV.jar /home/server-files/dev/
+    - sudo systemctl stop cyio-dev
+    - sudo systemctl enable cyio-dev
   environment:
     name: review/$CI_COMMIT_REF_NAME
   artifacts:
