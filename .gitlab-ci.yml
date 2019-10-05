@@ -46,7 +46,6 @@ Deploy to Prod Environment:
   retry: 2
   environment:
     name: prod/$CI_COMMIT_REF_SLUG
-    # url: http://$CI_COMMIT_REF_SLUG.$APPS_DOMAIN
   script:
     - echo "Deploying Production Backend Server"
     - cd backend
