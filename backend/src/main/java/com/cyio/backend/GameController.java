@@ -6,10 +6,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 public class GameController {
@@ -37,5 +35,11 @@ public class GameController {
 		//return ret;
 	}
 
-
+	@PostMapping("/addgame")
+	public @ResponseBody String addNewUser(@RequestParam String title, @RequestParam String creatorid){ //adds a new row in the games table
+		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
+		Game game = new Game(title,newID.toString(),creatorid);
+		gameRepository.save(game); //Insert new game to the database
+		return "Game \""+ title +"\" Added";
+	}
 }
