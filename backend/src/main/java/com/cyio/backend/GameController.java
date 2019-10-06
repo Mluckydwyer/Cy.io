@@ -20,8 +20,8 @@ public class GameController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/restexample")
 	public Game game(@RequestParam(value = "title", defaultValue = "cy.io") String title){
-		return null;
-        // return new Game(title, UUID.randomUUID(), UUID.randomUUID());
+		return new Game("Tommy.io", "3fe2ff3a", "Tommy, the best comedian in succ");
+
 	}
 
     @CrossOrigin(origins = "http://localhost:3000")
