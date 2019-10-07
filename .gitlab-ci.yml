@@ -6,6 +6,8 @@ stages:
     - build
     - deploy
 # - web-deploy
+# - android-test
+# - android-build
 
 
 variables:
@@ -19,7 +21,15 @@ cache:
     - .m2/repository/
     - target/
 
-# deploy-frontend-site:
+# Deploy Site to Prod Environment:
+#   stage: web-deploy
+#   script:
+#     - rm -rf /var/www/html/
+#     - pwd
+#     - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+# #    - cp -rf frontend/ /var/www/html/
+
+# Deploy Site to Dev Environment:
 #   stage: web-deploy
 #   script:
 #     - rm -rf /var/www/html/
@@ -48,17 +58,14 @@ Deploy to Prod Environment:
   script:
     - echo "Deploying Production Backend Server"
     - cd backend
-    - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_PROD clean package
-    - echo $OUTPUT_JAR_PROD
-    - ls target/
+    - mvn $MAVEN_CLI_OPTS clean package
     - sudo systemctl stop cyio-prod
-    - sudo cp target/$OUTPUT_JAR_PROD.jar /home/server-files/prod/
-    - sudo systemctl stop cyio-prod
-    - sudo systemctl enable cyio-prod
+    - sudo mv target/*.jar /home/server-files/prod/$OUTPUT_JAR_PROD.jar
+    - sudo systemctl start cyio-prod
 
   artifacts:
     paths:
-      - target/$OUTPUT_JAR_PROD.jar
+      - backend/target/*.jar
   only:
     - master
 
@@ -70,17 +77,14 @@ Deploy to Dev Environment:
     - echo "Deploying Development Backend Server"
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_DEV clean package
-    - echo $OUTPUT_JAR_DEV
-    - ls target/
     - sudo systemctl stop cyio-dev
-    - sudo cp target/$OUTPUT_JAR_DEV.jar /home/server-files/dev/
-    - sudo systemctl stop cyio-dev
-    - sudo systemctl enable cyio-dev
+    - sudo mv target/*.jar /home/server-files/dev/$OUTPUT_JAR_DEV.jar
+    - sudo systemctl start cyio-dev
   environment:
     name: review/$CI_COMMIT_REF_NAME
   artifacts:
     paths:
-        - target/$OUTPUT_JAR_DEV.jar
+      - backend/target/*.jar
   only:
     - branches
   except:
