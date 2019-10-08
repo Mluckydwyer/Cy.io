@@ -82,7 +82,7 @@ Test Springboot:
     - master
 
 # Deploy Springboot Backend to Production Environment
-Deploy to Prod Environment:
+Deploy Springboot to Prod Environment:
   stage: deploy
   retry: 2
   environment:
@@ -102,7 +102,7 @@ Deploy to Prod Environment:
     - master
 
 # Deploy Springboot Backend to Development Environment
-Deploy to Dev Environment:
+Deploy SpringBoot to Dev Environment:
   stage: deploy
   when: manual
   retry: 2
