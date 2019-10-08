@@ -5,7 +5,7 @@ stages:
     - test
     - build
     - deploy
-# - web-deploy
+    - web-deploy
 # - android-test
 # - android-build
 
@@ -19,37 +19,67 @@ variables:
 cache:
   paths:
     - .m2/repository/
-    - target/
+    - backend/target/
 
-# Deploy Site to Prod Environment:
-#   stage: web-deploy
-#   script:
-#     - rm -rf /var/www/html/
-#     - pwd
-#     - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-# #    - cp -rf frontend/ /var/www/html/
+# Deploy Site to Production Environment:
+  stage: web-deploy
+  script:
+    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+    - cd react-frontend/
+    - npm run build
+    - mv -f build/* /var/www/prod-site/
+  artifacts:
+    paths:
+      - react-frontend/build/
+  only:
+    - master
 
-# Deploy Site to Dev Environment:
-#   stage: web-deploy
-#   script:
-#     - rm -rf /var/www/html/
-#     - pwd
-#     - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-# #    - cp -rf frontend/ /var/www/html/
+# Deploy Site to Development Environment:
+  stage: web-deploy
+  when: manual
+  script:
+    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+    - cd react-frontend/
+    - npm run build
+    - mv -f build/* /var/www/dev-site/
+  artifacts:
+    paths:
+      - react-frontend/build/
+  only:
+    - branches
+  except:
+    - master
 
+# Build Springboot Backend
 Build Maven Backend:
   stage: build
   script:
     - cd backend
     - mvn $MAVEN_CLI_OPTS compile
 
+# Test Springboot Backend For Production Environment
+Test Springboot:
+  stage: test
+  allow_failure: false
+  script:
+    - cd backend
+    - mvn $MAVEN_CLI_OPTS test
+  only:
+    - master
+
+# Test Springboot Backend For Development Environment
 Test Springboot:
   stage: test
   allow_failure: true
   script:
     - cd backend
     - mvn $MAVEN_CLI_OPTS test
+  only:
+    - branches
+  except:
+    - master
 
+# Deploy Springboot Backend to Production Environment
 Deploy to Prod Environment:
   stage: deploy
   retry: 2
@@ -69,6 +99,7 @@ Deploy to Prod Environment:
   only:
     - master
 
+# Deploy Springboot Backend to Development Environment
 Deploy to Dev Environment:
   stage: deploy
   when: manual
