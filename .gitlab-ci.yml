@@ -61,7 +61,7 @@ Build Maven Backend:
     - mvn $MAVEN_CLI_OPTS compile
 
 # Test Springboot Backend For Production Environment
-Test Springboot:
+Test Springboot Prod:
   stage: test
   allow_failure: false
   script:
@@ -71,7 +71,7 @@ Test Springboot:
     - master
 
 # Test Springboot Backend For Development Environment
-Test Springboot:
+Test Springboot Dev:
   stage: test
   allow_failure: true
   script:
