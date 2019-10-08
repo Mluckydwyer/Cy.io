@@ -22,6 +22,7 @@ cache:
     - backend/target/
 
 # Deploy Site to Production Environment:
+Deploy React Prod Site:
   stage: web-deploy
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
@@ -35,6 +36,7 @@ cache:
     - master
 
 # Deploy Site to Development Environment:
+Deploy React Dev Site:
   stage: web-deploy
   when: manual
   script:
