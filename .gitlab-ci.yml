@@ -24,6 +24,7 @@ cache:
 # Deploy Site to Production Environment:
 Deploy React Prod Site:
   stage: web-deploy
+  allow_failure: true
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react-frontend/
@@ -84,7 +85,7 @@ Test Springboot:
 # Deploy Springboot Backend to Production Environment
 Deploy Springboot to Prod Environment:
   stage: deploy
-  retry: 2
+  allow_failure: true
   environment:
     name: prod/$CI_COMMIT_REF_SLUG
   script:
@@ -105,7 +106,6 @@ Deploy Springboot to Prod Environment:
 Deploy SpringBoot to Dev Environment:
   stage: deploy
   when: manual
-  retry: 2
   script:
     - echo "Deploying Development Backend Server"
     - cd backend
