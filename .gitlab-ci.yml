@@ -4,7 +4,7 @@ stages:
     - cache
     - test
     - build
-    #- deploy
+    - deploy
     - web-deploy
 # - android-test
 # - android-build
