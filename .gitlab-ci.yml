@@ -27,12 +27,12 @@ Deploy React Prod Site:
   allow_failure: true
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-    - cd react-frontend/
+    - cd react/
     - npm run build
     - mv -f build/* /var/www/prod-site/
   artifacts:
     paths:
-      - react-frontend/build/
+      - react/build/
   only:
     - master
 
@@ -42,12 +42,12 @@ Deploy React Dev Site:
   when: manual
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-    - cd react-frontend/
+    - cd react/
     - npm run build
     - mv -f build/* /var/www/dev-site/
   artifacts:
     paths:
-      - react-frontend/build/
+      - react/build/
   only:
     - branches
   except:
