@@ -5,7 +5,9 @@ stages:
     - test
     - build
     - deploy
-# - web-deploy
+    - web-deploy
+# - android-test
+# - android-build
 
 
 variables:
@@ -17,69 +19,105 @@ variables:
 cache:
   paths:
     - .m2/repository/
-    - target/
+    - backend/target/
 
-# deploy-frontend-site:
-#   stage: web-deploy
-#   script:
-#     - rm -rf /var/www/html/
-#     - pwd
-#     - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-# #    - cp -rf frontend/ /var/www/html/
+# Deploy Site to Production Environment:
+Deploy React Prod Site:
+  stage: web-deploy
+  allow_failure: true
+  script:
+    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+    - cd react-frontend/
+    - npm run build
+    - mv -f build/* /var/www/prod-site/
+  artifacts:
+    paths:
+      - react-frontend/build/
+  only:
+    - master
 
+# Deploy Site to Development Environment:
+Deploy React Dev Site:
+  stage: web-deploy
+  when: manual
+  script:
+    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+    - cd react-frontend/
+    - npm run build
+    - mv -f build/* /var/www/dev-site/
+  artifacts:
+    paths:
+      - react-frontend/build/
+  only:
+    - branches
+  except:
+    - master
+
+# Build Springboot Backend
 Build Maven Backend:
   stage: build
-  parallel: 3
   script:
     - cd backend
     - mvn $MAVEN_CLI_OPTS compile
 
-Test Springboot:
+# Test Springboot Backend For Production Environment
+Test Springboot Prod:
   stage: test
-  parallel: 3
+  allow_failure: false
+  script:
+    - cd backend
+    - mvn $MAVEN_CLI_OPTS test
+  only:
+    - master
+
+# Test Springboot Backend For Development Environment
+Test Springboot Dev:
+  stage: test
   allow_failure: true
   script:
+    - cd backend
     - mvn $MAVEN_CLI_OPTS test
+  only:
+    - branches
+  except:
+    - master
 
-Deploy to Prod Environment:
+# Deploy Springboot Backend to Production Environment
+Deploy Springboot to Prod Environment:
   stage: deploy
-  retry: 2
+  allow_failure: true
   environment:
     name: prod/$CI_COMMIT_REF_SLUG
   script:
     - echo "Deploying Production Backend Server"
     - cd backend
-    - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_PROD clean package
-    - ls target/
-    - systemctl stop cyio-prod
-    - cp target/$OUTPUT_JAR_PROD.jar /home/server-files/prod/
-    - systemctl stop cyio-prod
-    - systemctl enable cyio-prod
+    - mvn $MAVEN_CLI_OPTS clean package
+    - sudo systemctl stop cyio-prod
+    - sudo mv target/*.jar /home/server-files/prod/$OUTPUT_JAR_PROD.jar
+    - sudo systemctl start cyio-prod
 
   artifacts:
     paths:
-      - target/$OUTPUT_JAR_PROD.jar
+      - backend/target/*.jar
   only:
     - master
 
-Deploy to Dev Environment:
+# Deploy Springboot Backend to Development Environment
+Deploy SpringBoot to Dev Environment:
   stage: deploy
   when: manual
-  retry: 2
   script:
     - echo "Deploying Development Backend Server"
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_DEV clean package
-    - ls target/
-    - systemctl stop cyio-dev
-    - cp target/$OUTPUT_JAR_DEV.jar /home/server-files/dev/
-    - systemctl stop cyio-dev
-    - systemctl enable cyio-dev
+    - sudo systemctl stop cyio-dev
+    - sudo mv target/*.jar /home/server-files/dev/$OUTPUT_JAR_DEV.jar
+    - sudo systemctl start cyio-dev
   environment:
     name: review/$CI_COMMIT_REF_NAME
   artifacts:
     paths:
-        - target/$OUTPUT_JAR_DEV.jar
+      - backend/target/*.jar
   only:
     - branches
   except:

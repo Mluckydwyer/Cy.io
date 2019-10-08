@@ -70,6 +70,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+<<<<<<< HEAD
 				<executions>
 					<execution>
 						<goals>
@@ -84,8 +85,12 @@
 						</configuration>
 					</execution>
 				</executions>
+=======
+				<version>2.1.8.RELEASE</version>
+>>>>>>> f865d0e4a57bbf478dddda47840279308b07b534
             </plugin>
         </plugins>
+		<defaultGoal>package</defaultGoal>
     </build>
 
 <!--	<profiles>-->
