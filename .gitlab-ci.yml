@@ -93,11 +93,8 @@ Deploy Springboot to Prod Environment:
     - cd backend
     - mvn $MAVEN_CLI_OPTS clean package
     - sudo systemctl stop cyio-prod
-    - pwd
-    - ls
-    - ls target/
 #    - sudo mv target/*.jar /home/server-files/prod/$OUTPUT_JAR_PROD.jar
-    - sudo mv `ls /home/server-files/prod/*.jar | head -n 1` /home/server-files/prod/$OUTPUT_JAR_PROD.jar
+    - sudo mv `ls target/*.jar | head -n 1` /home/server-files/prod/$OUTPUT_JAR_PROD.jar
     - sudo systemctl start cyio-prod
 
   artifacts:
