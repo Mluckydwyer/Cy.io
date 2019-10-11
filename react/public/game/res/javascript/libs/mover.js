@@ -4,16 +4,18 @@ function Mover() {
     this.targetX = 0;
     this.targetY = 0;
     this.mag = 0;
-    this.speed = 0;
+    this.speed = 5;
     this.radius = 0;
 
     this.mouseDeadzone = 5;
     this.enableMouse = true;
-    this.enableKeys = false;
-    this.expMovement = true;
+    this.enableKeys = true;
+    this.expMovement = false;
 
     // Mouse and Keyboard tracking variables
     this.keys = [false, false, false, false, false, false, false, false]; // Key Order= Left; Up; Right, Down, A, W, D, S
+    this.xBound = 0;
+    this.yBound = 0;
     this.mouseX = 0;
     this.mouseY = 0;
     this.lastMouseX = 0;
@@ -33,12 +35,12 @@ function Mover() {
     // Establish event listeners
     this.initListeners = function () {
         // Control Listeners
-        if (this.enableKeys) document.addEventListener('keyup', this.onKeyup);
-        if (this.enableKeys) document.addEventListener('keydown', this.onKeydown);
-        if (this.enableMouse) document.addEventListener('wheel', this.onMouseWheel);
-        if (this.enableMouse) document.addEventListener('click', this.onClick);
-        if (this.enableMouse) document.addEventListener('mouseleave', this.onMouseLeave);
-        if (this.enableMouse) document.addEventListener('mousemove', this.onMouseMove);
+        if (this.enableKeys) document.addEventListener('keyup', this);
+        if (this.enableKeys) document.addEventListener('keydown', this);
+        if (this.enableMouse) document.addEventListener('wheel', this);
+        if (this.enableMouse) document.addEventListener('click', this);
+        if (this.enableMouse) document.addEventListener('mouseleave', this);
+        if (this.enableMouse) document.addEventListener('mousemove', this);
     };
 
     // Update movement vector magnitude
@@ -96,6 +98,11 @@ function Mover() {
     this.move = function () {
         this.xPos += this.targetX * this.speed;
         this.yPos += this.targetY * this.speed;
+
+        // Check Boundaries
+        if (this.xPos > )
+
+        console.log("x: " + this.targetX + "  y: " + this.targetY + " s: " + this.speed)
     };
 
     // Check for current input source
@@ -145,7 +152,6 @@ function Mover() {
             this.setCoords(0, 0);
         }
 
-        // TODO Exponential Movement
         if (this.expMovement) {
             //Exponential 75
             this.targetX /= 75;
@@ -161,121 +167,127 @@ function Mover() {
      */
 
     // On Key Pressed
-    this.onKeydown = function(e) {
+    this.onkeydown = function(e) {
         e.preventDefault();
         console.log("Keydown Event: " + e.which);
 
         switch (e.which) {
             case 37: // Left Arrow
-                keys[0] = true;
+                this.keys[0] = true;
                 console.log("Left Arrow Pressed");
                 break;
             case 65: // 'A' Key
-                keys[4] = true;
+                this.keys[4] = true;
                 console.log("\'A\' Key Pressed");
                 break;
             case 38: // Up Arrow
-                keys[1] = true;
+                this.keys[1] = true;
                 console.log("Up Arrow Pressed");
                 break;
             case 87: // 'W' Key
-                keys[5] = true;
+                this.keys[5] = true;
                 console.log("\'W\' Key Pressed");
                 break;
             case 39: // Right Arrow
-                keys[2] = true;
+                this.keys[2] = true;
                 console.log("Right Arrow Pressed");
                 break;
             case 68: // 'D' Key
-                keys[6] = true;
+                this.keys[6] = true;
                 console.log("\'D\' Key Pressed");
                 break;
             case 40: // Down Arrow
-                keys[3] = true;
+                this.keys[3] = true;
                 console.log("Down Arrow Pressed");
                 break;
             case 83: // 'S' Key
-                keys[7] = true;
+                this.keys[7] = true;
                 console.log("\'S\' Key Pressed");
                 break;
         }
     };
-
-    // On Key Released
-    this.onKeyup = function(e) {
-        e.preventDefault();
-
-        switch (e.which) {
-            case 37: // Left Arrow
-                keys[0] = false;
-                console.log("Left Arrow Released");
-                break;
-            case 65: // 'A' Key
-                keys[4] = false;
-                console.log("\'A\' Key Released");
-                break;
-            case 38: // Up Arrow
-                keys[1] = false;
-                console.log("Up Arrow Released");
-                break;
-            case 87: // 'W' Key
-                keys[5] = false;
-                console.log("\'W\' Key Released");
-                break;
-            case 39: // Right Arrow
-                keys[2] = false;
-                console.log("Right Arrow Released");
-                break;
-            case 68: // 'D' Key
-                keys[6] = false;
-                console.log("\'D\' Key Released");
-                break;
-            case 40: // Down Arrow
-                keys[3] = false;
-                console.log("Down Arrow Released");
-                break;
-            case 83: // 'S' Key
-                keys[7] = false;
-                console.log("\'S\' Key Released");
-                break;
-        }
-    };
-
-    // On Mouse Click
-    this.onClick = function(e) {
-        e.preventDefault();
-        console.log("Click Event: " + e.which);
-
-        player.radius = player.defaultRadius;
-    };
-
-    // On Mouse Leave Screen
-    this.onMouseLeave = function(e) {
-        this.mouseOnScreen = false;
-        //this.setCoords(0, 0);
-        this.targetX = 0;
-        this.targetY = 0;
-        this.updateMag();
-    };
-
-    // On Mouse Move
-    this.onMouseMove = function(e) {
-        this.mouseOnScreen = true;
-        this.mouseX = e.clientX;
-        this.mouseY = e.clientY;
-        console.log("mx: " + e.clientX + "  my: " + e.clientY);
-    };
-
-    // On Mouse Wheel
-    this.onMouseWheel = function(e) {
-        console.log("Wheel Event: " + e.which);
-        e.preventDefault();
-
-        if (e.deltaY > 0) this.radius += player.sizeIncrement;
-        else if (this.radius - player.sizeIncrement >= 0) this.radius -= player.sizeIncrement;
-    };
 }
 
+// On Key Released
+this.onKeyup = function(e) {
+    e.preventDefault();
+
+    switch (e.which) {
+        case 37: // Left Arrow
+            this.keys[0] = false;
+            console.log("Left Arrow Released");
+            break;
+        case 65: // 'A' Key
+            this.keys[4] = false;
+            console.log("\'A\' Key Released");
+            break;
+        case 38: // Up Arrow
+            this.keys[1] = false;
+            console.log("Up Arrow Released");
+            break;
+        case 87: // 'W' Key
+            this.keys[5] = false;
+            console.log("\'W\' Key Released");
+            break;
+        case 39: // Right Arrow
+            this.keys[2] = false;
+            console.log("Right Arrow Released");
+            break;
+        case 68: // 'D' Key
+            this.keys[6] = false;
+            console.log("\'D\' Key Released");
+            break;
+        case 40: // Down Arrow
+            this.keys[3] = false;
+            console.log("Down Arrow Released");
+            break;
+        case 83: // 'S' Key
+            this.keys[7] = false;
+            console.log("\'S\' Key Released");
+            break;
+    }
+};
+
+Mover.prototype.handleEvent = function (event) {
+    console.log(event.type);
+    let method = 'on' + event.type;
+    if (this[method]) {
+        this[method](event);
+    }
+};
+
+// On Mouse Click
+Mover.prototype.onclick = function(event) {
+    event.preventDefault();
+    console.log("Click Event: " + event.which);
+
+    player.radius = player.defaultRadius;
+};
+
+// On Mouse Leave Screen
+Mover.prototype.onmouseleave = function(event) {
+    this.mouseOnScreen = false;
+    //this.setCoords(0, 0);
+    this.targetX = 0;
+    this.targetY = 0;
+    this.updateMag();
+};
+
+// On Mouse Move
+Mover.prototype.onmousemove = function(event) {
+    this.mouseOnScreen = true;
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
+};
+
+// On Mouse Wheel
+Mover.prototype.onwheel = function(event) {
+    console.log("Wheel Event: " + event.which);
+    event.preventDefault();
+
+    if (event.deltaY > 0) this.radius += player.sizeIncrement;
+    else if (this.radius - player.sizeIncrement >= 0) this.radius -= player.sizeIncrement;
+};
 
 // var mover = function (x, y) {
 //     if (!x) x = 0;

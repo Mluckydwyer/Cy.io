@@ -14,7 +14,7 @@ function Player() {
     this.defaultName = "Tim";
 
     // Object that handles player movement and input
-    this.mover = new Mover();
+    this.mover = new Mover(canvas.width, canvas.height);
     this.mover.init();
     this.mover.speed = this.defaultSpeed; // Set player speed
     this.mover.radius = this.defaultRadius; // Set player size TODO Only circles right now
