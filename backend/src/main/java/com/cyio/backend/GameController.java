@@ -25,14 +25,17 @@ public class GameController {
     @CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/gamelist")
 	public List<Game> gameList(@RequestParam(value="limit", defaultValue = "10") int limit, @RequestParam(value="title", defaultValue = "Cy.io Game") String title){
-//		List<Game> ret = new ArrayList<Game>();
-//
-//		for (int i = 0; i < limit; i ++) {
-//			Game g = new Game(title, UUID.randomUUID(), UUID.randomUUID());
-//			ret.add(g);
-//		}
 		return gameRepository.findAll();
-		//return ret;
+	}
+
+	@RequestMapping("/searchby")
+	public List<Game> searchBy(@RequestParam(value="searchtype", defaultValue = "all") String searchType, @RequestParam(value="query", defaultValue = "*") String query){
+		switch (searchType){
+			case "title": return gameRepository.findGameByTitleContaining(query);
+			case "blurb": return gameRepository.findGameByBlurbContaining(query);
+			case "about": return gameRepository.findGameByAboutContaining(query);
+			default: return gameRepository.findGameByTitleContainingOrBlurbContainingOrAboutContainingOrderByTitle(query,query,query);
+		}
 	}
 
 	@PostMapping("/addgame")
