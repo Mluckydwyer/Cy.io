@@ -1,0 +1,19 @@
+These are the mappings for all the current endpoints on the werver. 
+
+Last Update: Oct 8th, 2019
+
+:8080/reactexample
+	- Status: Running
+	- Usage: none
+	- Returns: JSON for 3 precoded games - not connected to server
+
+:8080/gamelist
+	- Status: Running
+	- Usage: none
+	- Returns: JSON for the compelete list of games in the database 
+
+:8080/addgame?title=TITLE&creatorid=CREATORID
+	- Status: Running
+	- Usage: TITLE is the title of the new game; CREATORID is the creator's userid
+
+
