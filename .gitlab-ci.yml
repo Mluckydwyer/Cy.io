@@ -28,6 +28,8 @@ Deploy React Prod Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
+    - sudo npm install
+    - sudo chmod +x node_modules/.bin/react-scripts
     - sudo npm run build
     - sudo mv -f build/* /var/www/prod-site/
   artifacts:
@@ -43,6 +45,8 @@ Deploy React Dev Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
+    - sudo npm install
+    - sudo chmod +x node_modules/.bin/react-scripts
     - sudo npm run build
     - sudo mv -f build/* /var/www/dev-site/
   artifacts:
@@ -93,12 +97,12 @@ Deploy Springboot to Prod Environment:
     - cd backend
     - mvn $MAVEN_CLI_OPTS clean package
     - sudo systemctl stop cyio-prod
-    - sudo mv target/*.jar /home/server-files/prod/$OUTPUT_JAR_PROD.jar
+    - sudo mv `ls target/*.jar | head -n 1` /home/server-files/prod/$OUTPUT_JAR_PROD.jar
     - sudo systemctl start cyio-prod
 
   artifacts:
     paths:
-      - backend/target/*.jar
+      - /home/server-files/prod/*.jar
   only:
     - master
 
@@ -111,13 +115,13 @@ Deploy SpringBoot to Dev Environment:
     - cd backend
     - mvn $MAVEN_CLI_OPTS -Djar.finalName=$OUTPUT_JAR_DEV clean package
     - sudo systemctl stop cyio-dev
-    - sudo mv target/*.jar /home/server-files/dev/$OUTPUT_JAR_DEV.jar
+    - sudo mv `ls target/*.jar | head -n 1` /home/server-files/dev/$OUTPUT_JAR_DEV.jar
     - sudo systemctl start cyio-dev
   environment:
     name: review/$CI_COMMIT_REF_NAME
   artifacts:
     paths:
-      - backend/target/*.jar
+      - /home/server-files/dev/*.jar
   only:
     - branches
   except:
