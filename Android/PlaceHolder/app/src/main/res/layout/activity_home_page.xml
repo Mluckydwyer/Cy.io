@@ -63,17 +63,4 @@
         android:inputType="textPersonName"
         android:text="Hello" />
 
-    <Button
-        android:id="@+id/proceed"
-        android:layout_width="227dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="66dp"
-        android:layout_marginLeft="66dp"
-        android:layout_marginBottom="113dp"
-        android:text="Proceed to Login" />
-
 </RelativeLayout>
