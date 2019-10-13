@@ -12,24 +12,13 @@ function Mover() {
     this.enableKeys = true;
     this.expMovement = false;
 
-    // Mouse and Keyboard tracking variables
-    this.keys = [false, false, false, false, false, false, false, false]; // Key Order= Left; Up; Right, Down, A, W, D, S
-    this.xBound = 0;
-    this.yBound = 0;
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.lastMouseX = 0;
-    this.lastMouseY = 0;
-    this.mouseOnScreen = true;
-
-    this.inputs = {
-        KEYBOARD: 'keyboard',
-        MOUSE: 'mouse'
-    };
-    this.inputSource = this.inputs.MOUSE; // Last used input source and one used to update movement
-
-    this.init = function () {
+    this.init = function (radius) {
         this.initListeners();
+        this.radius = radius;
+    };
+
+    this.config = function (config) {
+
     };
 
     // Establish event listeners
@@ -60,12 +49,12 @@ function Mover() {
         this.yPos = canvas.height / 2 + this.radius / 2;
     };
 
-    this.updateVectorKeys= function () {
+    this.updateVectorKeys = function () {
         // TODO
     };
 
     // Normalize movement vector
-    this.normalize = function() {
+    this.normalize = function () {
         this.updateMag();
 
         this.targetX /= this.mag;
@@ -78,8 +67,9 @@ function Mover() {
     };
 
     // Update movement based on current input
-    this.update = function() {
-        this.updateInputSource(); // Update input source
+    this.update = function (controller) {
+        this.targetX = controller.targetX;
+        this.targetY = controller.targetY;
 
         // Use the current input source to get current movement data
         switch (this.inputSource) {
@@ -99,46 +89,34 @@ function Mover() {
         this.xPos += this.targetX * this.speed;
         this.yPos += this.targetY * this.speed;
 
-        // Check Boundaries
-        if (this.xPos > )
-
-        console.log("x: " + this.targetX + "  y: " + this.targetY + " s: " + this.speed)
+        // console.log("x: " + this.targetX + "  y: " + this.targetY + " s: " + this.speed)
     };
 
-    // Check for current input source
-    this.updateInputSource = function () {
-        // Mouse
-        if (this.enableMouse && this.mouseOnScreen) {
-            let mouseMoved = this.mouseX !== this.lastMouseX || this.mouseY !== this.lastMouseY;
-            if (mouseMoved) this.inputSource = this.inputs.MOUSE;
-        }
-
-        // Keyboard
-        if (this.enableKeys) {
-            let anyKeyPressed = false;
-            for (let key in this.keys) {
-                if (key) anyKeyPressed = true;
-            }
-
-            if (anyKeyPressed) this.inputSource = this.inputs.KEYBOARD;
-        }
-    };
-
-    // TODO NOT FULLY IMPLEMENTED
     // Handles Keyboard input
     this.checkKeys = function () {
+        keys = this.keys;
+
         // Keyboard Controls
-        if ((this.keys[0] || this.keys[4]) && (this.targetX + this.radius / 2 >= 0))
+        if ((keys[0] || keys[4]) && (this.targetX + this.radius >= 0))
             this.targetX -= this.speed; // Left
-        if ((this.keys[1] || this.keys[5]) && (this.targetX + this.radius / 2 >= 0))
+
+        if ((keys[1] || keys[5]) && (this.targetY + this.radius >= 0))
             this.targetY -= this.speed; // Up
-        if ((this.keys[2] || this.keys[6]) && (this.targetX + this.radius / 2 <= canvas.width))
+
+        if ((keys[2] || keys[6]) && (this.targetX + this.radius <= canvas.width))
             this.targetX += this.speed; // Right
-        if ((this.keys[3] || this.keys[7]) && (this.targetX + this.radius / 2 <= canvas.height))
+
+        if ((keys[3] || keys[7]) && (this.targetY + this.radius <= canvas.height))
             this.targetY += this.speed; // Down
 
+        if (!(keys[0] || keys[4] || keys[2] || keys[6]))
+            this.targetX = 0; // If no x-coord keys pressed, reset target
+
+        if (!(keys[1] || keys[5] || keys[3] || keys[7]))
+            this.targetY = 0; // If no y-coord keys pressed, reset target
 
         this.normalize();
+        // console.log("x: " + this.xPos + " y: " + this.yPos);
     };
 
     // Handles mouse input
@@ -166,147 +144,8 @@ function Mover() {
         Begin Listener function to listen for browser events
      */
 
-    // On Key Pressed
-    this.onkeydown = function(e) {
-        e.preventDefault();
-        console.log("Keydown Event: " + e.which);
-
-        switch (e.which) {
-            case 37: // Left Arrow
-                this.keys[0] = true;
-                console.log("Left Arrow Pressed");
-                break;
-            case 65: // 'A' Key
-                this.keys[4] = true;
-                console.log("\'A\' Key Pressed");
-                break;
-            case 38: // Up Arrow
-                this.keys[1] = true;
-                console.log("Up Arrow Pressed");
-                break;
-            case 87: // 'W' Key
-                this.keys[5] = true;
-                console.log("\'W\' Key Pressed");
-                break;
-            case 39: // Right Arrow
-                this.keys[2] = true;
-                console.log("Right Arrow Pressed");
-                break;
-            case 68: // 'D' Key
-                this.keys[6] = true;
-                console.log("\'D\' Key Pressed");
-                break;
-            case 40: // Down Arrow
-                this.keys[3] = true;
-                console.log("Down Arrow Pressed");
-                break;
-            case 83: // 'S' Key
-                this.keys[7] = true;
-                console.log("\'S\' Key Pressed");
-                break;
-        }
-    };
 }
 
-// On Key Released
-this.onKeyup = function(e) {
-    e.preventDefault();
-
-    switch (e.which) {
-        case 37: // Left Arrow
-            this.keys[0] = false;
-            console.log("Left Arrow Released");
-            break;
-        case 65: // 'A' Key
-            this.keys[4] = false;
-            console.log("\'A\' Key Released");
-            break;
-        case 38: // Up Arrow
-            this.keys[1] = false;
-            console.log("Up Arrow Released");
-            break;
-        case 87: // 'W' Key
-            this.keys[5] = false;
-            console.log("\'W\' Key Released");
-            break;
-        case 39: // Right Arrow
-            this.keys[2] = false;
-            console.log("Right Arrow Released");
-            break;
-        case 68: // 'D' Key
-            this.keys[6] = false;
-            console.log("\'D\' Key Released");
-            break;
-        case 40: // Down Arrow
-            this.keys[3] = false;
-            console.log("Down Arrow Released");
-            break;
-        case 83: // 'S' Key
-            this.keys[7] = false;
-            console.log("\'S\' Key Released");
-            break;
-    }
-};
-
-Mover.prototype.handleEvent = function (event) {
-    console.log(event.type);
-    let method = 'on' + event.type;
-    if (this[method]) {
-        this[method](event);
-    }
-};
-
-// On Mouse Click
-Mover.prototype.onclick = function(event) {
-    event.preventDefault();
-    console.log("Click Event: " + event.which);
-
-    player.radius = player.defaultRadius;
-};
-
-// On Mouse Leave Screen
-Mover.prototype.onmouseleave = function(event) {
-    this.mouseOnScreen = false;
-    //this.setCoords(0, 0);
-    this.targetX = 0;
-    this.targetY = 0;
-    this.updateMag();
-};
-
-// On Mouse Move
-Mover.prototype.onmousemove = function(event) {
-    this.mouseOnScreen = true;
-    this.mouseX = event.clientX;
-    this.mouseY = event.clientY;
-};
-
-// On Mouse Wheel
-Mover.prototype.onwheel = function(event) {
-    console.log("Wheel Event: " + event.which);
-    event.preventDefault();
-
-    if (event.deltaY > 0) this.radius += player.sizeIncrement;
-    else if (this.radius - player.sizeIncrement >= 0) this.radius -= player.sizeIncrement;
-};
-
-// var mover = function (x, y) {
-//     if (!x) x = 0;
-//     if (!y) y = 0;
-//
-//     this.targetX = x;
-//     this.targetY = y;
-//     this.targetMag = mag(x, y);
-//     this.mouseMovement = true;
-//     const mouseDeadzone = 5;
-//     const enableMouse = false;
-//     const enableKeys = true;
-//     const expMovement = true;
-//
-//     var keys = [false, false, false, false, false, false, false, false]; // Key Order: Left, Up, Right, Down, A, W, D, S
-//     var mouseX;
-//     var mouseY;
-//     var mouseOnScreen = true;
-// };
 
 
 

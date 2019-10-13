@@ -1,0 +1,23 @@
+{
+  "Game": {
+    "Game ID": "xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx",
+    "Title": "Title",
+    "Authors": []
+  },
+  "Players": {
+    "Shape": {
+      "Player Shape": "circle",
+      "Player Size": 0,
+      "Player Color": "blue",
+      "Player Outline": "#003300",
+      "Enemy Shape": "circle",
+      "Enemy Size": 0,
+      "Enemy Color": "red",
+      "Enemy Outline": "#003300"
+    },
+    "Movement": {
+      "Player Speed": 0,
+      "Movement Style": "linear"
+    }
+  }
+}
