@@ -28,6 +28,7 @@ Deploy React Prod Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
+    - sudo npm install
     - sudo npm run build
     - sudo mv -f build/* /var/www/prod-site/
   artifacts:
@@ -43,6 +44,7 @@ Deploy React Dev Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
+    - sudo npm install
     - sudo npm run build
     - sudo mv -f build/* /var/www/dev-site/
   artifacts:
