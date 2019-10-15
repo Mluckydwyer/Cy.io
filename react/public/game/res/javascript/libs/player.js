@@ -1,15 +1,15 @@
 function Player() {
     // Object that handles player movement and input
-    this.mover = new Mover();
 
-    this.name = this.defaultName;
+    this.init = function (config) {
+        this.mover = new Mover().init(config);
+        this.name = "";
+        this.config(config);
+        return this;
+    };
 
     this.config = function (config) {
-        this.mover.config(config).init();
-
-
-        this.speed = config.defaultSpeed; // Set player speed
-        this.radius = config.defaultSize; // Set player size
+        return this;
     };
 
     // Draw the player TODO allow more than circles

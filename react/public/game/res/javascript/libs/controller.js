@@ -16,17 +16,18 @@ function Controller() {
     this.targetY = 0;
     this.mouseOnScreen = false;
     this.mouseEnabled = false;
-    this.keybaordEnabled = false;
+    this.keyboardEnabled = false;
 
     this.init = function (config, enable) {
         this.addEventListeners(); // Listen for mouse of keyboard events
         this.config(config);
         if (enable) this.enable(); // Enable control
+        return this;
     };
 
     this.config = function (config) {
-        this.mouseEnabled = config['Allow Mouse'];
-        this.keyboardEnabled = config['Allow Keyboard'];
+        this.mouseEnabled = config.players.movement.allowMouse;
+        this.keyboardEnabled = config.players.movement.allowKeyboard;
         return this;
     };
 

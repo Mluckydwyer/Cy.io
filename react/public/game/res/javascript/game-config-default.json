@@ -1,25 +1,25 @@
 {
-  "Game": {
-    "Game ID": "xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx",
-    "Title": "Title",
-    "Authors": []
+  "game": {
+    "gameId": "xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx",
+    "title": "Title",
+    "authors": []
   },
-  "Players": {
-    "Shape": {
-      "Player Shape": "circle",
-      "Player Size": 0,
-      "Player Color": "blue",
-      "Player Outline": "#003300",
-      "Enemy Shape": "circle",
-      "Enemy Size": 0,
-      "Enemy Color": "red",
-      "Enemy Outline": "#003300"
+  "players": {
+    "shape": {
+      "playerShape": "circle",
+      "playerSize": 0,
+      "playerColor": "blue",
+      "playerOutline": "#003300",
+      "enemyShape": "circle",
+      "enemySize": 0,
+      "enemyColor": "red",
+      "enemyOutline": "#003300"
     },
-    "Movement": {
-      "Player Speed": 0,
-      "Movement Style": "linear",
-      "Allow Keyboard": true,
-      "Allow Mouse": true
+    "movement": {
+      "playerSpeed": 0,
+      "movementStyle": "linear",
+      "allowKeyboard": true,
+      "allowMouse": true
     }
   }
 }

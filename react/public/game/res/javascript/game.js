@@ -13,11 +13,15 @@ function setup() {
     window.addEventListener('resize', resizeCanvas); // Window resize listener
 
     // Game Elements
-    config = new Config().init();
-    console.log(config);
-    controller = new Controller().config(config);
-    player = new Player().config(config); // Create main player
-    setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
+    config = new Config().init().then(function (config) {
+        this.config = config;
+        controller = new Controller().init(config, false);
+        player = new Player().init(config); // Create main player
+        controller.then(function (controller) {
+            controller.enable();
+        });
+        setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
+    });
 }
 
 // When done loading, run the setup function

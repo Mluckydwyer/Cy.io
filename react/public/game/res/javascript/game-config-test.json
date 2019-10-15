@@ -1,11 +1,10 @@
 {
-  "Players": {
-    "Shape": {
-      "Default Size": 30
+  "players": {
+    "shape": {
+      "defaultSize": 30
     },
-    "Movement": {
-      "Default Speed": 5,
-
+    "movement": {
+      "defaultSpeed": 5
     }
   }
 }

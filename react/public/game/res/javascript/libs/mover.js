@@ -14,12 +14,14 @@ function Mover() {
 
     this.init = function (config) {
         this.initListeners();
+        this.config(config);
+        return this;
     };
 
     this.config = function (config) {
-        this.size = config.Players.Shape["Player Size"];
-        this.speed = config["Movement"]["Player Speed"];
-        this.expMovement = config["Movement"]["Movement Style"] === 'exponential';
+        this.size = config.players.shape.playerSize;
+        this.speed = config.players.movement.playerSpeed;
+        this.expMovement = config.players.movement.movementStyle === 'exponential';
         return this;
     };
 
