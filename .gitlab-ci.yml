@@ -1,7 +1,7 @@
 image: maven:latest
 
 stages:
-    - cache
+#    - cache
     - test
     - build
     - deploy
