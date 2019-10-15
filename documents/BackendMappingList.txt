@@ -1,0 +1,24 @@
+These are the mappings for all the current endpoints on the werver. 
+
+Last Update: Oct 8th, 2019
+
+:8080/reactexample
+	- Status: Running - Stable
+	- Usage: none
+	- Returns: JSON for 3 precoded games - not connected to server
+
+:8080/gamelist
+	- Status: Running
+	- Usage: none - Stable
+	- Returns: JSON for the compelete list of games in the database 
+
+:8080/addgame?title=TITLE&creatorid=CREATORID
+	- Status: Running - Stable
+	- Usage: TITLE is the title of the new game; CREATORID is the creator's userid
+	- Returns: "game added successfully" if game was added, error messages otherwise
+
+:8080/searchby?searchtype=TYPE&query=QUERY
+	- Status: Running - Testing
+	- Usage: TYPE is the parameter the query is going to search. Options are: all(Default), title, blurb, and about. If TYPE is not specified or omitted, all fields will be searched 	
+		 QUERY is the keyword(s) to be searched
+	- Returns: JSON for all matched games
