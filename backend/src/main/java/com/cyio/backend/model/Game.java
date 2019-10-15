@@ -1,4 +1,4 @@
-package com.cyio.backend;
+package com.cyio.backend.model;
 
 import javax.persistence.*;
 import java.util.UUID;
