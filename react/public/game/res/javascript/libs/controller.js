@@ -15,10 +15,19 @@ function Controller() {
     this.targetX = 0;
     this.targetY = 0;
     this.mouseOnScreen = false;
+    this.mouseEnabled = false;
+    this.keybaordEnabled = false;
 
-    this.init = function (enable) {
+    this.init = function (config, enable) {
         this.addEventListeners(); // Listen for mouse of keyboard events
+        this.config(config);
         if (enable) this.enable(); // Enable control
+    };
+
+    this.config = function (config) {
+        this.mouseEnabled = config['Allow Mouse'];
+        this.keyboardEnabled = config['Allow Keyboard'];
+        return this;
     };
 
     // Enable Game Controller
@@ -40,19 +49,21 @@ function Controller() {
     };
 
     this.click = function (event) {
-        event.preventDefault();
-        console.log("Click Event: " + event.which);
-        this.inputSource = this.inputs.MOUSE;
+        if (this.isEnabled && this.mouseEnabled) {
+            event.preventDefault();
+            console.log("Click Event: " + event.which);
+            this.inputSource = this.inputs.MOUSE;
 
-        // player.radius = player.defaultRadius;
-        this.expMovement = true;
-        setTimeout(function () {
-            player.mover.expMovement = false;
-        }, 500)
+            // player.radius = player.defaultRadius;
+            this.expMovement = true;
+            setTimeout(function () {
+                player.mover.expMovement = false;
+            }, 500)
+        }
     };
 
     this.mouseLeave = function (event) {
-        if (this.isEnabled) {
+        if (this.isEnabled && this.mouseEnabled) {
             this.mouseOnScreen = false;
             this.inputSource = this.inputs.MOUSE;
             this.targetX = 0;
@@ -62,12 +73,12 @@ function Controller() {
     };
 
     this.keyPressed = function (event) {
-        if (this.isEnabled) {
-            e.preventDefault();
-            console.log("Keydown Event: " + e.which);
+        if (this.isEnabled && this.keyboardEnabled) {
+            event.preventDefault();
+            console.log("Keydown Event: " + event.which);
             this.inputSource = this.inputs.KEYBOARD;
 
-            switch (e.which) {
+            switch (event.which) {
                 case 37: // Left Arrow
                     this.keys[0] = true;
                     console.log("Left Arrow Pressed");
@@ -107,12 +118,12 @@ function Controller() {
     };
 
     this.keyReleased = function (event) {
-        if (this.isEnabled) {
-            e.preventDefault();
-            console.log("Keydown Event: " + e.which);
+        if (this.isEnabled  && this.keyboardEnabled) {
+            event.preventDefault();
+            console.log("Keydown Event: " + event.which);
             this.inputSource = this.inputs.KEYBOARD;
 
-            switch (e.which) {
+            switch (event.which) {
                 case 37: // Left Arrow
                     this.keys[0] = false;
                     console.log("Left Arrow Released");
@@ -151,7 +162,7 @@ function Controller() {
     };
 
     this.mouseMove = function(event) {
-        if (this.isEnabled) {
+        if (this.isEnabled  && this.mouseEnabled) {
             this.mouseOnScreen = true;
             this.inputSource = this.inputs.MOUSE;
             this.mouseX = event.clientX;
@@ -160,7 +171,7 @@ function Controller() {
     };
 
     this.mouseWheel = function(event) {
-        if (this.isEnabled) {
+        if (this.isEnabled  && this.mouseEnabled) {
             event.preventDefault();
             this.inputSource = this.inputs.MOUSE;
 
@@ -172,11 +183,15 @@ function Controller() {
     // Add all prototypes to handle browser events
     this.addEventListeners = function () {
         //Controller.prototype.handleEvent = this.defaultEventHandler; // Handle all default events
-        Controller.prototype.onkeydown = this.keyPressed(); // On Mouse Click
-        Controller.prototype.onkeyup = this.keyReleased(); // On Mouse Click
-        Controller.prototype.onmouseleave = this.mouseLeave; // On Mouse Leave Screen
-        Controller.prototype.onmousemove = this.mouseMove; // On Mouse Move
-        Controller.prototype.onwheel = this.mouseWheel; // On Mouse Wheel
-    }
+        if (this.keyboardEnabled) {
+            Controller.prototype.onkeydown = this.keyPressed(); // On Mouse Click
+            Controller.prototype.onkeyup = this.keyReleased(); // On Mouse Click
+        }
+        if (this.mouseEnabled) {
+            Controller.prototype.onmouseleave = this.mouseLeave; // On Mouse Leave Screen
+            Controller.prototype.onmousemove = this.mouseMove; // On Mouse Move
+            Controller.prototype.onwheel = this.mouseWheel; // On Mouse Wheel
+        }
+    };
 }
 

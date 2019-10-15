@@ -13,7 +13,8 @@ function setup() {
     window.addEventListener('resize', resizeCanvas); // Window resize listener
 
     // Game Elements
-    config = new Config();
+    config = new Config().init();
+    console.log(config);
     controller = new Controller().config(config);
     player = new Player().config(config); // Create main player
     setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
@@ -55,7 +56,6 @@ function draw() {
 
 // On Window Size Change
 function resizeCanvas() {
-    console.log("Resize!");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }

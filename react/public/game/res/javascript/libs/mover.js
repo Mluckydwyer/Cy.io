@@ -5,20 +5,22 @@ function Mover() {
     this.targetY = 0;
     this.mag = 0;
     this.speed = 5;
-    this.radius = 0;
+    this.size = 0;
 
     this.mouseDeadzone = 5;
     this.enableMouse = true;
     this.enableKeys = true;
-    this.expMovement = false;
+    this.expMovement = false; // TODO Make enum
 
-    this.init = function (radius) {
+    this.init = function (config) {
         this.initListeners();
-        this.radius = radius;
     };
 
     this.config = function (config) {
-
+        this.size = config.Players.Shape["Player Size"];
+        this.speed = config["Movement"]["Player Speed"];
+        this.expMovement = config["Movement"]["Movement Style"] === 'exponential';
+        return this;
     };
 
     // Establish event listeners

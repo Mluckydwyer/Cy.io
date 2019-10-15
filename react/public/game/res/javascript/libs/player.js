@@ -1,13 +1,13 @@
 function Player() {
     // Object that handles player movement and input
     this.mover = new Mover();
-    this.mover.init();
-    this.mover.speed = 0;
-    this.mover.radius = 0;
 
     this.name = this.defaultName;
 
     this.config = function (config) {
+        this.mover.config(config).init();
+
+
         this.speed = config.defaultSpeed; // Set player speed
         this.radius = config.defaultSize; // Set player size
     };

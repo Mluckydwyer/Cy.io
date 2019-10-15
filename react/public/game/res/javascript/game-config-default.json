@@ -17,7 +17,9 @@
     },
     "Movement": {
       "Player Speed": 0,
-      "Movement Style": "linear"
+      "Movement Style": "linear",
+      "Allow Keyboard": true,
+      "Allow Mouse": true
     }
   }
 }
