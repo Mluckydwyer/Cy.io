@@ -3,6 +3,10 @@ package com.cyio.backend.controller;
 import com.cyio.backend.exception.BadRequestException;
 import com.cyio.backend.model.AuthProvider;
 import com.cyio.backend.model.User;
+import com.cyio.backend.payload.ApiResponse;
+import com.cyio.backend.payload.AuthResponse;
+import com.cyio.backend.payload.LoginRequest;
+import com.cyio.backend.payload.SignUpRequest;
 import com.cyio.backend.repository.UserRepository;
 import com.cyio.backend.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +64,7 @@ public class AuthController {
 
         // Creating user's account
         User user = new User();
-        user.setName(signUpRequest.getName());
+        user.setUserName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
@@ -70,7 +74,7 @@ public class AuthController {
         User result = userRepository.save(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(result.getId()).toUri();
+                .buildAndExpand(result.getUserid()).toUri();
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "User registered successfully@"));

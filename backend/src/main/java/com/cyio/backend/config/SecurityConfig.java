@@ -1,12 +1,14 @@
 package com.cyio.backend.config;
 
 
+import com.cyio.backend.security.CustomUserDetailsService;
 import com.cyio.backend.security.OAuth2AuthenticationSuccessHandler;
+import com.cyio.backend.security.RestAuthenticationEntryPoint;
+import com.cyio.backend.security.TokenAuthenticationFilter;
 import com.cyio.backend.security.oauth2.CustomOAuth2UserService;
 import com.cyio.backend.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.cyio.backend.security.oauth2.OAuth2AuthenticationFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,24 +17,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/*@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity{
-        securedEnabled=true,
-        jsr250Enabled=true,
-        prePostEnabled=true
-        }*/
-
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity
-public class SecurityConfig extends WebSecurityConfiguration {
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
