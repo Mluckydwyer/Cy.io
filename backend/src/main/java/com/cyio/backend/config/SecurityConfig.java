@@ -24,24 +24,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //enable web security settings for the project
 @EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
+        securedEnabled = true, //enables certain methods to be only executed by restricted roles
+        jsr250Enabled = true,  //enables @rolesallowed annotation for methods
+        prePostEnabled = true  //enables @preauthorize and @postAuthorize
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private CustomUserDetailsService customUserDetailsService; //find user's data using certain fields
 
     @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+    private CustomOAuth2UserService customOAuth2UserService; //OAuth2 stuff
 
     @Autowired
-    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler; //oAuth 2 stuff
 
     @Autowired
-    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler; //OAuth 2 stuff
 
     @Autowired
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
@@ -95,15 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
+                        "/gamelist",
+                        "/user/me"
+                        )
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
                 .permitAll()

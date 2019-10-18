@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"userid","userName"})
+        @UniqueConstraint(columnNames = {"userid", "userName"})
 })
 public class User {
     @Id
@@ -24,6 +24,11 @@ public class User {
 
     private String providerId;
     private int gamesOwned;
+
+    public User() {
+        UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
+        this.userid = newID.toString();
+    }
 
     public String getPassword() {
         return password;
@@ -49,10 +54,6 @@ public class User {
         this.providerId = providerId;
     }
 
-    public User(){
-        UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
-        this.userid = newID.toString();
-    }
     public String getUserid() {
         return userid;
     }
