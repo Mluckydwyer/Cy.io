@@ -1,8 +1,12 @@
 package com.cyio.backend.config;
 
 
+import com.cyio.backend.security.OAuth2AuthenticationSuccessHandler;
+import com.cyio.backend.security.oauth2.CustomOAuth2UserService;
 import com.cyio.backend.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.cyio.backend.security.oauth2.OAuth2AuthenticationFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,13 +20,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-@Configuration
+
+/*@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity{
         securedEnabled=true,
         jsr250Enabled=true,
         prePostEnabled=true
-        }
+        }*/
+
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity
 public class SecurityConfig extends WebSecurityConfiguration {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;

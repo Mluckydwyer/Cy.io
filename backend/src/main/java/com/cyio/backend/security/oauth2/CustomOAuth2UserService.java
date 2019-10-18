@@ -4,6 +4,7 @@ import com.cyio.backend.exception.OAuth2AuthenticationProcessingException;
 import com.cyio.backend.model.AuthProvider;
 import com.cyio.backend.model.User;
 import com.cyio.backend.repository.UserRepository;
+import com.cyio.backend.security.UserPrincipal;
 import com.cyio.backend.security.oauth2.user.OAuth2UserInfo;
 import com.cyio.backend.security.oauth2.user.OAuth2UserInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.attribute.UserPrincipal;
 import java.util.Optional;
 
 @Service
