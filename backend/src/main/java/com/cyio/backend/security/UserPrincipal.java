@@ -1,7 +1,6 @@
 package com.cyio.backend.security;
 
 import com.cyio.backend.model.User;
-import com.cyio.backend.security.oauth2.user.OAuth2UserInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,11 +8,16 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 
+/*
+    this class provides data to the CostumUserDetailsService
+    TODO: Implement username in this class as well
+ */
+
 public class UserPrincipal implements OAuth2User, UserDetails {
     private String id;
     private String email;
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities; //list of access the user has
     private Map<String, Object> attributes;
 
     public  UserPrincipal (String id, String email, String password, Collection<? extends GrantedAuthority> authorities){

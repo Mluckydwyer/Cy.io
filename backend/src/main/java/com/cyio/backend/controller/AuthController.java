@@ -45,7 +45,7 @@ public class AuthController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
+                        loginRequest.getuserName(),
                         loginRequest.getPassword()
                 )
         );
@@ -64,7 +64,7 @@ public class AuthController {
 
         // Creating user's account
         User user = new User();
-        user.setUserName(signUpRequest.getName());
+        user.setUserName(signUpRequest.getUserName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);

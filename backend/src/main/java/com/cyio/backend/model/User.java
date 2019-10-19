@@ -9,25 +9,34 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"userid", "userName"})
+        @UniqueConstraint(columnNames = {"userid", "user_name"})
 })
 public class User {
     @Id
     private String userid;
+
+    @Column(name = "user_name")
     private String userName;
+
     private String email;
+
     @JsonIgnore
     private String password;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
+    @Column(name = "provider_id")
     private String providerId;
+
+    @Column(name = "games_owned")
     private int gamesOwned;
 
     public User() {
         UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
         this.userid = newID.toString();
+        this.userName = newID.toString();
     }
 
     public String getPassword() {

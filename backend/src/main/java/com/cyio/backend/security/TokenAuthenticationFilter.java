@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/*
+    This class gets JWT from request -> validate it -> loads the user associated with the token -> pass to Spring Security
+ */
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -26,16 +29,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
+    /*
+         This method gets JWT from request -> validate it -> loads the user associated with the token -> pass to Spring Security
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String jwt = getJwtFromRequest(request);
+            String jwt = getJwtFromRequest(request); //retrieves request jwt
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                String userId = tokenProvider.getUserIdFromToken(jwt);
+                String userId = tokenProvider.getUserIdFromToken(jwt); //grabs user info from token
 
-                UserDetails userDetails = customUserDetailsService.loadUserById(userId);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UserDetails userDetails = customUserDetailsService.loadUserById(userId); //load user data
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()); //vaildates token
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);

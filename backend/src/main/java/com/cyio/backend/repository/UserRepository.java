@@ -10,7 +10,7 @@ import java.util.Optional;
 //communication between backend and server
 
 public interface UserRepository extends JpaRepository<User,String> {
-        Optional<User> findByEmail(String email);
+        Optional<User> findByUserName(String userName);
 
         Boolean existsByEmail(String email);
 }

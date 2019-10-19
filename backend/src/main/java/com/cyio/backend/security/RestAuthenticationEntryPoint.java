@@ -13,7 +13,10 @@ import java.io.IOException;
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(RestAuthenticationEntryPoint.class);
-
+    /*
+        This method is called when unauthenticated/unauthorized user/session tries to access restricted methods
+        Returns an error message to the client and an error log
+     */
     @Override
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,

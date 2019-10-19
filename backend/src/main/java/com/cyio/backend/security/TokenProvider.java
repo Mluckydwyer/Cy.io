@@ -8,6 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+
+/*
+    This class is used to generate JWT after a successful log-in. Also used to validate the JWQ sent in the Authorization header of requests
+ */
 @Service
 public class TokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
@@ -24,7 +28,7 @@ public class TokenProvider {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
-
+        appProperties.getAuth().setTokenSecret("926D96C90030DD58429D2751AC1BDBBC");
         return Jwts.builder()
                 .setSubject(userPrincipal.getId())
                 .setIssuedAt(new Date())

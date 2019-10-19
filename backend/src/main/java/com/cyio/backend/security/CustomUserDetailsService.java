@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-//this service returns an user's details based on some fields, currently it's by email
+//this service returns an user's data based on some fields, currently it's by email
+//interacts with UserPrincipal
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -20,13 +21,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     /*
-        This methods returns the user's data by searching for his/her email
+        This methods returns the user's data by searching for his/her username
      */
-    public UserDetails loadUserByUsername(String email)
+    public UserDetails loadUserByUsername(String userName)
             throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUserName(userName)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with email : " + email)
+                        new UsernameNotFoundException("User not found with email : " + userName)
                 );
 
         return UserPrincipal.create(user);
@@ -34,6 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /*
         This method returns the user's data by searching for his/hers id (this should be the auto generated one)
+        This is used by JWTAuthenticationFilter
      */
     @Transactional
     public UserDetails loadUserById(String id) {
