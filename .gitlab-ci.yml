@@ -4,7 +4,7 @@ stages:
 #    - cache
     - test-spring
     - test-android
-#    - test-site
+    - test-site
     - build-spring
     - deploy-spring
     - deploy-site
@@ -20,42 +20,6 @@ cache:
   paths:
     - .m2/repository/
     - backend/target/
-
-# Deploy Site to Production Environment:
-Deploy React Prod Site:
-  stage: deploy-site
-  allow_failure: true
-  script:
-    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-    - cd react/
-    - sudo npm install
-    - sudo chmod -R +xwr .
-    - sudo npm run build
-    - sudo mv -f build/* /var/www/prod-site/
-  artifacts:
-    paths:
-      - react/build/
-  only:
-    - master
-
-# Deploy Site to Development Environment:
-Deploy React Dev Site:
-  stage: deploy-site
-  when: manual
-  script:
-    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
-    - cd react/
-    - sudo npm install
-    - sudo chmod -R +xwr .
-    - sudo npm run build
-    - sudo mv -f build/* /var/www/dev-site/
-  artifacts:
-    paths:
-      - react/build/
-  only:
-    - branches
-  except:
-    - master
 
 # Build Springboot Backend
 Build Maven Backend:
@@ -84,6 +48,32 @@ Test Springboot Dev:
   only:
     - branches
   except:
+    - master
+
+# Test Website Frontend For Development Environment
+Test Site Dev:
+  stage: test-site
+  allow_failure: true
+  script:
+    - cd react
+    - sudo npm install
+    - sudo chmod -R +xwr .
+    - sudo npm test
+  only:
+    - branches
+  except:
+    - master
+
+# Test Website Frontend For Production Environment
+Test Site Prod:
+  stage: test-site
+  allow_failure: false
+  script:
+    - cd react
+    - sudo npm install
+    - sudo chmod -R +xwr .
+    - sudo npm test
+  only:
     - master
 
 # Test Android Application for Development Environment
@@ -148,6 +138,42 @@ Deploy SpringBoot to Dev Environment:
   artifacts:
     paths:
       - backend/target/*.jar
+  only:
+    - branches
+  except:
+    - master
+
+# Deploy Site to Production Environment:
+Deploy React Prod Site:
+  stage: deploy-site
+  allow_failure: true
+  script:
+    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+    - cd react/
+    - sudo npm install
+    - sudo chmod -R +xwr .
+    - sudo npm run build
+    - sudo mv -f build/* /var/www/prod-site/
+  artifacts:
+    paths:
+      - react/build/
+  only:
+    - master
+
+# Deploy Site to Development Environment:
+Deploy React Dev Site:
+  stage: deploy-site
+  when: manual
+  script:
+    # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
+    - cd react/
+    - sudo npm install
+    - sudo chmod -R +xwr .
+    - sudo npm run build
+    - sudo mv -f build/* /var/www/dev-site/
+  artifacts:
+    paths:
+      - react/build/
   only:
     - branches
   except:
