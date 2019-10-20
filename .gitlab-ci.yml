@@ -92,7 +92,8 @@ Test Android Dev:
     allow_failure: true
     script:
       - cd Android/PlaceHolder
-      - sudo ./gradlew -Pci --console=plane :app:testDebug
+      - gradle test
+#      - sudo ./gradlew -Pci --console=plane :app:testDebug
     only:
       - branches
     except:
@@ -104,7 +105,8 @@ Test Android Prod:
     allow_failure: false
     script:
       - cd Android/PlaceHolder
-      - sudo ./gradlew -Pci --console=plane :app:testDebug
+      - gradle test
+#      - sudo ./gradlew -Pci --console=plane :app:testDebug
     only:
       - master
 
@@ -124,7 +126,7 @@ Deploy Springboot to Prod Environment:
 
   artifacts:
     paths:
-      - /home/server-files/prod/*.jar
+      - backend/target/*.jar
   only:
     - master
 
@@ -143,7 +145,7 @@ Deploy SpringBoot to Dev Environment:
     name: review/$CI_COMMIT_REF_NAME
   artifacts:
     paths:
-      - /home/server-files/dev/*.jar
+      - backend/target/*.jar
   only:
     - branches
   except:
