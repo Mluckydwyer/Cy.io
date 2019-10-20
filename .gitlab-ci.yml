@@ -4,7 +4,7 @@ stages:
 #    - cache
     - test-spring
     - test-android
-#    - test-site
+    - test-site
     - build-spring
     - deploy-spring
     - deploy-site
