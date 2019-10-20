@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 public class login extends AppCompatActivity
 {
     Button login;
@@ -21,6 +22,7 @@ public class login extends AppCompatActivity
         login = (Button)findViewById(R.id.login);
         username = (EditText)findViewById(R.id.usernameEntry);
         password = (EditText)findViewById(R.id.passwordEntry);
+        //GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 
         login.setOnClickListener(new View.OnClickListener()
         {
@@ -38,7 +40,7 @@ public class login extends AppCompatActivity
     }
     public void openHomePage()
     {
-        Intent i = new Intent(this, HomePage.class);
-        startActivity(i);
+        Intent intent = new Intent(this, HomePage.class);
+        startActivity(intent);
     }
 }

@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                respond();
+               openGameList();
+                //respond();
 
             }
         });
@@ -66,6 +67,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    public void openGameList()
+    {
+        Intent gmlst = new Intent(this, GameList.class);
+        startActivity(gmlst);
     }
 
     public void openLoginPage()
