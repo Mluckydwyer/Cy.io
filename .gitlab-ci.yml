@@ -86,6 +86,28 @@ Test Springboot Dev:
   except:
     - master
 
+# Test Website Frontend For Development Environment
+Test Site Dev:
+  stage: test-site
+  allow_failure: true
+  script:
+    - cd react
+    - mocha
+  only:
+    - branches
+  except:
+    - master
+
+# Test Website Frontend For Production Environment
+Test Site Prod:
+  stage: test-site
+  allow_failure: false
+  script:
+    - cd react
+    - mocha
+  only:
+    - master
+
 # Test Android Application for Development Environment
 Test Android Dev:
     stage: test-android
