@@ -95,7 +95,7 @@ Test Android Dev:
 # Test Android Application for Production Environment
 Test Android Prod:
     stage: test-spring
-    allow_failure: false
+    allow_failure: true
     script:
       - cd Android/PlaceHolder
       - sudo chmod -R +xwr .
