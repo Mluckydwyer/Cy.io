@@ -91,7 +91,7 @@ Test Android Dev:
     allow_failure: true
     script:
       - cd Android/PlaceHolder
-      - ./gradlew -Pci --console=plane :app:testDebug
+      - sudo ./gradlew -Pci --console=plane :app:testDebug
     only:
       - branches
     except:
@@ -103,7 +103,7 @@ Test Android Prod:
     allow_failure: false
     script:
       - cd Android/PlaceHolder
-      - ./gradlew -Pci --console=plane :app:testDebug
+      - sudo ./gradlew -Pci --console=plane :app:testDebug
     only:
       - master
 
