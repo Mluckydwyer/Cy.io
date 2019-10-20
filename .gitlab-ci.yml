@@ -86,6 +86,28 @@ Test Springboot Dev:
   except:
     - master
 
+# Test Android Application for Development Environment
+Test Android Dev:
+    stage: test
+    allow_failure: true
+    script:
+      - cd Android/PlaceHolder
+      - ./gradlew -Pci --console=plane :app:testDebug
+    only:
+      - branches
+    except:
+      - master
+
+# Test Android Application for Production Environment
+Test Android Prod:
+    stage: test
+    allow_failure: false
+    script:
+      - cd Android/PlaceHolder
+      - ./gradlew -Pci --console=plane :app:testDebug
+    only:
+      - master
+
 # Deploy Springboot Backend to Production Environment
 Deploy Springboot to Prod Environment:
   stage: deploy
