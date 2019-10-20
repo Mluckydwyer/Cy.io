@@ -59,7 +59,7 @@ Test Site Dev:
     - sudo npm install
     - sudo chmod -R +xwr .
     - sudo npm test
-    - sudo rm -r node-modules
+#    - sudo rm -r node-modules
   only:
     - branches
   except:
@@ -74,7 +74,7 @@ Test Site Prod:
     - sudo npm install
     - sudo chmod -R +xwr .
     - sudo npm test
-    - sudo rm -r node-modules
+#    - sudo rm -r node-modules
   only:
     - master
 
@@ -156,7 +156,7 @@ Deploy React Prod Site:
     - sudo chmod -R +xwr .
     - sudo npm run build
     - sudo mv -f build/* /var/www/prod-site/
-    - sudo rm -r node-modules
+#    - sudo rm -r node-modules
   artifacts:
     paths:
       - react/build/
@@ -174,7 +174,7 @@ Deploy React Dev Site:
     - sudo chmod -R +xwr .
     - sudo npm run build
     - sudo mv -f build/* /var/www/dev-site/
-    - sudo rm -r node-modules
+#    - sudo rm -r node-modules
   artifacts:
     paths:
       - react/build/
