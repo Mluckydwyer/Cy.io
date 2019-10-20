@@ -92,7 +92,8 @@ Test Android Dev:
     allow_failure: true
     script:
       - cd Android/PlaceHolder
-      - gradle test
+      - sudo chmod -R +xwr .
+      - ./gradlew test --stacktrace
 #      - sudo ./gradlew -Pci --console=plane :app:testDebug
     only:
       - branches
@@ -105,7 +106,8 @@ Test Android Prod:
     allow_failure: false
     script:
       - cd Android/PlaceHolder
-      - gradle test
+      - sudo chmod -R +xwr .
+      - ./gradlew test --stacktrace
 #      - sudo ./gradlew -Pci --console=plane :app:testDebug
     only:
       - master
