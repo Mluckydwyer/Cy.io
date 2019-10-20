@@ -6,8 +6,7 @@ stages:
     - build
     - deploy
     - web-deploy
-# - android-test
-# - android-build
+    - android-test
 
 
 variables:
@@ -76,7 +75,7 @@ Test Springboot Prod:
 
 # Test Springboot Backend For Development Environment
 Test Springboot Dev:
-  stage: test
+  stage: android-test
   allow_failure: true
   script:
     - cd backend
@@ -88,7 +87,7 @@ Test Springboot Dev:
 
 # Test Android Application for Development Environment
 Test Android Dev:
-    stage: test
+    stage: android-test
     allow_failure: true
     script:
       - cd Android/PlaceHolder
