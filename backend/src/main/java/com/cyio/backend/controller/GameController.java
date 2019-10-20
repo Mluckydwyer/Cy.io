@@ -1,19 +1,18 @@
-package com.cyio.backend;
+package com.cyio.backend.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 
+import com.cyio.backend.model.Game;
+import com.cyio.backend.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 public class GameController {
 
     @Autowired
-    GameRepository gameRepository; //using autowire to create an instance of blog Repository
+	GameRepository gameRepository; //using autowire to create an instance of blog Repository
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/restexample")
@@ -39,7 +38,7 @@ public class GameController {
 	}
 
 	@PostMapping("/addgame")
-	public @ResponseBody String addNewUser(@RequestParam String title, @RequestParam String creatorid){ //adds a new row in the games table
+	public @ResponseBody String addGame(@RequestParam String title, @RequestParam String creatorid){ //adds a new row in the games table
 		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
 		Game game = new Game(title,newID.toString(),creatorid);
 		gameRepository.save(game); //Insert new game to the database
