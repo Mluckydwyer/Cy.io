@@ -1,0 +1,55 @@
+These are the mappings for all the current endpoints on the werver. 
+
+Last Update: Oct 8th, 2019
+
+:8080/reactexample
+	- Status: Running - Stable
+	- Type: GET
+	- Usage: none
+	- Returns: JSON for 3 precoded games - not connected to server
+
+:8080/gamelist
+	- Status: Running
+	- Type: GET
+	- Usage: none - Stable
+	- Returns: JSON for the compelete list of games in the database 
+
+:8080/addgame?title=TITLE&creatorid=CREATORID
+	- Status: Running - Stable
+	- Type: POST
+	- Usage: TITLE is the title of the new game; CREATORID is the creator's userid
+	- Returns: "game added successfully" if game was added, error messages otherwise
+
+:8080/searchby?searchtype=TYPE&query=QUERY
+	- Status: Running - Testing
+	- Type: GET
+	- Usage: TYPE is the parameter the query is going to search. Options are: all(Default), title, blurb, and about. If TYPE is not specified or omitted, all fields will be searched 	
+		 QUERY is the keyword(s) to be searched
+	- Returns: JSON for all matched games
+
+:8081/auth/signup
+	- Status: Running on DEVELOP - Unstable
+	- Type: POST
+	- Usage: to register a new user, call this endpoint with a json of the folllowing format:
+			{"userName":"USERNAME",
+			 "email":"EMAIL",
+			 "password":"PASSWORD"}
+		where USERNAME is the username, EMAIL is the email address, PASSWORD is the password, in plain text
+	- Returns: if successful, 
+			{"success": true,
+			 "message": "user registered successfully"}
+		   otherwise, 
+			error messages
+:8081/auth/login
+	- Status: Running on DEVELOP - Unstable
+	- Type: POST
+	- Usage: to log a user in, call this endpoint with the following json:
+			{"userName":"USERNAME",
+			 "password":"PASSWORD"}
+		 where USERNAME is teh usernme, PASSWORD is the password, in plain text
+	- Returns: if successful,
+			{"accesstoken":"ACCESSTOKEN",
+			 "tokenType":"TOKENTYPE"}
+		   otherwise, error messages
+
+		

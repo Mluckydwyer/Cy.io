@@ -1,0 +1,14 @@
+[Unit]
+Description=Cy.io SpringBoot Development Server Service
+After=httpd.service network.target
+Wants=mysqld.service
+
+[Service]
+Type=simple
+Restart=always
+User=user
+Group=users
+ExecStart=/usr/bin/java -jar /home/server-files/dev/cyio-backend-dev.jar --server.port=8081
+
+[Install]
+WantedBy=multi-user.target
