@@ -51,7 +51,7 @@ describe('Config Files', function() {
         fetchMock.reset();
     });
 
-    it('#init()', async () => {
+    it('#init()', async function () {
         fetchMock.mock('res/javascript/game-config-default.json', fakeDefaultConfig);
 
         let config = new Config();
@@ -63,7 +63,7 @@ describe('Config Files', function() {
         expect(config.players.shape).to.have.all.keys(fakeDefaultConfig.players.shape);
     });
 
-    it('#load()', () => {
+    it('#load()', function()  {
         let config = new Config();
         config.load(JSON.stringify(testConfig));
 

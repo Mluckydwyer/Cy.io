@@ -74,7 +74,7 @@ describe('Mover Lib', function() {
     });
 
 
-    it('#normalize()', () => {
+    it('#normalize()', function() {
         let config = new Config();
         config.load(JSON.stringify(fakeDefaultConfig));
         let mover = new Mover().init(config);
