@@ -17,9 +17,6 @@ function setup() {
         this.config = config;
         controller = new Controller().init(config, false);
         player = new Player().init(config); // Create main player
-        controller.then(function (controller) {
-            controller.enable();
-        });
         setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
     });
 }

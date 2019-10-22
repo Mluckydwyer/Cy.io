@@ -150,7 +150,4 @@ function Mover() {
 
 }
 
-
-
-
-
+module.exports = Mover;
