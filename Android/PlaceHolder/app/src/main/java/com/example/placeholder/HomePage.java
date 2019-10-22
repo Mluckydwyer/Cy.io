@@ -2,7 +2,6 @@ package com.example.placeholder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -23,9 +22,9 @@ import org.json.JSONObject;
 
 import static android.widget.TextView.BufferType.EDITABLE;
 
-public class MainActivity extends AppCompatActivity
+public class HomePage extends AppCompatActivity
 {
-    Button gamelist, leaderboard, proceed;
+    Button gamelist, leaderboard;
     EditText tex;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity
         gamelist = (Button) findViewById(R.id.gamelist);
         leaderboard = (Button) findViewById(R.id.leaderboard);
         tex = (EditText) findViewById(R.id.editText);
-        proceed = (Button) findViewById(R.id.proceed);
 
 
         gamelist.setOnClickListener(new View.OnClickListener()
@@ -43,8 +41,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-               openGameList();
-                //respond();
+                respond();
 
             }
         });
@@ -58,29 +55,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        proceed.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                openLoginPage();
-            }
-        });
+
 
     }
-
-    public void openGameList()
-    {
-        Intent gmlst = new Intent(this, GameList.class);
-        startActivity(gmlst);
-    }
-
-    public void openLoginPage()
-    {
-        Intent i = new Intent(this, login.class);
-        startActivity(i);
-    }
-
     //need to put on response for these
     private static final String TAG = "MainActivity";
 
