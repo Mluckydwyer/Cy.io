@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "mocha": "^6.2.2",
+    "chai": "^4.2.0",
     "jquery": "^3.4.1",
     "font-awesome": "^4.7.0",
     "react": "^16.9.0",
@@ -11,10 +13,10 @@
     "react-scripts": "3.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "BROWSER=none react-scripts start",
+    "build": "BROWSER=none react-scripts build",
+    "test": "mocha",
+    "eject": "BROWSER=none react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
