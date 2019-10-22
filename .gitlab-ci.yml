@@ -18,8 +18,17 @@ variables:
 
 cache:
   paths:
-    - .m2/repository/
     - backend/target/
+
+# Change Gitlab-Runner Home directory file permissions and remove node_modlues if there
+default:
+  before_script:
+    - sudo chmod 777 /home/gitlab-runner/ -R
+    - sudo rm /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node_modules/ -rf
+  after_script:
+    - sudo chmod 777 /home/gitlab-runner/ -R
+    - sudo rm /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node_modules/ -rf
+  
 
 # Build Springboot Backend
 Build Maven Backend:
@@ -59,7 +68,6 @@ Test Site Dev:
     - sudo npm install
     - sudo chmod -R +xwr .
     - sudo npm test
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
   only:
     - branches
   except:
@@ -74,7 +82,6 @@ Test Site Prod:
     - sudo npm install
     - sudo chmod -R +xwr .
     - sudo npm test
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
   only:
     - master
 
@@ -117,7 +124,6 @@ Deploy Springboot to Prod Environment:
     - sudo systemctl stop cyio-prod
     - sudo mv `ls target/*.jar | head -n 1` /home/server-files/prod/$OUTPUT_JAR_PROD.jar
     - sudo systemctl start cyio-prod
-
   artifacts:
     paths:
       - backend/target/*.jar
@@ -156,7 +162,6 @@ Deploy React Prod Site:
     - sudo chmod -R +xwr .
     - sudo npm run build
     - sudo mv -f build/* /var/www/prod-site/
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
   artifacts:
     paths:
       - react/build/
@@ -174,7 +179,6 @@ Deploy React Dev Site:
     - sudo chmod -R +xwr .
     - sudo npm run build
     - sudo mv -f build/* /var/www/dev-site/
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
   artifacts:
     paths:
       - react/build/
