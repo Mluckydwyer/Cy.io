@@ -160,7 +160,7 @@ Deploy React Prod Site:
     - cd react/
     - sudo npm install
     - sudo chmod -R +xwr .
-    - sudo npm run build
+    - sudo npm run build-auto
     - sudo mv -f build/* /var/www/prod-site/
   artifacts:
     paths:
@@ -177,7 +177,7 @@ Deploy React Dev Site:
     - cd react/
     - sudo npm install
     - sudo chmod -R +xwr .
-    - sudo npm run build
+    - sudo npm run build-auto
     - sudo mv -f build/* /var/www/dev-site/
   artifacts:
     paths:
