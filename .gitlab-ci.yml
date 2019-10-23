@@ -19,6 +19,7 @@ variables:
 cache:
   paths:
     - backend/target/
+    - react/build/
 
 # Change Gitlab-Runner Home directory file permissions and remove node_modlues if there
 default:
