@@ -14,8 +14,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-auto": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
-    "build-auto": "BROWSER=none react-scripts build",
+    "build-auto": "react-scripts build",
     "test": "mocha",
     "eject": "react-scripts eject"
   },
