@@ -33,6 +33,6 @@ app:
     # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
     # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris:
-      - http://localhost:3000/oauth2/redirect
+      - http://localhost:8080/user/me
+      - /user/me
       - myandroidapp://oauth2/redirect
-      - myiosapp://oauth2/redirect
