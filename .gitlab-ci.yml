@@ -67,9 +67,9 @@ Test Site Dev:
   allow_failure: true
   script:
     - cd react
-    - sudo $NPM_PATH install
-    - sudo chmod -R +xwr .
-    - sudo $NPM_PATH test
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - $NPM_PATH test
   only:
     - branches
   except:
@@ -81,9 +81,9 @@ Test Site Prod:
   allow_failure: false
   script:
     - cd react
-    - sudo $NPM_PATH install
-    - sudo chmod -R +xwr .
-    - sudo $NPM_PATH test
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - $NPM_PATH test
   only:
     - master
 
@@ -160,9 +160,9 @@ Deploy React Prod Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
-    - sudo $NPM_PATH install
-    - sudo chmod -R +xwr .
-    - sudo $NPM_PATH run build-auto
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - $NPM_PATH run build-auto
     - sudo mv -f build/* /var/www/prod-site/
   artifacts:
     paths:
@@ -177,9 +177,9 @@ Deploy React Dev Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
-    - sudo $NPM_PATH install
-    - sudo chmod -R +xwr .
-    - sudo $NPM_PATH run build-auto
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - $NPM_PATH run build-auto
     - sudo mv -f build/* /var/www/dev-site/
   artifacts:
     paths:
