@@ -15,10 +15,12 @@ variables:
     SPRING_PROFILES_ACTIVE: gitlab-ci
     OUTPUT_JAR_PROD: "cyio-backend-prod"
     OUTPUT_JAR_DEV: "cyio-backend-dev"
+    NPM_PATH: "/usr/local/bin/npm"
 
 cache:
   paths:
     - backend/target/
+    - react/build/
 
 # Change Gitlab-Runner Home directory file permissions and remove node_modlues if there
 default:
@@ -65,9 +67,9 @@ Test Site Dev:
   allow_failure: true
   script:
     - cd react
-    - sudo npm install
+    - sudo $NPM_PATH install
     - sudo chmod -R +xwr .
-    - sudo npm test
+    - sudo $NPM_PATH test
   only:
     - branches
   except:
@@ -79,9 +81,9 @@ Test Site Prod:
   allow_failure: false
   script:
     - cd react
-    - sudo npm install
+    - sudo $NPM_PATH install
     - sudo chmod -R +xwr .
-    - sudo npm test
+    - sudo $NPM_PATH test
   only:
     - master
 
@@ -158,9 +160,9 @@ Deploy React Prod Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
-    - sudo npm install
+    - sudo $NPM_PATH install
     - sudo chmod -R +xwr .
-    - sudo npm run build-auto
+    - sudo $NPM_PATH run build-auto
     - sudo mv -f build/* /var/www/prod-site/
   artifacts:
     paths:
@@ -175,9 +177,9 @@ Deploy React Dev Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
-    - sudo npm install
+    - sudo $NPM_PATH install
     - sudo chmod -R +xwr .
-    - sudo npm run build-auto
+    - sudo $NPM_PATH run build-auto
     - sudo mv -f build/* /var/www/dev-site/
   artifacts:
     paths:
