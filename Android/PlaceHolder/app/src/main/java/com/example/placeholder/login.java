@@ -58,36 +58,41 @@ public class login extends AppCompatActivity
                     System.out.println(e.getMessage());
                 }
                 String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
-                JsonObjectRequest jobj = new JsonObjectRequest(Request.Method.POST, URL, obj, new Response.Listener<JSONObject>()
-                {
-                    @Override
-                    public void onResponse(JSONObject response)
-                    {
-                        JSONArray tokens = response.names();
-                        vt.setTextSize(15);
-                        try
-                        {
-                            vt.setText("work please");
-                            vt.setText(response.getString(tokens.get(0).toString()) + response.getString(tokens.get(1).toString()));
-                        }
-                        catch (JSONException e)
-                        {
-                            System.out.println(e.getMessage());
-                        }
-                    }
-                }, new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        VolleyLog.d("Login","Error: "+ error.getMessage());
-                    }
-                });
+                JsonObjectRequest jobj = signon(obj,vt);
                 AppController.getInstance().addToRequestQueue(jobj, tag_json_obj);
             }
         });
 
 
+    }
+
+    public static JsonObjectRequest signon(JSONObject jo, final TextView vt)
+    {
+        String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
+        return new JsonObjectRequest(Request.Method.POST, URL, jo, new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                JSONArray tokens = response.names();
+                vt.setTextSize(15);
+                try
+                {
+                    vt.setText(response.getString(tokens.get(0).toString()) + response.getString(tokens.get(1).toString()));
+                }
+                catch (JSONException e)
+                {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                VolleyLog.d("Login","Error: "+ error.getMessage());
+            }
+        });
     }
     public void openHomePage()
     {

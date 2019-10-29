@@ -1,6 +1,7 @@
 package com.example.placeholder;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.placeholder.Game;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -25,7 +26,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.widget.TextView.BufferType.EDITABLE;
 
@@ -85,6 +88,7 @@ public class GameList extends AppCompatActivity
                         Log.d(TAG, res);
                         //TextView vt = (TextView) findViewById(R.id.scrolledText);
                         //vt.setText("");
+                        ArrayList<String> gametitles = new ArrayList<String>();
                         for(int i = 0; i < response.length(); i++)
                         {
                            // CharSequence c = vt.getText();
@@ -102,6 +106,7 @@ public class GameList extends AppCompatActivity
                                 Title.setText(ti + "\n");
                                 Title.setTextSize(20);
                                 ll.addView(Title);
+                                gametitles.add(ti);
 
                                 TextView blurb = new TextView(getApplicationContext());
                                 blurb.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -191,7 +196,19 @@ public class GameList extends AppCompatActivity
         }
     }
 
-
+    public List<Game> parseGameList(ArrayList<String> gametitles)
+    {
+        if (gametitles == null)
+        {
+            return null;
+        }
+        ArrayList<Game> listofgames = new ArrayList<Game>();
+        for (int parser = 0; parser < gametitles.size(); parser++)
+        {
+            listofgames.add(new Game(gametitles.get(parser)));
+        }
+        return listofgames;
+    }
 
 
 }
