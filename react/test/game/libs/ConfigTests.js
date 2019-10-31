@@ -1,8 +1,41 @@
 let expect = require('chai').expect;
 let fetchMock = require('fetch-mock');
 require('isomorphic-fetch');
-require('../../../public/game/res/javascript/libs/config');
-let Config = require('../../../public/game/res/javascript/libs/config');
+import { Config } from '../../../public/game/res/javascript/libs/config.mjs';
+let jsdom = require("jsdom");
+let { JSDOM } = jsdom;
+let fs = require('fs');
+let path = require('path');
+let filePath = path.join(__dirname, '../../../public/game/index.html');
+
+fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+    if (!err) {
+        const { window } = new JSDOM(data);
+
+        function copyProps(src, target) {
+            Object.defineProperties(target, {
+                ...Object.getOwnPropertyDescriptors(src),
+                ...Object.getOwnPropertyDescriptors(target),
+            });
+        }
+
+        global.window = window;
+        global.document = window.document;
+        global.navigator = {
+            userAgent: 'node.js',
+        };
+        global.requestAnimationFrame = function (callback) {
+            return setTimeout(callback, 0);
+        };
+        global.cancelAnimationFrame = function (id) {
+            clearTimeout(id);
+        };
+        copyProps(window, global);
+
+    } else {
+        console.log(err);
+    }
+});
 
 let fakeDefaultConfig = {
     "game": {
@@ -45,8 +78,7 @@ let testConfig = {
 describe('Config Files', function() {
 
     // add a test hook
-    beforeEach(function() {
-    });
+    beforeEach(function() {});
 
     afterEach(function () {
         fetchMock.reset();

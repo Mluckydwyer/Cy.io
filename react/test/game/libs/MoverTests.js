@@ -1,12 +1,11 @@
 let expect = require('chai').expect;
-let Mover = require('../../../public/game/res/javascript/libs/mover');
-let Config = require('../../../public/game/res/javascript/libs/config');
+import { Config } from '../../../public/game/res/javascript/libs/config.mjs';
+import { Mover } from '../../../public/game/res/javascript/libs/mover.mjs';
 let jsdom = require("jsdom");
 let { JSDOM } = jsdom;
 let fs = require('fs');
 let path = require('path');
 let filePath = path.join(__dirname, '../../../public/game/index.html');
-let dom;
 
 fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
     if (!err) {
@@ -66,13 +65,9 @@ let fakeDefaultConfig = {
 describe('Mover Lib', function() {
 
     // add a test hook
-    beforeEach(function() {
+    beforeEach(function() {});
 
-    });
-
-    afterEach(function () {
-    });
-
+    afterEach(function () {});
 
     it('#normalize()', function() {
         let config = new Config();
