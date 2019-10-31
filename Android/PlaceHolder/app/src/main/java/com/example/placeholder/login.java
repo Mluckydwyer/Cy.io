@@ -43,6 +43,7 @@ public class login extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                openHomePage();
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
                 String tag_json_obj ="json_obj_req";

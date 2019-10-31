@@ -36,6 +36,7 @@ public class GameList extends AppCompatActivity
 {
     JSONArray arr = new JSONArray();
     //TextView text = new TextView(this);
+    public ArrayList<Game> gameList;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -66,36 +67,30 @@ public class GameList extends AppCompatActivity
 
     public void goHome()
     {
-        Intent it = new Intent(this, HomePage.class);
+        Intent it = new Intent(this, MainActivity.class);
         startActivity(it);
     }
     private static final String TAG = "MainActivity";
+
     protected void arrResponse() throws JSONException
     {
         String tag_json_arry ="json_array_req";
         String url = "http://coms-309-nv-4.misc.iastate.edu:8080/gamelist";
-        ArrayList<String> list = new ArrayList<String>();
-//        JSONArray arr = new JSONArray();
+        ArrayList<String> biglist = new ArrayList<String>();
         JsonArrayRequest req =new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>()
                 {
+                    public ArrayList<Game> midlist = new ArrayList<>();
+
                     @Override
                     public void onResponse(JSONArray response)
                     {
-                        Log.d(TAG, response.toString());
-                        String res = response.toString();
-                        CharSequence ch = res;
-                        Log.d(TAG, res);
-                        //TextView vt = (TextView) findViewById(R.id.scrolledText);
-                        //vt.setText("");
-                        ArrayList<String> gametitles = new ArrayList<String>();
+                        ArrayList<String> list = new ArrayList<String>();
                         for(int i = 0; i < response.length(); i++)
                         {
-                           // CharSequence c = vt.getText();
-                            JSONArray st = new JSONArray();
+                            JSONArray st;
                             try
                             {
-                             //   String s = c.toString();
                                 JSONObject jj = response.getJSONObject(i);
                                 st = jj.names();
                                 LinearLayout ll = (LinearLayout) findViewById(R.id.llMain);
@@ -106,7 +101,7 @@ public class GameList extends AppCompatActivity
                                 Title.setText(ti + "\n");
                                 Title.setTextSize(20);
                                 ll.addView(Title);
-                                gametitles.add(ti);
+                                list.add(ti);
 
                                 TextView blurb = new TextView(getApplicationContext());
                                 blurb.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -114,6 +109,7 @@ public class GameList extends AppCompatActivity
                                 blurb.setText(bl);
                                 blurb.setTextSize(15);
                                 ll.addView(blurb);
+                                list.add(bl);
 
                                 TextView about = new TextView(getApplicationContext());
                                 about.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -121,6 +117,7 @@ public class GameList extends AppCompatActivity
                                 about.setText("Description:" + ab);
                                 about.setTextSize(15);
                                 ll.addView(about);
+                                list.add(ab);
 
                                 TextView gameID = new TextView(getApplicationContext());
                                 gameID.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -128,6 +125,7 @@ public class GameList extends AppCompatActivity
                                 gameID.setText("Game ID:" + ga);
                                 gameID.setTextSize(15);
                                 ll.addView(gameID);
+                                list.add(ga);
 
                                 TextView creatorID = new TextView(getApplicationContext());
                                 creatorID.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -135,6 +133,7 @@ public class GameList extends AppCompatActivity
                                 creatorID.setText("Created by:"+ bl + "\n");
                                 creatorID.setTextSize(15);
                                 ll.addView(creatorID);
+                                list.add(cr);
 
                                 /*
                                 0=Title
@@ -144,37 +143,17 @@ public class GameList extends AppCompatActivity
                                 4=Creator ID
                                 5=thumbnail
                                  */
-
-                               // c = s;
                             }
                             catch (JSONException e)
                             {
                                 System.out.println(e.getMessage());
                             }
-                           // vt.setText(c);
-                            //vt.setTextSize(30);
                         }
-                        //arr = response;
-//                        try
-//                        {
-//
-//                            LinearLayout ll = (LinearLayout) findViewById(R.id.llMain);
-////            for (int i = 0; i < arr.length(); i++)
-////            {
-//                            JSONObject jj = response.getJSONObject(0);
-//                            st = jj.names();
-//                            String title = jj.getString(st.get(0).toString());
-//
-//
-//                            vt.setText(response.toString());
-//                            ll.addView(text);
-////            }
-//                        }
-//                        catch (JSONException e)
-//                        {
-//                            System.out.println(e.getMessage());
-//                        }
-
+                        for(int j = 0; j < list.size(); j += 5)
+                        {
+                            Game gg = new Game(list.get(j), list.get(j + 1), list.get(j + 2), list.get(j + 3), list.get(j + 4));
+                            midlist.add(gg);
+                        }
                     }
                 },new Response.ErrorListener()
         {
@@ -185,30 +164,29 @@ public class GameList extends AppCompatActivity
             }
         });
         AppController.getInstance().addToRequestQueue(req, tag_json_arry);
-        if (arr != null)
-        {
-            int len = arr.length();
-
-            for (int i = 0; i < len; i++)
-            {
-                list.add(arr.get(i).toString());
-            }
-        }
     }
 
-    public List<Game> parseGameList(ArrayList<String> gametitles)
+    public List<Game> parseGameList()
     {
-        if (gametitles == null)
+        if (gameList == null)
         {
             return null;
         }
         ArrayList<Game> listofgames = new ArrayList<Game>();
-        for (int parser = 0; parser < gametitles.size(); parser++)
-        {
-            listofgames.add(new Game(gametitles.get(parser)));
-        }
+//        for (int parser = 0; parser < gametitles.size(); parser++)
+//        {
+//            listofgames.add(gameList.get(parser));
+//        }
         return listofgames;
     }
+    public ArrayList<Game> getGameList()
+    {
+        return gameList;
+    }
 
+    public void addToList(Game g)
+    {
+
+    }
 
 }

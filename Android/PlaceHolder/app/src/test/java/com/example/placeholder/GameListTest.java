@@ -31,12 +31,12 @@ public class GameListTest
     @Test
     public void Null_parseGameList()
     {
-        Game g1 = new Game("Cookie Clicker");
-        Game g2 = new Game("Agar.io");
+        Game g1 = new Game("Cookie Clicker", "S", "t", "u", "v");
+        Game g2 = new Game("Agar.io", "S", "T", "r", "m");
         ArrayList<Game> list = new ArrayList<Game>();
         list.add(g1);
         list.add(g2);
-        when(g.parseGameList(null)).thenReturn(list);
+        when(g.parseGameList()).thenReturn(list);
         assertEquals(list.get(0), g1);
         assertEquals(list.get(1), g2);
     }

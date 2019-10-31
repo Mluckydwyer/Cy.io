@@ -31,49 +31,34 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/leaderboard"
-        android:layout_width="185dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="269dp"
-        android:text="LeaderBoards" />
-
-    <Button
-        android:id="@+id/gamelist"
-        android:layout_width="184dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="251dp"
-        android:text="GameList" />
-
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="71dp"
-        android:layout_marginLeft="71dp"
-        android:layout_marginTop="180dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Hello" />
-
-    <Button
         android:id="@+id/proceed"
-        android:layout_width="227dp"
+        android:layout_width="255dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="66dp"
-        android:layout_marginLeft="66dp"
-        android:layout_marginBottom="113dp"
-        android:text="Proceed to Login" />
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginBottom="272dp"
+        android:text="Proceed to Login"
+        android:textSize="45dp" />
+
+    <Button
+        android:id="@+id/games"
+        android:layout_width="224dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
+        android:layout_marginBottom="128dp"
+        android:text="Game List" />
 
 </RelativeLayout>
