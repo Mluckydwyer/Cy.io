@@ -1,3 +1,5 @@
+export { Mover };
+
 function Mover() {
     this.xPos = 0;
     this.yPos = 0;
@@ -12,9 +14,8 @@ function Mover() {
     this.enableKeys = true;
     this.expMovement = false; // TODO Make enum
 
-    this.init = function (config) {
+    this.init = function () {
         this.initListeners();
-        this.config(config);
         return this;
     };
 
@@ -22,6 +23,7 @@ function Mover() {
         this.size = config.players.shape.playerSize;
         this.speed = config.players.movement.playerSpeed;
         this.expMovement = config.players.movement.movementStyle === 'exponential';
+        this.centerPos();
         return this;
     };
 
@@ -49,8 +51,8 @@ function Mover() {
     };
 
     this.centerPos = function () {
-        this.xPos = canvas.width / 2 + this.radius / 2;
-        this.yPos = canvas.height / 2 + this.radius / 2;
+        this.xPos = canvas.width / 2 + this.size / 2;
+        this.yPos = canvas.height / 2 + this.size / 2;
     };
 
     this.updateVectorKeys = function () {
@@ -72,11 +74,11 @@ function Mover() {
 
     // Update movement based on current input
     this.update = function (controller) {
-        this.targetX = controller.targetX;
-        this.targetY = controller.targetY;
+        if (!controller.mouseOnScreen) return; // If mouse has left hte screen don't update position
+        this.setCoords(controller.mouseX, controller.mouseY); // Set new mouse coords
 
         // Use the current input source to get current movement data
-        switch (this.inputSource) {
+        switch (controller.inputSource) {
             case 'keyboard':
                 this.checkKeys(); // Keyboard input
                 break;
@@ -92,13 +94,11 @@ function Mover() {
     this.move = function () {
         this.xPos += this.targetX * this.speed;
         this.yPos += this.targetY * this.speed;
-
-        // console.log("x: " + this.targetX + "  y: " + this.targetY + " s: " + this.speed)
     };
 
     // Handles Keyboard input
     this.checkKeys = function () {
-        keys = this.keys;
+        let keys = this.keys;
 
         // Keyboard Controls
         if ((keys[0] || keys[4]) && (this.targetX + this.radius >= 0))
@@ -120,14 +120,13 @@ function Mover() {
             this.targetY = 0; // If no y-coord keys pressed, reset target
 
         this.normalize();
-        // console.log("x: " + this.xPos + " y: " + this.yPos);
     };
 
     // Handles mouse input
     this.checkMouse = function () {
         // Mouse Controls
-        let deltaX = this.mouseX - this.xPos;
-        let deltaY = this.mouseY - this.yPos;
+        let deltaX = this.targetX - this.xPos;
+        let deltaY = this.targetY - this.yPos;
 
         this.setCoords(deltaX, deltaY);
         if (this.mag <= this.mouseDeadzone) {
@@ -150,4 +149,5 @@ function Mover() {
 
 }
 
-module.exports = Mover;
+// export { Mover };
+// module.exports = Mover;

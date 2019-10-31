@@ -1,10 +1,25 @@
 {
+  "game": {
+    "gameId": "xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx",
+    "title": "Title",
+    "authors": []
+  },
   "players": {
     "shape": {
-      "defaultSize": 30
+      "playerShape": "circle",
+      "playerSize": 30,
+      "playerColor": "blue",
+      "playerOutline": "#003300",
+      "enemyShape": "circle",
+      "enemySize": 0,
+      "enemyColor": "red",
+      "enemyOutline": "#003300"
     },
     "movement": {
-      "defaultSpeed": 5
+      "playerSpeed": 5,
+      "movementStyle": "linear",
+      "allowKeyboard": true,
+      "allowMouse": true
     }
   }
 }

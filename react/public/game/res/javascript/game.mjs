@@ -1,11 +1,16 @@
 let canvas; // HTML canvas
 let g; // canvas graphics object
 
+// import { Mover } from './res/javascript/libs/mover.mjs';
+import { Config } from './libs/config.mjs';
+import { Player } from './libs/player.mjs';
+import { Controller } from './libs/controller.mjs';
+
 const framerate = 60;
 let player, controller, config;
 
 // Initial Setup
-function setup() {
+async function setup() {
     // Setup HTML drawing canvas for drawing to screen
     canvas = document.getElementById("canvas");
     g = canvas.getContext('2d');
@@ -13,19 +18,21 @@ function setup() {
     window.addEventListener('resize', resizeCanvas); // Window resize listener
 
     // Game Elements
-    config = new Config().init().then(function (config) {
-        this.config = config;
-        controller = new Controller().init(config, false);
+    config = await new Config().init();
+        controller = new Controller().init(config, canvas, false);
         player = new Player().init(config); // Create main player
+        await refreshConfig('res/javascript/game-config-test.json'); // TODO await???
+
         setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
-    });
+        controller.enable();
 }
 
 // When done loading, run the setup function
 window.onload = setup;
 
-function refreshConfig(json) {
-    config.load(json);
+// Refresh teh game config file
+async function refreshConfig(json) {
+    await config.load(json);
     controller.config(config);
     player.config(config);
 }

@@ -1,6 +1,7 @@
 let expect = require('chai').expect;
 let fetchMock = require('fetch-mock');
 require('isomorphic-fetch');
+require('../../../public/game/res/javascript/libs/config');
 let Config = require('../../../public/game/res/javascript/libs/config');
 
 let fakeDefaultConfig = {
@@ -63,7 +64,7 @@ describe('Config Files', function() {
         expect(config.players.shape).to.have.all.keys(fakeDefaultConfig.players.shape);
     });
 
-    it('#load()', function()  {
+    it('#load()', function() {
         let config = new Config();
         config.load(JSON.stringify(testConfig));
 

@@ -1,3 +1,5 @@
+export { Controller };
+
 function Controller() {
     this.isEnabled = false;
 
@@ -12,15 +14,13 @@ function Controller() {
     this.keys = [false, false, false, false, false, false, false, false]; // Key Order= Left; Up; Right, Down, A, W, D, S
     this.mouseX = 0;
     this.mouseY = 0;
-    this.targetX = 0;
-    this.targetY = 0;
     this.mouseOnScreen = false;
     this.mouseEnabled = false;
     this.keyboardEnabled = false;
 
-    this.init = function (config, enable) {
-        this.addEventListeners(); // Listen for mouse of keyboard events
+    this.init = function (config, canvas, enable) {
         this.config(config);
+        this.addEventListeners(canvas); // Listen for mouse of keyboard events
         if (enable) this.enable(); // Enable control
         return this;
     };
@@ -42,34 +42,12 @@ function Controller() {
     };
 
     this.defaultEventHandler = function (event) {
-        console.log(event.type);
-        let method = 'on' + event.type;
-        if (this[method]) {
-            this[method](event);
-        }
-    };
-
-    this.click = function (event) {
-        if (this.isEnabled && this.mouseEnabled) {
-            event.preventDefault();
-            console.log("Click Event: " + event.which);
-            this.inputSource = this.inputs.MOUSE;
-
-            // player.radius = player.defaultRadius;
-            this.expMovement = true;
-            setTimeout(function () {
-                player.mover.expMovement = false;
-            }, 500)
-        }
-    };
-
-    this.mouseLeave = function (event) {
-        if (this.isEnabled && this.mouseEnabled) {
-            this.mouseOnScreen = false;
-            this.inputSource = this.inputs.MOUSE;
-            this.targetX = 0;
-            this.targetY = 0;
-            this.updateMag();
+        if (this.isEnabled) {
+            console.log(event.type);
+            let method = 'on' + event.type;
+            if (this[method]) {
+                this[method](event);
+            }
         }
     };
 
@@ -119,7 +97,7 @@ function Controller() {
     };
 
     this.keyReleased = function (event) {
-        if (this.isEnabled  && this.keyboardEnabled) {
+         if (this.isEnabled && this.keyboardEnabled) {
             event.preventDefault();
             console.log("Keydown Event: " + event.which);
             this.inputSource = this.inputs.KEYBOARD;
@@ -162,37 +140,56 @@ function Controller() {
         }
     };
 
-    this.mouseMove = function(event) {
-        if (this.isEnabled  && this.mouseEnabled) {
+    this.click = function (event) {
+        if (this.isEnabled && this.mouseEnabled) {
+            event.preventDefault();
+            console.log("Click Event: " + event.which);
+            this.inputSource = this.inputs.MOUSE;
+        }
+    };
+
+    this.mouseLeave = function (event) {
+        if (this.isEnabled && this.mouseEnabled) {
+            this.mouseOnScreen = false;
+            this.inputSource = this.inputs.MOUSE;
+        }
+    };
+
+    this.mouseMove = function (event) {
+        if (this.isEnabled && this.mouseEnabled) {
             this.mouseOnScreen = true;
             this.inputSource = this.inputs.MOUSE;
             this.mouseX = event.clientX;
             this.mouseY = event.clientY;
+            //console.log("MM X: " + this.mouseX + " Y: " + this.mouseY);
         }
     };
 
-    this.mouseWheel = function(event) {
-        if (this.isEnabled  && this.mouseEnabled) {
+    this.mouseWheel = function (event) {
+        console.log("scroll");
+        if (this.isEnabled && this.mouseEnabled) {
             event.preventDefault();
             this.inputSource = this.inputs.MOUSE;
-
-            if (event.deltaY > 0) this.radius += player.sizeIncrement;
-            else if (this.radius - player.sizeIncrement >= 0) this.radius -= player.sizeIncrement;
         }
     };
 
     // Add all prototypes to handle browser events
-    this.addEventListeners = function () {
-        //Controller.prototype.handleEvent = this.defaultEventHandler; // Handle all default events
-        if (this.keyboardEnabled) {
-            Controller.prototype.onkeydown = this.keyPressed(); // On Mouse Click
-            Controller.prototype.onkeyup = this.keyReleased(); // On Mouse Click
-        }
-        if (this.mouseEnabled) {
-            Controller.prototype.onmouseleave = this.mouseLeave; // On Mouse Leave Screen
-            Controller.prototype.onmousemove = this.mouseMove; // On Mouse Move
-            Controller.prototype.onwheel = this.mouseWheel; // On Mouse Wheel
-        }
+    this.addEventListeners = function (canvas) {
+        // Controller.prototype.handleEvent = this.defaultEventHandler; // Handle all default events
+        // Controller.prototype.keydown = this.keyPressed(); // On Mouse Click
+        // Controller.prototype.keyup = this.keyReleased(); // On Mouse Click
+        // Controller.prototype.mouseleave = this.mouseLeave; // On Mouse Leave Screen
+        // Controller.prototype.mousemove = this.mouseMove; // On Mouse Move
+        // Controller.prototype.wheel = this.mouseWheel; // On Mouse Wheel
+        canvas.addEventListener("keydown", this.keyPressed.bind(this), false);
+        canvas.addEventListener("keyup", this.keyReleased.bind(this), false);
+        canvas.addEventListener("mouseleave", this.mouseLeave.bind(this), false);
+        canvas.addEventListener("mousemove", this.mouseMove.bind(this), false);
+        canvas.addEventListener("wheel", this.mouseWheel.bind(this), false);
+        canvas.addEventListener("click", this.click.bind(this), false);
+
+        //window.addEventListener("handleEvent", this.defaultEventHandler.bind(this), false);
+        // canvas.addEventListener("mousemove", this.mouseMove, false);
     };
 }
 
