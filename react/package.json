@@ -19,7 +19,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-auto": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
+    "build-auto": "react-scripts build",
     "test": "mocha --experimental-modules --require esm --recursive",
     "eject": "react-scripts eject"
   },
