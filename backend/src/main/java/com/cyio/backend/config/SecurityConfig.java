@@ -96,7 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/",
                         "/gamelist",
-                        "/user/me" //TODO: remove this bad boii
+                        "/user/me", //TODO: remove this bad boii
+                        "/leaderboard"
                         )
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
