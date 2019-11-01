@@ -163,6 +163,7 @@ Deploy React Prod Site:
     - $NPM_PATH install
     # - sudo chmod -R +xwr .
     - CI=false $NPM_PATH run build-auto
+    - sudo rm -rf /var/www/prod-site/*
     - sudo mv -f build/* /var/www/prod-site/
   artifacts:
     paths:
@@ -180,6 +181,7 @@ Deploy React Dev Site:
     - $NPM_PATH install
     # - sudo chmod -R +xwr .
     - CI=false $NPM_PATH run build-auto
+    - sudo rm -rf /var/www/dev-site/*
     - sudo mv -f build/* /var/www/dev-site/
   artifacts:
     paths:
