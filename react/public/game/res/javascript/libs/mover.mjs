@@ -8,14 +8,12 @@ function Mover() {
     this.mag = 0;
     this.speed = 5;
     this.size = 0;
+    this.keys = [];
 
     this.mouseDeadzone = 5;
-    this.enableMouse = true;
-    this.enableKeys = true;
     this.expMovement = false; // TODO Make enum
 
     this.init = function () {
-        this.initListeners();
         return this;
     };
 
@@ -25,17 +23,6 @@ function Mover() {
         this.expMovement = config.players.movement.movementStyle === 'exponential';
         this.centerPos();
         return this;
-    };
-
-    // Establish event listeners
-    this.initListeners = function () {
-        // Control Listeners
-        if (this.enableKeys) document.addEventListener('keyup', this);
-        if (this.enableKeys) document.addEventListener('keydown', this);
-        if (this.enableMouse) document.addEventListener('wheel', this);
-        if (this.enableMouse) document.addEventListener('click', this);
-        if (this.enableMouse) document.addEventListener('mouseleave', this);
-        if (this.enableMouse) document.addEventListener('mousemove', this);
     };
 
     // Update movement vector magnitude
@@ -48,6 +35,10 @@ function Mover() {
         this.targetX = x;
         this.targetY = y;
         this.updateMag();
+    };
+
+    this.setKeys = function (keys) {
+        this.keys = keys;
     };
 
     this.centerPos = function () {
@@ -76,6 +67,7 @@ function Mover() {
     this.update = function (controller) {
         if (!controller.mouseOnScreen) return; // If mouse has left hte screen don't update position
         this.setCoords(controller.mouseX, controller.mouseY); // Set new mouse coords
+        this.setKeys(controller.keys);
 
         // Use the current input source to get current movement data
         switch (controller.inputSource) {
@@ -119,6 +111,7 @@ function Mover() {
         if (!(keys[1] || keys[5] || keys[3] || keys[7]))
             this.targetY = 0; // If no y-coord keys pressed, reset target
 
+        console.log("X: " + this.targetX + " Y: " + this.targetY);
         this.normalize();
     };
 

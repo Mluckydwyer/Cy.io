@@ -21,7 +21,7 @@ export function Player() {
 
     // Draw the player TODO allow more than circles
     this.draw = function(g) {
-        console.log("X: " + this.mover.xPos + " Y: " + this.mover.yPos + " R: " + this.mover.size);
+        // console.log("X: " + this.mover.xPos + " Y: " + this.mover.yPos + " R: " + this.mover.size);
         g.beginPath(); // Draw a path that is an unfilled circle
         g.arc(this.mover.xPos, this.mover.yPos, this.mover.size, 0, 2 * Math.PI, false);
         g.fillStyle = 'blue'; // Fill it with blue

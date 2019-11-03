@@ -97,7 +97,7 @@ function Controller() {
     };
 
     this.keyReleased = function (event) {
-         if (this.isEnabled && this.keyboardEnabled) {
+        if (this.isEnabled && this.keyboardEnabled) {
             event.preventDefault();
             console.log("Keydown Event: " + event.which);
             this.inputSource = this.inputs.KEYBOARD;
@@ -181,8 +181,8 @@ function Controller() {
         // Controller.prototype.mouseleave = this.mouseLeave; // On Mouse Leave Screen
         // Controller.prototype.mousemove = this.mouseMove; // On Mouse Move
         // Controller.prototype.wheel = this.mouseWheel; // On Mouse Wheel
-        canvas.addEventListener("keydown", this.keyPressed.bind(this), false);
-        canvas.addEventListener("keyup", this.keyReleased.bind(this), false);
+        document.addEventListener("keydown", this.keyPressed.bind(this), false);
+        document.addEventListener("keyup", this.keyReleased.bind(this), false);
         canvas.addEventListener("mouseleave", this.mouseLeave.bind(this), false);
         canvas.addEventListener("mousemove", this.mouseMove.bind(this), false);
         canvas.addEventListener("wheel", this.mouseWheel.bind(this), false);
