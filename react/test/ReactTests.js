@@ -1,4 +1,4 @@
-// begin a test suite of one or more tests
+// begin a test suite of one or more test
 var expect = require('chai').expect;
 
 describe('React Tests', function() {
@@ -14,6 +14,6 @@ describe('React Tests', function() {
         expect(2 + 2).to.equal(4);
     })
 
-    // ...some more tests
+    // ...some more test
 
 });
