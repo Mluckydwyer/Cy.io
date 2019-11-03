@@ -12,6 +12,10 @@ function Config() {
 
     this.load = async function (uri) {
         let json = await getConfig(uri);
+        this.loadRaw(json);
+    };
+
+    this.loadRaw = function (json) {
         json = JSON.parse(json);
         //this.addProps(json, json);
         Object.keys(json).forEach(key => this[key] = json[key]); // Parse the JSON config file

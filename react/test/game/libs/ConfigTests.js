@@ -96,9 +96,9 @@ describe('Config Files', function() {
         expect(config.players.shape).to.have.all.keys(fakeDefaultConfig.players.shape);
     });
 
-    it('#load()', function() {
+    it('#loadRaw()', function() {
         let config = new Config();
-        config.load(JSON.stringify(testConfig));
+        config.loadRaw(JSON.stringify(testConfig));
 
         expect(config.players.shape.defaultSize).to.equal(testConfig.players.shape.defaultSize);
         expect(config.players.movement.defaultSpeed).to.equal(testConfig.players.movement.defaultSpeed);
