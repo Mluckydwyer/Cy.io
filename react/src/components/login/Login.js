@@ -23,18 +23,22 @@ class Login extends Component{
     }
     
     loginRequest(event) {
-        event.preventDefault();
         const API = 'http://coms-309-nv-4.misc.iastate.edu:8080/auth/login';
         this.setState({isLoading : true});
-        const response = fetch(API, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
+        fetch(API, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(({
                 userName:this.state.userName,
                 password:this.state.password,
             })),
-        });
-        return response.json();
+            credentials: "include",
+            
+        })
+            .then(res => res.json())
+            .then(console.log);
     }
     
     render(){
