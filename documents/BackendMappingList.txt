@@ -27,10 +27,10 @@ Last Update: Oct 8th, 2019
 		 QUERY is the keyword(s) to be searched
 	- Returns: JSON for all matched games
 
-:8080/auth/signup
+:8080/auth/signup   
 	- Status: Stable
 	- Type: POST
-	- Usage: to register a new user, call this endpoint with a json of the folllowing format:
+	- Usage: to register a new user, call this endpoint with a json of the following format:
 			{"userName":"USERNAME",
 			 "email":"EMAIL",
 			 "password":"PASSWORD"}
@@ -41,7 +41,7 @@ Last Update: Oct 8th, 2019
 		   otherwise, 
 			error messages
 :8080/auth/login
-	- Status: Stab;e
+	- Status: Stable
 	- Type: POST
 	- Usage: to log a user in, call this endpoint with the following json:
 			{"userName":"USERNAME",

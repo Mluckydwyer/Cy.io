@@ -1,9 +1,6 @@
 import React from 'react';
 import '../../css/base/StaticBanner.css'
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
     Link
 } from "react-router-dom";
 function StaticBanner() {
