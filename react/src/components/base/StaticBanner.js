@@ -1,6 +1,11 @@
 import React from 'react';
 import '../../css/base/StaticBanner.css'
-
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 function StaticBanner() {
     
 
@@ -10,7 +15,7 @@ function StaticBanner() {
                 <h1 className="jumbotron-heading">Cy.io Hosted Games</h1>
                 <p className="lead">Cy.io Platform. See blow for games currently hosted on our platform!</p>
                 <p>
-                    <a href="#" className="btn my-2 btn-prim-cyio raised-btn" id="login-btn" >Login</a>
+                    <Link to="/login" className="btn my-2 btn-prim-cyio raised-btn" id="login-btn" >Login</Link>
                 </p>
             </div>
         </section>
