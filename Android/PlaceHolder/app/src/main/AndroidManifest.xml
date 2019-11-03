@@ -14,7 +14,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".GameList"></activity>
-        <activity android:name=".HomePage" />
         <activity android:name=".login" />
         <activity android:name=".MainActivity">
             <intent-filter>
