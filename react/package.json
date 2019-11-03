@@ -15,9 +15,15 @@
   },
   "scripts": {
     "start": "react-scripts start",
+<<<<<<< HEAD
     "build": "BROWSER=none react-scripts build",
+=======
+    "start-auto": "BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "build-auto": "react-scripts build",
+>>>>>>> 70e7201e604af77fd761ef48730d17b34a932643
     "test": "mocha",
-    "eject": "BROWSER=none react-scripts eject"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
