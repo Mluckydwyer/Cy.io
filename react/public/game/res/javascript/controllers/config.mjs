@@ -1,5 +1,5 @@
 export { Config };
-import getConfig from "./requests.mjs";
+import getConfig from "../libs/requests.mjs";
 
 let defaultConfigUri = 'res/javascript/game-config-default.json';
 

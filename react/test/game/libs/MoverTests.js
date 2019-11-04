@@ -1,6 +1,6 @@
 let expect = require('chai').expect;
-import { Config } from '../../../public/game/res/javascript/libs/config.mjs';
-import { Mover } from '../../../public/game/res/javascript/libs/mover.mjs';
+import { Config } from '../../../public/game/res/javascript/controllers/config.mjs';
+import { Mover } from '../../../public/game/res/javascript/controllers/mover.mjs';
 let jsdom = require("jsdom");
 let { JSDOM } = jsdom;
 let fs = require('fs');
