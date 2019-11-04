@@ -5,11 +5,6 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "chai": "^4.2.0",
-<<<<<<< HEAD
-    "font-awesome": "^4.7.0",
-    "jquery": "^3.4.1",
-    "mocha": "^6.2.2",
-=======
     "jsdom": "^15.2.0",
     "fetch-mock": "^7.5.1",
     "node-fetch": "^2.6.0",
@@ -17,7 +12,6 @@
     "jquery": "^3.4.1",
     "font-awesome": "^4.7.0",
     "esm": "^3.2.25",
->>>>>>> 36be35da1c4665c02a0963f6d250b954ed944b1d
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.1.2",
