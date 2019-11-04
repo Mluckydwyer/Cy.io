@@ -1,5 +1,5 @@
 Server Backend API Mappings
-These are the mappings for all the current endpoints on the werver.
+These are the mappings for all the current endpoints on the server.
 
 Last Update: Oct 8th, 2019
 
