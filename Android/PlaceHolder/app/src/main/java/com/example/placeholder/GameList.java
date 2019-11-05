@@ -67,7 +67,7 @@ public class GameList extends AppCompatActivity
 
     public void goHome()
     {
-        Intent it = new Intent(this, MainActivity.class);
+        Intent it = new Intent(this, Home.class);
         startActivity(it);
     }
     private static final String TAG = "MainActivity";

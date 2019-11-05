@@ -27,6 +27,7 @@ public class login extends AppCompatActivity
     Button login;
     EditText username, password;
     TextView vt;
+    public static final String NICKNAME = "username";
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -43,7 +44,6 @@ public class login extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                openHomePage();
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
                 String tag_json_obj ="json_obj_req";
@@ -61,6 +61,7 @@ public class login extends AppCompatActivity
                 String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
                 JsonObjectRequest jobj = signon(obj,vt);
                 AppController.getInstance().addToRequestQueue(jobj, tag_json_obj);
+                openHomePage(user);
             }
         });
 
@@ -95,9 +96,10 @@ public class login extends AppCompatActivity
             }
         });
     }
-    public void openHomePage()
+    public void openHomePage(String user)
     {
-       // Intent intent = new Intent(this, .class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, Home.class);
+        intent.putExtra(NICKNAME, user);
+        startActivity(intent);
     }
 }
