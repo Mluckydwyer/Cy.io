@@ -4,11 +4,12 @@ let g; // canvas graphics object
 // import { Mover } from './res/javascript/libs/mover.mjs';
 import { Config } from './controllers/config.mjs';
 import { Socket } from './controllers/socket.mjs';
+import { Message } from './objects/message.mjs';
 import { Player } from './controllers/player.mjs';
 import { Controller } from './controllers/controller.mjs';
 
 const framerate = 60;
-let player, controller, config, socket;
+let player, controller, config, chatSocket;
 
 // Initial Setup
 async function setup() {
@@ -27,9 +28,43 @@ async function setup() {
     setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
     controller.enable();
 
+
+
     // Testing
-    socket = new Socket().init('http://localhost:3000/game');
-    socket.connect();
+    chatSocket = new Socket();
+    chatSocket.init('http://localhost:8080' + chatSocket.SECURED_CHAT);
+    await chatSocket.connect();
+
+    // let SECURED_CHAT = '/secured/chat';
+    // let SECURED_CHAT_HISTORY = '/secured/history';
+    // let SECURED_CHAT_ROOM = '/secured/room';
+    // let SECURED_CHAT_SPECIFIC_USER = '/secured/user/queue/specific-user';
+
+    // let socket = new SockJS('http://localhost:8080' + SECURED_CHAT);
+    // let sc = Stomp.over(socket);
+    // let sessionID = "";
+    //
+    // sc.connect({}, function (frame) {
+    //         let url = stompClient.ws._transport.url;
+    //         url = url.replace("ws://localhost:8080/spring-security-mvc-socket/secured/room/", "");
+    //         url = url.replace("/websocket", "");
+    //         url = url.replace(/^[0-9]+\//, "");
+    //         console.log("Your current session is: " + url);
+    //         sessionID = url;
+    // });
+
+    // sc.subscribe('secured/user/queue/specific-user'
+    //     + '-user' + that.sessionId, function (msgOut) {
+    //     //handle messages
+    // });
+}
+
+function sendTestChatMessage() {
+    let message = new Message();
+    message.to = "ALL";
+    message.from = "User1";
+    message.text = "This is a test message";
+    chatSocket.sendMessage(message);
 }
 
 // When done loading, run the setup function

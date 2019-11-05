@@ -2,6 +2,11 @@
 
 export function Socket() {
 
+    this.SECURED_CHAT = '/secured/chat';
+    this.SECURED_CHAT_HISTORY = '/secured/history';
+    this.SECURED_CHAT_ROOM = '/secured/room';
+    this.SECURED_CHAT_SPECIFIC_USER = '/secured/user/queue/specific-user';
+
     this.socket = null;
     this.isConnected = false;
     this.url = "";
@@ -11,21 +16,17 @@ export function Socket() {
         return this;
     };
     
-    this.connect = function (onOpen=function () {
-        console.log('Socket opened at ' + this.url);
-    }, onMessage=function (m) {
-        console.log("Message received at " + this.url + ":\n" + m.data);
-    }, onClose=function () {
-        console.log("Socket closed at " + this.url);
-    }) {
-        let sock = new SockJS(this.url);
-        sock.onopen = onOpen;
-        sock.onclose = onClose;
-        sock.onmessage = onMessage;
-        stompClient = Stomp.over(sock);
-        stompClient.connect({}, function () {
-            this.isConnected = true;
-            console.log("Connected over STOMP at " + this.url);
+    this.connect = function () {
+        let socket = new SockJS(this.url);
+        let stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            let url = stompClient.ws._transport.url;
+            console.log(stompClient.ws._transport.url);
+            url = url.replace("ws://localhost:8080/spring-security-mvc-socket/secured/room/",  "");
+            url = url.replace("/websocket", "");
+            url = url.replace(/^[0-9]+\//, "");
+            console.log("Your current session is: " + url);
+            this.sessionId = url;
         });
 
         this.socket = stompClient;
@@ -40,6 +41,20 @@ export function Socket() {
         this.socket.disconnect();
         this.isConnected = false;
         console.log("Socket disconnected at " + this.url);
-    }
+    };
+
+    this.sendMessage = function (message) {
+        let to = message.to;
+        let from = message.from;
+
+        let msg = {
+            'from': (from === undefined || from === null ) ? to : from,
+            'to': (to === undefined || to === null ) ? "ALL" : to,
+            'text': message.text
+        };
+
+        console.log(JSON.stringify(msg));
+        this.socket.send(this.url, {}, JSON.stringify(msg));
+    };
     
 }

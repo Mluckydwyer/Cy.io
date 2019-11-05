@@ -97,7 +97,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/",
                         "/gamelist",
                         "/user/me",
-                        "/game/*"
+                        "/game/*",
+                        "/chat/user-123456789"
                         )
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
