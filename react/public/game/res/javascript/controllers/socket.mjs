@@ -16,10 +16,12 @@ export function Socket() {
         return this;
     };
     
-    this.connect = function () {
+    this.connect = function (callback) {
         let socket = new SockJS(this.url);
         let stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
+        let connectPromise = new Promise();
+        if (!callback) callback = (function (frame) {
+            console.log(frame);
             let url = stompClient.ws._transport.url;
             console.log(stompClient.ws._transport.url);
             url = url.replace("ws://localhost:8080/spring-security-mvc-socket/secured/room/",  "");
@@ -27,9 +29,13 @@ export function Socket() {
             url = url.replace(/^[0-9]+\//, "");
             console.log("Your current session is: " + url);
             this.sessionId = url;
-        });
+            this.isConnected = true;
+            connectPromise.resolve();
+        }).bind(this);
 
         this.socket = stompClient;
+        this.socket.connect({}, callback);
+        return connectPromise;
     };
 
     this.disconnect = function () {
@@ -41,6 +47,13 @@ export function Socket() {
         this.socket.disconnect();
         this.isConnected = false;
         console.log("Socket disconnected at " + this.url);
+    };
+
+    this.subscribe = function (endpoint, callback=function (message) {
+        console.log(JSON.parse(message.body).content);
+        console.log(JSON.parse(message.body));
+    }) {
+        this.socket.subscribe(endpoint, callback);
     };
 
     this.sendMessage = function (message) {

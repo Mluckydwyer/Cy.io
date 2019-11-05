@@ -41,7 +41,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //                }
 //                return true;
 //            }}).withSockJS();
-        registry.addEndpoint("/secured/room").withSockJS();
-    }
+        registry.addEndpoint("/secured/room").setAllowedOrigins("http://localhost:63342").withSockJS();
+        registry.addEndpoint("/secured/chat").setAllowedOrigins("http://localhost:63342").withSockJS();
+        registry.addEndpoint("/secured/history").setAllowedOrigins("http://localhost:63342").withSockJS(); }
 
 }

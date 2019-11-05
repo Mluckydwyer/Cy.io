@@ -33,7 +33,10 @@ async function setup() {
     // Testing
     chatSocket = new Socket();
     chatSocket.init('http://localhost:8080' + chatSocket.SECURED_CHAT);
-    await chatSocket.connect();
+    await chatSocket.connect().then(function () {
+        chatSocket.subscribe('http://localhost:8080' + chatSocket.SECURED_CHAT_HISTORY);
+    });
+
 
     // let SECURED_CHAT = '/secured/chat';
     // let SECURED_CHAT_HISTORY = '/secured/history';

@@ -98,7 +98,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/gamelist",
                         "/user/me",
                         "/game/*",
-                        "/chat/user-123456789"
+                        "/chat/user-123456789",
+                        "/secured/**",
+                        "/history/**",
+                        "/chat/**",
+                        "/user/**"
                         )
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
