@@ -99,11 +99,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/me", //TODO: remove this bad boii
                         "/leaderboard",
                         "/game/leaderboard",
-                        "/app.js"
-                        )
-                .permitAll()
-                .antMatchers("/auth/**", "/oauth2/**")
-                .permitAll()
+                        "/app.js",
+                        "/topic",
+                        "/topic/public",
+                        "/gamews",
+                        "/gamews/**"
+                        ).permitAll()
+                .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

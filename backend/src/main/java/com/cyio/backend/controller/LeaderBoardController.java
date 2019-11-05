@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class LeaderBoardController {
     @MessageMapping("/leaderboard")
-    @SendTo("/game/leaderboard")
+    @SendTo("/topic/leaderboard")
     public LeaderBoard leaderBoard() throws Exception{
         Thread.sleep(1000);
         LeaderBoard lb = new LeaderBoard();

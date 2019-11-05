@@ -10,15 +10,27 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    /**
+     * set the broker enpoint to /topic  and app prefixes to /app
+     * @param config
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/game");
+        config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
     }
 
+
+    /**
+     *set the connection endpoint to /ws
+     *     //clients should be able to connect without logging in. for now
+     * @param registry
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket").withSockJS();
+        //gamews is the websocket for leaderboard
+        //notificationws is the websocket for notifications
+        registry.addEndpoint("/gamews","/notificationws").withSockJS();
     }
 
 }
