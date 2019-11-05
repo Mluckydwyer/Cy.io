@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class LeaderBoard {
     private ArrayList<Player> leaderList;
 
+    public LeaderBoard(){
+        leaderList = new ArrayList<>();
+    }
+
     public ArrayList<Player> getLeaderList() {
         return leaderList;
     }
