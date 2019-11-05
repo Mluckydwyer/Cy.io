@@ -103,7 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/topic",
                         "/topic/public",
                         "/gamews",
-                        "/notificationws"
+                        "/notificationws/**"
                         ).permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .anyRequest()
