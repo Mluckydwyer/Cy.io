@@ -25,7 +25,7 @@ public class LeaderboardSocket {
         logger.info("New gamews connection");
         LeaderBoard leaderBoard = new LeaderBoard();
         leaderBoard.generateDummyData();
-        broadcast("Hello");
+        broadcast("Leaderboard Socket Connected!Yay");
     }
 
     @OnClose
