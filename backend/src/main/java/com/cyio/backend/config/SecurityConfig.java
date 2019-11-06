@@ -96,7 +96,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/",
                         "/gamelist",
-                        "/user/me"
+                        "/user/me", //TODO: remove this bad boii
+                        "/game/*",
+                        "/chat/user-123456789",
+                        "/secured/**",
+                        "/history/**",
+                        "/chat/**",
+                        "/user/**"
                         )
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")

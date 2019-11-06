@@ -19,20 +19,18 @@ spring:
           google:
             clientID: 957503584754-t42f4je8f4letesio50mc9721s3h0pt2.apps.googleusercontent.com
             clientSecret: Bd7O8RS0VD3s6L1v54O5eyeg
-            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            #redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirectUriTemplate: "{baseUrl}/user/me"
             scope:
               - email
               - profile
-  app:
-    auth:
-      tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
-      tokenExpirationMsec: 864000000
-    oauth2:
-      # After successfully authenticating with the OAuth2 Provider,
-      # we'll be generating an auth token for the user and sending the token to the
-      # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
-      # We're not using cookies because they won't work well in mobile clients.
-      authorizedRedirectUris:
-        - http://localhost:3000/oauth2/redirect
-        - myandroidapp://oauth2/redirect
-        - myiosapp://oauth2/redirect
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpirationMsec: 864000000
+oauth2:
+  # After successfully authenticating with the OAuth2 Provider,
+  AuthorizedRedirectUris:
+    - http://localhost:8080/user/me
+    - /user/me
+    - myandroidapp://oauth2/redirect

@@ -15,11 +15,22 @@ variables:
     SPRING_PROFILES_ACTIVE: gitlab-ci
     OUTPUT_JAR_PROD: "cyio-backend-prod"
     OUTPUT_JAR_DEV: "cyio-backend-dev"
+    NPM_PATH: "/usr/local/bin/npm"
 
 cache:
   paths:
-    - .m2/repository/
     - backend/target/
+    - react/build/
+
+# Change Gitlab-Runner Home directory file permissions and remove node_modlues if there
+default:
+  before_script:
+    - sudo chmod 777 /home/gitlab-runner/ -R
+    - sudo rm /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node_modules/ -rf
+  after_script:
+    - sudo chmod 777 /home/gitlab-runner/ -R
+    - sudo rm /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node_modules/ -rf
+  
 
 # Build Springboot Backend
 Build Maven Backend:
@@ -56,10 +67,9 @@ Test Site Dev:
   allow_failure: true
   script:
     - cd react
-    - sudo npm install
-    - sudo chmod -R +xwr .
-    - sudo npm test
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - $NPM_PATH test
   only:
     - branches
   except:
@@ -68,13 +78,12 @@ Test Site Dev:
 # Test Website Frontend For Production Environment
 Test Site Prod:
   stage: test-site
-  allow_failure: false
+  allow_failure: true
   script:
     - cd react
-    - sudo npm install
-    - sudo chmod -R +xwr .
-    - sudo npm test
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - $NPM_PATH test
   only:
     - master
 
@@ -117,7 +126,6 @@ Deploy Springboot to Prod Environment:
     - sudo systemctl stop cyio-prod
     - sudo mv `ls target/*.jar | head -n 1` /home/server-files/prod/$OUTPUT_JAR_PROD.jar
     - sudo systemctl start cyio-prod
-
   artifacts:
     paths:
       - backend/target/*.jar
@@ -152,11 +160,11 @@ Deploy React Prod Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
-    - sudo npm install
-    - sudo chmod -R +xwr .
-    - sudo npm run build
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - CI=false $NPM_PATH run build-auto
+    - sudo rm -rf /var/www/prod-site/*
     - sudo mv -f build/* /var/www/prod-site/
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
   artifacts:
     paths:
       - react/build/
@@ -170,11 +178,11 @@ Deploy React Dev Site:
   script:
     # - sudo docker cp gitlab-runner:/builds/cs309/fall2019/nv_4/frontend/ /var/www/html/
     - cd react/
-    - sudo npm install
-    - sudo chmod -R +xwr .
-    - sudo npm run build
+    - $NPM_PATH install
+    # - sudo chmod -R +xwr .
+    - CI=false $NPM_PATH run build-auto
+    - sudo rm -rf /var/www/dev-site/*
     - sudo mv -f build/* /var/www/dev-site/
-    - sudo rm -r /home/gitlab-runner/builds/SDjQd5kx/0/cs309/fall2019/nv_4/react/node-modules
   artifacts:
     paths:
       - react/build/
