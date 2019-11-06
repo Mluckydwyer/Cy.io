@@ -78,7 +78,7 @@ Test Site Dev:
 # Test Website Frontend For Production Environment
 Test Site Prod:
   stage: test-site
-  allow_failure: false
+  allow_failure: true
   script:
     - cd react
     - $NPM_PATH install
