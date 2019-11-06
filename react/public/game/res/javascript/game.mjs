@@ -32,9 +32,18 @@ async function setup() {
 
     // Testing
     chatSocket = new Socket();
-    chatSocket.init('http://localhost:8080' + chatSocket.SECURED_CHAT);
+    chatSocket.init('http://localhost:8080' + chatSocket.SECURED_CHAT_ROOM);
     await chatSocket.connect().then(function () {
-        chatSocket.subscribe('http://localhost:8080' + chatSocket.SECURED_CHAT_HISTORY);
+        chatSocket.subscribe("/room/public");
+        chatSocket.sendMessage({text: "This is a test message"});
+        let msg = {
+            to: "Matt",
+            from: "Tom",
+            text: "<3"
+        };
+        chatSocket.sendChatMessage(msg);
+    }).catch(function () {
+        console.log("Chat websocket Failed to connect");
     });
 
 

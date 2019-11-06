@@ -27,18 +27,20 @@ public class ChatController {
     private SimpMessagingTemplate simpMessagingTemplate;
     private static final Logger log = LoggerFactory.getLogger(ChatController.class);
 
-    @MessageMapping(SECURED_CHAT)
-    @SendTo(SECURED_CHAT_HISTORY)
-    public OutputChatMessage sendAll(ChatMessage msg) throws Exception {
-        OutputChatMessage out = new OutputChatMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date()));
-        return out;
+    @MessageMapping("/SendMessage")
+    @SendTo("/room/public")
+    public ChatMessage sendAll(@Payload ChatMessage msg) {
+        //OutputChatMessage out = new OutputChatMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date()));
+        System.out.println(msg);
+        return msg;
     }
 
-    @MessageMapping(SECURED_CHAT_ROOM)
-    public void sendSpecific(@Payload ChatMessage msg, Principal user, @Header("simpSessionId") String sessionId) throws Exception {
-        OutputChatMessage out = new OutputChatMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date()));
-        simpMessagingTemplate.convertAndSendToUser(msg.getTo(), SECURED_CHAT_SPECIFIC_USER, out);
-    }
+//    @MessageMapping(SECURED_CHAT_ROOM)
+//    @SendTo(SECURED_CHAT_HISTORY)
+//    public void sendSpecific(@Payload ChatMessage msg, Principal user, @Header("simpSessionId") String sessionId) throws Exception {
+//        OutputChatMessage out = new OutputChatMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date()));
+//        simpMessagingTemplate.convertAndSendToUser(msg.getTo(), SECURED_CHAT_SPECIFIC_USER, out);
+//    }
 
 
 

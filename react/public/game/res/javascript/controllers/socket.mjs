@@ -6,35 +6,41 @@ export function Socket() {
     this.SECURED_CHAT_HISTORY = '/secured/history';
     this.SECURED_CHAT_ROOM = '/secured/room';
     this.SECURED_CHAT_SPECIFIC_USER = '/secured/user/queue/specific-user';
+    this.APPLICATION_PREFIX = "/app";
 
     this.socket = null;
     this.isConnected = false;
     this.url = "";
+    this.sessionId = "";
+    this.subscriptions = [];
 
     this.init = function (url) {
         this.url = url;
         return this;
     };
     
-    this.connect = function (callback) {
-        let socket = new SockJS(this.url);
-        let stompClient = Stomp.over(socket);
-        let connectPromise = new Promise();
-        if (!callback) callback = (function (frame) {
-            console.log(frame);
-            let url = stompClient.ws._transport.url;
-            console.log(stompClient.ws._transport.url);
-            url = url.replace("ws://localhost:8080/spring-security-mvc-socket/secured/room/",  "");
-            url = url.replace("/websocket", "");
-            url = url.replace(/^[0-9]+\//, "");
-            console.log("Your current session is: " + url);
-            this.sessionId = url;
-            this.isConnected = true;
-            connectPromise.resolve();
-        }).bind(this);
+    this.connect = function () {
+        let connectPromise = new Promise((function (resolve, reject) {
+            let socket = new SockJS(this.url);
+            let stompClient = Stomp.over(socket);
+            this.socket = stompClient;
+            this.socket.reconnect_delay = 5000;
 
-        this.socket = stompClient;
-        this.socket.connect({}, callback);
+            this.socket.connect({}, (function (frame) {
+                let url = stompClient.ws._transport.url;
+                console.log(stompClient.ws._transport.url);
+                url = url.replace("ws://localhost:8080/spring-security-mvc-socket/secured/room/",  "");
+                url = url.replace("/websocket", "");
+                url = url.replace(/^[0-9]+\//, "");
+                console.log("Your current session is: " + url);
+                this.sessionId = url;
+                this.isConnected = true;
+                resolve();
+            }).bind(this), function (frame) {
+                reject();
+            });
+        }).bind(this));
+
         return connectPromise;
     };
 
@@ -49,14 +55,13 @@ export function Socket() {
         console.log("Socket disconnected at " + this.url);
     };
 
-    this.subscribe = function (endpoint, callback=function (message) {
-        console.log(JSON.parse(message.body).content);
-        console.log(JSON.parse(message.body));
+    this.subscribe = function (endpoint, onMessage=function (frame) {
+        console.log(JSON.parse(frame.body));
     }) {
-        this.socket.subscribe(endpoint, callback);
+        this.subscriptions.push(this.socket.subscribe(endpoint, onMessage, {}));
     };
 
-    this.sendMessage = function (message) {
+    this.sendChatMessage = function (message) {
         let to = message.to;
         let from = message.from;
 
@@ -66,8 +71,11 @@ export function Socket() {
             'text': message.text
         };
 
-        console.log(JSON.stringify(msg));
-        this.socket.send(this.url, {}, JSON.stringify(msg));
+        this.sendMessage(msg);
     };
+
+    this.sendMessage = function (message) {
+        this.socket.send("/app/SendMessage", {}, JSON.stringify(message));
+    }
     
 }

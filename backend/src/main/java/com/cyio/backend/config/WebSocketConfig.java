@@ -22,9 +22,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
 //        config.enableSimpleBroker("/game/", "/chat/");
 //        config.setApplicationDestinationPrefixes("/app");
-        config.enableSimpleBroker("/secured/user/queue/specific-user");
-        config.setApplicationDestinationPrefixes("/spring-security-mvc-socket");
-        config.setUserDestinationPrefix("/secured/user");
+        //config.enableSimpleBroker("/secured/user/queue/specific-user", "/secured");
+        config.enableSimpleBroker("/room");
+        config.setApplicationDestinationPrefixes("/app");
+        //config.setUserDestinationPrefix("/secured/user");
     }
 
     @Override
@@ -41,8 +42,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //                }
 //                return true;
 //            }}).withSockJS();
-        registry.addEndpoint("/secured/room").setAllowedOrigins("http://localhost:63342").withSockJS();
-        registry.addEndpoint("/secured/chat").setAllowedOrigins("http://localhost:63342").withSockJS();
-        registry.addEndpoint("/secured/history").setAllowedOrigins("http://localhost:63342").withSockJS(); }
+        registry.addEndpoint("/secured/room").setAllowedOrigins("http://localhost:63343").withSockJS();
+        //registry.addEndpoint("/secured/chat").setAllowedOrigins("http://localhost:63343").withSockJS();
+        //registry.addEndpoint("/secured/history").setAllowedOrigins("http://localhost:63343").withSockJS();
+        }
 
 }
