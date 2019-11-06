@@ -61,6 +61,20 @@ export function Socket() {
         this.subscriptions.push(this.socket.subscribe(endpoint, onMessage, {}));
     };
 
+    this.sendPlayerDataMessage = function (player) {
+        let msg = {
+            name: player.name,
+            xPos: player.mover.xPos,
+            yPos: player.mover.yPos,
+            xTarget: player.mover.xTarget,
+            yTarget: player.mover.yTarget,
+            speed: player.mover.speed,
+            size: player.mover.size
+        };
+
+        this.sendMessage(msg);
+    };
+
     this.sendChatMessage = function (message) {
         let to = message.to;
         let from = message.from;
@@ -74,8 +88,8 @@ export function Socket() {
         this.sendMessage(msg);
     };
 
-    this.sendMessage = function (message) {
-        this.socket.send("/app/SendMessage", {}, JSON.stringify(message));
+    this.sendMessage = function (message, endpoint="/app/SendMessage") {
+        this.socket.send(endpoint, {}, JSON.stringify(message));
     }
     
 }

@@ -42,6 +42,7 @@ async function setup() {
             text: "<3"
         };
         chatSocket.sendChatMessage(msg);
+        chatSocket.sendPlayerDataMessage(player);
     }).catch(function () {
         console.log("Chat websocket Failed to connect");
     });
