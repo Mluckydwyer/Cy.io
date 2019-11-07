@@ -30,7 +30,7 @@ public class Player {
         public int compare(Player p1, Player p2){
             int score1 = p1.getScore();
             int score2 = p2.getScore();
-            return score1 - score2;
+            return score2 - score1;
         }
     }
 }
