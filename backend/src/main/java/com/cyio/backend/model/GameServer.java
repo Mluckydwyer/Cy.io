@@ -18,13 +18,12 @@ public class GameServer {
     }
 
     public void addPlayer(Player player) {
-        players.put(player.getId(), player);
+        players.put(player.getUserId(), player);
     }
 
 
-
     public void removePlayer(Player player) {
-        players.remove(player.getId());
+        players.remove(player.getUserId());
     }
 
     public String getServerID() {
