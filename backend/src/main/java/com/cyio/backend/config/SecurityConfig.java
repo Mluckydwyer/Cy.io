@@ -97,15 +97,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/",
                         "/gamelist",
                         "/user/me", //TODO: remove this bad boii
-                        "/leaderboard",
-                        "/game/leaderboard",
-                        "/app.js",
-                        "/topic",
-                        "/topic/public",
+                        "/game/*",
+                        "/chat/user-123456789",
+                        "/secured/**",
+                        "/history/**",
+                        "/chat/**",
+                        "/user/**",
                         "/gamews",
                         "/notificationws/**"
-                        ).permitAll()
-                .antMatchers("/auth/**", "/oauth2/**").permitAll()
+                        )
+                .permitAll()
+                .antMatchers("/auth/**", "/oauth2/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

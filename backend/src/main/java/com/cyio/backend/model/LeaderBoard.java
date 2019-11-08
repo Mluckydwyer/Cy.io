@@ -99,7 +99,7 @@ public class LeaderBoard {
         LeaderBoard topBoard = new LeaderBoard();
         for(int i = 0; i < n;i ++ ){
             Player p = leaderList.get(i);
-            topBoard.addPlayer(new Player(p.userName,p.getScore()));
+            topBoard.addPlayer(new Player(p.getUserName(),p.getScore()));
         }
         return null;
     }
