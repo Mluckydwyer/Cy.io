@@ -1,7 +1,7 @@
 let expect = require('chai').expect;
 let fetchMock = require('fetch-mock');
 require('isomorphic-fetch');
-import { Config } from '../../../public/game/res/javascript/libs/config.mjs';
+import { Config } from '../../../public/game/res/javascript/controllers/config.mjs';
 let jsdom = require("jsdom");
 let { JSDOM } = jsdom;
 let fs = require('fs');

@@ -1,6 +1,7 @@
 package com.cyio.backend.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +19,7 @@ public class Game{
     private String gameID;
     private String creatorID;
     private String thumbnailID;
+    private ArrayList<GameServer> gameServers;
 
     public Game(String title, String gameID, String creatorID) {
         this.title = title;
@@ -26,6 +28,7 @@ public class Game{
         this.gameID = gameID;
         this.creatorID = creatorID;
         this.thumbnailID ="thumbnail.jpg";
+        gameServers = new ArrayList<>();
     }
 
     public Game(){

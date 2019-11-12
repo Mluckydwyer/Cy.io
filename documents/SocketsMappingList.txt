@@ -1,0 +1,30 @@
+Last Updated Nov. 5
+Quesions? Ask Tom - jidongs@iastate.edu, 563-650-9971
+
+/gamews
+Status: Planned 
+Usage: This socket is used to send leaderboard data to clients. Currently it is set to randomize the leaderboard every 10 seconds and send the updated list to clients. 
+Data Model: The returned data is a sorted list of 10 Player objects in JSON with the following fields, where the player in index 0 has the most score, and index 9 has the least score. 
+		public class Player{
+			private String userName; //username, the user can be found in the user database
+			private int score; //the score of the user
+		}
+
+
+/notificationws
+Status: Planned
+Usage: This socket is used to send notification to clients. Notifications include when a user joined/left the server, or a message
+Data Model: the returned data is a Notification object with the following fields
+		public class Notification{
+			public enum NotificationType{
+        			JOIN,
+       				LEAVE,
+        			NEWGAME,
+        			MESSAGE
+   			 }
+
+   			 private NotificationType type;
+  			 private String notificationMessage;
+    			 private String referencedGame; //this will be the gameID
+    			 private String referencedUser;	//this weill be the userID
+		}
