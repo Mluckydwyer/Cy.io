@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import './css/base/Base.css';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import TopNavbar from './components/base/TopNavbar';
@@ -10,37 +10,36 @@ import PrivateRoute from "./routes/PrivateRoute";
 import { AuthContext } from "./routes/auth";
 
 
-class App extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            authTokens: null,
-        }
-    }
-    render(){
-        return(
-            <AuthContext.Provider value = {false}>
-                <Router>
-                    <div>
-                        <TopNavbar/>
-                        <Switch>
-                            <Route exact path="/">
-                                <main role="main">
-                                    <StaticBanner/>
-                                    <GameCardList/>
-                                </main>
-                            </Route>
-                            <Route path="/login">
-                                <Login />
-                            </Route>
-                            <PrivateRoute path="/user"/>
-                        </Switch>
-                        <BottomFooter/>
-                    </div>
-                </Router>
-            </AuthContext.Provider>
-        );
-        
-    }
+function App(props){
+    
+    const [authTokens, setAuthTokens] = useState();
+    
+    const setTokens = (data) => {
+        localStorage.setItem("tokens", JSON.stringify(data));
+        setAuthTokens(data);
+    }   
+    
+    return(
+        <AuthContext.Provider value = {{authTokens, setAuthTokens: setTokens}}>
+            <Router>
+                <div>
+                    <TopNavbar/>
+                    <Switch>
+                        <Route exact path="/">
+                            <main role="main">
+                                <StaticBanner/>
+                                <GameCardList/>
+                            </main>
+                        </Route>
+                        <Route path="/login">
+                            <Login />
+                        </Route>
+                        <PrivateRoute path="/user"/>
+                    </Switch>
+                    <BottomFooter/>
+                </div>
+            </Router>
+        </AuthContext.Provider>
+    );
 }
 export default App;
