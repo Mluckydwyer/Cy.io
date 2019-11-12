@@ -43,4 +43,8 @@ public class GameController {
 		gameRepository.save(game); //Insert new game to the database
 		return "Game \""+ title +"\" Added";
 	}
+
+	public GameRepository getGameRepository() {
+		return gameRepository;
+	}
 }

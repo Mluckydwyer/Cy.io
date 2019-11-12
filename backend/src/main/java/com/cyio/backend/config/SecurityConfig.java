@@ -104,6 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/chat/**",
                         "/user/**",
                         "/gamews",
+                        "/join",
                         "/notificationws/**"
                         )
                 .permitAll()

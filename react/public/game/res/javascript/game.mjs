@@ -32,7 +32,8 @@ async function setup() {
 
     // Testing
     chatSocket = new Socket();
-    chatSocket.init('http://localhost:8080' + chatSocket.SECURED_CHAT_ROOM);
+    //chatSocket.init('http://localhost:8080' + chatSocket.SECURED_CHAT_ROOM);
+    chatSocket.init('http://coms-309-nv-4.misc.iastate.edu:8080' + chatSocket.SECURED_CHAT_ROOM);
     await chatSocket.connect().then(function () {
         chatSocket.subscribe("/room/public");
         chatSocket.sendMessage({text: "This is a test message"});
