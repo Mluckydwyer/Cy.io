@@ -8,9 +8,10 @@ import BottomFooter from './components/base/BottomFooter';
 import Login from "./components/login/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthContext } from "./routes/auth";
+import Signup from "./css/login/Signup";
 
 
-function App(props){
+function App(){
     
     const [authTokens, setAuthTokens] = useState();
     
@@ -35,6 +36,9 @@ function App(props){
                             <Login />
                         </Route>
                         <PrivateRoute path="/user"/>
+                        <Route path="/signup">
+                            <Signup />
+                        </Route>
                     </Switch>
                     <BottomFooter/>
                 </div>
