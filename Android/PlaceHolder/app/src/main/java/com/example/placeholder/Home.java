@@ -62,7 +62,7 @@ public class Home extends AppCompatActivity
 
     public void openLeaderBoard()
     {
-        Intent i = new Intent(this, GameList.class);
+        Intent i = new Intent(this, LeaderBoard.class);
         startActivity(i);
     }
 }
