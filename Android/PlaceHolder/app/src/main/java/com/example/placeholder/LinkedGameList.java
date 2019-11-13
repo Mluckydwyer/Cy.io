@@ -24,8 +24,8 @@ public class LinkedGameList
 
     public LinkedGameList()
     {
-        head = null;
-        head.next = null;
+        head = new Node();
+        head.next = new Node();
     }
 
     public LinkedGameList(Game g)
@@ -37,11 +37,20 @@ public class LinkedGameList
     public void AddToList(Game g)
     {
         Node n = head;
-        while (n.next != null)
+        while (n.next.game != null)
         {
             n = n.next;
         }
         n.next = new Node(g);
+    }
+
+    public Game getGame()
+    {
+        if(head.next == null)
+        {
+            return null;
+        }
+        return head.next.game;
     }
 
 }

@@ -20,7 +20,11 @@ public class Game
 
     public Game()
     {
-
+        title = null;
+        blurb = null;
+        about = null;
+        gameID = null;
+        creatorID = null;
     }
     public Game(String titleName, String blurbInfo, String aboutInfo, String gameIDInfo, String creatorIDInfo)
     {
@@ -28,6 +32,31 @@ public class Game
         blurb = blurbInfo;
         about = aboutInfo;
         gameID = gameIDInfo;
+        creatorID = creatorIDInfo;
+    }
+
+    public void setTitle(String titleName)
+    {
+        title = titleName;
+    }
+
+    public void setBlurb(String blurbInfo)
+    {
+        blurb = blurbInfo;
+    }
+
+    public void setAbout(String aboutInfo)
+    {
+        about = aboutInfo;
+    }
+
+    public void setGameID(String gameIDInfo)
+    {
+        gameID = gameIDInfo;
+    }
+
+    public void setCreatorID(String creatorIDInfo)
+    {
         creatorID = creatorIDInfo;
     }
 

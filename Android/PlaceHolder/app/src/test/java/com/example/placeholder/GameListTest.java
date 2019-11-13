@@ -40,4 +40,30 @@ public class GameListTest
         assertEquals(list.get(0), g1);
         assertEquals(list.get(1), g2);
     }
+
+    @Test
+    public void Null_CreateLinkedList()
+    {
+        LinkedGameList lgl = new LinkedGameList();
+        when(g.createLinkedList(null)).thenReturn(lgl);
+        assertEquals(lgl.getGame(), null);
+    }
+
+    @Test
+    public void OneGame_CreateLinkedList()
+    {
+        LinkedGameList lgl = new LinkedGameList();
+        Game g1 = new Game("Cookie Clicker", "S", "t", "u", "v");
+        lgl.AddToList(g1);
+        ArrayList<Game> list = new ArrayList<>();
+        list.add(g1);
+        when(g.createLinkedList(list)).thenReturn(lgl);
+        assertEquals(lgl.getGame(), g1);
+    }
+
+    @Test
+    public  void NULL_updateLinkedGameList()
+    {
+        
+    }
 }

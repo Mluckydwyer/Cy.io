@@ -72,6 +72,7 @@ public class GameList extends AppCompatActivity
     }
     private static final String TAG = "MainActivity";
 
+    public LinkedGameList lgll;
     protected void arrResponse() throws JSONException
     {
         String tag_json_arry ="json_array_req";
@@ -81,7 +82,13 @@ public class GameList extends AppCompatActivity
                 new Response.Listener<JSONArray>()
                 {
                     public ArrayList<Game> midlist = new ArrayList<>();
+                    public LinkedGameList lgl = lgll;
 
+                    public void updateLinkedGameList(LinkedGameList lgl)
+                    {
+                        lgll = lgl;
+                        //copy method
+                    }
                     @Override
                     public void onResponse(JSONArray response)
                     {
@@ -154,6 +161,8 @@ public class GameList extends AppCompatActivity
                             Game gg = new Game(list.get(j), list.get(j + 1), list.get(j + 2), list.get(j + 3), list.get(j + 4));
                             midlist.add(gg);
                         }
+                        lgl = createLinkedList(midlist);
+                        updateLinkedGameList(lgl);
                     }
                 },new Response.ErrorListener()
         {
@@ -165,6 +174,18 @@ public class GameList extends AppCompatActivity
         });
         AppController.getInstance().addToRequestQueue(req, tag_json_arry);
     }
+
+    public LinkedGameList createLinkedList(ArrayList<Game> midlist)
+    {
+        LinkedGameList lgl = new LinkedGameList();
+        for (int i = 0; i < midlist.size(); i++)
+        {
+            lgl.AddToList(midlist.get(i));
+        }
+        return lgl;
+    }
+
+
 
     public List<Game> parseGameList()
     {
@@ -178,15 +199,6 @@ public class GameList extends AppCompatActivity
 //            listofgames.add(gameList.get(parser));
 //        }
         return listofgames;
-    }
-    public ArrayList<Game> getGameList()
-    {
-        return gameList;
-    }
-
-    public void addToList(Game g)
-    {
-
     }
 
 }
