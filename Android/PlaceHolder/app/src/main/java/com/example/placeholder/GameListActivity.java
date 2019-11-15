@@ -73,11 +73,11 @@ public class GameListActivity extends AppCompatActivity {
                                 st = jj.names();
 
                                 Game game = new Game();
-                                game.setTitle(st.get(0).toString());
-                                game.setBlurb(st.get(1).toString());
-                                game.setAbout(st.get(2).toString());
-                                game.setGameID(st.get(3).toString());
-                                game.setCreatorID(st.get(4).toString());
+                                game.setTitle(jj.getString(st.get(0).toString()));
+                                game.setBlurb(jj.getString(st.get(1).toString()));
+                                game.setAbout(jj.getString(st.get(2).toString()));
+                                game.setGameID(jj.getString(st.get(3).toString()));
+                                game.setCreatorID(jj.getString(st.get(4).toString()));
                                 midlist.add(game);
 
                                 /*
