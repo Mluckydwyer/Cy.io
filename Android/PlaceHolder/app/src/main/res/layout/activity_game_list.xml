@@ -36,39 +36,40 @@
         android:textSize="30dp"
         android:text="BACK" />
 
-        <ScrollView
-            android:layout_width="346dp"
-            android:layout_height="464dp"
-            android:layout_marginStart="9dp"
-            android:layout_marginLeft="9dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="106dp">
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="346dp"
+        android:layout_height="464dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="106dp">
 
-            <LinearLayout
-                android:id="@+id/llMain"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
+        <LinearLayout
+            android:id="@+id/llMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            </LinearLayout>
+        </LinearLayout>
 
-<!--            <TextView-->
-<!--                android:id="@+id/scrolledText"-->
-<!--                android:layout_width="150dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_alignParentStart="true"-->
-<!--                android:layout_alignParentLeft="true"-->
-<!--                android:layout_alignParentTop="true"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:layout_marginStart="107dp"-->
-<!--                android:layout_marginLeft="107dp"-->
-<!--                android:layout_marginTop="31dp"-->
-<!--                android:layout_weight='1'-->
-<!--                android:text="Games" />-->
+        <!--            <TextView-->
+        <!--                android:id="@+id/scrolledText"-->
+        <!--                android:layout_width="150dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_alignParentStart="true"-->
+        <!--                android:layout_alignParentLeft="true"-->
+        <!--                android:layout_alignParentTop="true"-->
+        <!--                android:layout_centerHorizontal="true"-->
+        <!--                android:layout_marginStart="107dp"-->
+        <!--                android:layout_marginLeft="107dp"-->
+        <!--                android:layout_marginTop="31dp"-->
+        <!--                android:layout_weight='1'-->
+        <!--                android:text="Games" />-->
 
-        </ScrollView>
+    </ScrollView>
 
 
     <!--        <LinearLayout-->
