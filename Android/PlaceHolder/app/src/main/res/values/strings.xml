@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">PlaceHolder</string>
+    <string name="app_name">Cy.io</string>
+    <string name="login">Login</string>
+    <string name="username">Username:</string>
 </resources>
