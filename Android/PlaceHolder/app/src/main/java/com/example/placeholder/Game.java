@@ -11,11 +11,11 @@ import java.util.ListIterator;
 
 public class Game
 {
-    public String title;
-    public String blurb;
-    public String about;
-    public String gameID;
-    public String creatorID;
+    private String title;
+    private  String blurb;
+    private String about;
+    private String gameID;
+    private String creatorID;
     //add thumbnail
 
     public Game()
@@ -29,6 +29,26 @@ public class Game
         about = aboutInfo;
         gameID = gameIDInfo;
         creatorID = creatorIDInfo;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setBlurb(String blurb) {
+        this.blurb = blurb;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
+    }
+
+    public void setCreatorID(String creatorID) {
+        this.creatorID = creatorID;
     }
 
     public String getTitle()

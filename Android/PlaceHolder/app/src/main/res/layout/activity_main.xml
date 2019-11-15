@@ -12,6 +12,7 @@
         android:id="@+id/textView"
         android:layout_width="112dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:text="CY.io"
         android:textSize="45dp"
         app:layout_constraintBottom_toTopOf="@+id/proceed"
@@ -34,10 +35,11 @@
         android:id="@+id/games"
         android:layout_width="224dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
         android:text="Game List"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="551dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
