@@ -94,9 +94,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
+                .antMatchers("/", // the list of whitelisted endpoints: no log in required to access
                         "/gamelist",
-                        "/user/me", //TODO: remove this bad boii
                         "/game/*",
                         "/chat/user-123456789",
                         "/secured/**",
