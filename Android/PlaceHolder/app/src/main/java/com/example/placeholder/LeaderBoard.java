@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
@@ -21,11 +23,14 @@ public class LeaderBoard extends AppCompatActivity
     private WebSocketClient socket;
     private String url;
     TextView title, place1, place2, place3, place4, place5;
+    Button r;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
+        r = (Button)findViewById(R.id.refresh);
         title = (TextView)findViewById(R.id.lb);
         place1 = (TextView)findViewById(R.id.p1);
         place2 = (TextView)findViewById(R.id.p2);
@@ -33,6 +38,7 @@ public class LeaderBoard extends AppCompatActivity
         place4 = (TextView)findViewById(R.id.p4);
         place5 = (TextView)findViewById(R.id.p5);
         url = "ws://coms-309-nv-4.misc.iastate.edu:8081/gamews";
+
         Draft[] drafts = {new Draft_6455()};
         try
         {
@@ -51,7 +57,7 @@ public class LeaderBoard extends AppCompatActivity
                     Log.d("", "run() returned: " + s);
 
                     String str = place1.getText().toString();
-                    place1.setText("hello world");
+                    place1.setText("1. ");
                     Log.d("first", "run() returned: " + str);
                     str = place1.getText().toString();
                     Log.d("second", "run() returned: " + str);
@@ -77,5 +83,13 @@ public class LeaderBoard extends AppCompatActivity
             e.printStackTrace();
         }
         socket.connect();
+        r.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                r.setText("Refresh");
+            }
+        });
     }
 }

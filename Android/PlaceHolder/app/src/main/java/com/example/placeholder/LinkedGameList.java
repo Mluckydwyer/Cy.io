@@ -4,7 +4,7 @@ public class LinkedGameList
 {
     public Node head;
 
-    private class Node
+    public class Node
     {
         public Game game;
         public Node next;
@@ -34,6 +34,15 @@ public class LinkedGameList
         head.next = new Node(g);
     }
 
+    public boolean hasNext(Node n)
+    {
+        if (n.next == null)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public void AddToList(Game g)
     {
         Node n = head;
@@ -42,16 +51,33 @@ public class LinkedGameList
             n = n.next;
         }
         n.next = new Node(g);
+        n.next.next = new Node();
     }
 
-    public Game getGame()
+    public Game getGame(Node n)
     {
-        if(head.next == null)
+        if(n == head)
+        {
+            if (head.next == null)
+            {
+                return null;
+            }
+            return head.next.game;
+        }
+        if (n == null)
         {
             return null;
         }
-        return head.next.game;
+        return n.game;
     }
 
+    public boolean hasGame(Node n)
+    {
+        if (n.game == null)
+        {
+            return false;
+        }
+        return true;
+    }
 }
 

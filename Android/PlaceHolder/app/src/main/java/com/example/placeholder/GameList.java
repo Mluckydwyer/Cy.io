@@ -89,6 +89,7 @@ public class GameList extends AppCompatActivity
                         lgll = lgl;
                         //copy method
                     }
+
                     @Override
                     public void onResponse(JSONArray response)
                     {
@@ -185,20 +186,9 @@ public class GameList extends AppCompatActivity
         return lgl;
     }
 
-
-
-    public List<Game> parseGameList()
+    public LinkedGameList getList()
     {
-        if (gameList == null)
-        {
-            return null;
-        }
-        ArrayList<Game> listofgames = new ArrayList<Game>();
-//        for (int parser = 0; parser < gametitles.size(); parser++)
-//        {
-//            listofgames.add(gameList.get(parser));
-//        }
-        return listofgames;
+        return lgll;
     }
 
 }
