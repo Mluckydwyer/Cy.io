@@ -49,6 +49,9 @@ public class Player {
         return socket;
     }
 
+    public String getGameData() {
+        return "Test Game DATA"; // TODO
+    }
 
     static class PlayerComparater implements Comparator<Player> {
         public int compare(Player p1, Player p2){
