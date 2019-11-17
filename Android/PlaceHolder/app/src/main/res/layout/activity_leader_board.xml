@@ -34,7 +34,7 @@
         android:layout_marginStart="65dp"
         android:layout_marginLeft="65dp"
         android:layout_marginTop="160dp"
-        android:text="1" />
+        android:text="1. " />
 
     <TextView
         android:id="@+id/p2"
@@ -47,7 +47,7 @@
         android:layout_marginStart="65dp"
         android:layout_marginLeft="65dp"
         android:layout_marginTop="208dp"
-        android:text="2" />
+        android:text="2. " />
 
     <TextView
         android:id="@+id/p3"
@@ -60,7 +60,7 @@
         android:layout_marginStart="65dp"
         android:layout_marginLeft="65dp"
         android:layout_marginTop="267dp"
-        android:text="3" />
+        android:text="3. " />
 
     <TextView
         android:id="@+id/p4"
@@ -73,7 +73,7 @@
         android:layout_marginStart="65dp"
         android:layout_marginLeft="65dp"
         android:layout_marginTop="335dp"
-        android:text="4" />
+        android:text="4. " />
 
     <TextView
         android:id="@+id/p5"
@@ -86,14 +86,14 @@
         android:layout_marginStart="65dp"
         android:layout_marginLeft="65dp"
         android:layout_marginTop="400dp"
-        android:text="5" />
+        android:text="5. " />
 
     <Button
         android:id="@+id/refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="106dp"
+        android:layout_marginTop="462dp"
         android:text="Show Top Scores" />
 </RelativeLayout>

@@ -16,6 +16,8 @@ import org.json.JSONArray;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class LeaderBoard extends AppCompatActivity
 {
@@ -54,14 +56,60 @@ public class LeaderBoard extends AppCompatActivity
                 @Override
                 public void onMessage(String s)
                 {
-                    Log.d("", "run() returned: " + s);
-
-                    String str = place1.getText().toString();
-                    place1.setText("1. ");
-                    Log.d("first", "run() returned: " + str);
-                    str = place1.getText().toString();
-                    Log.d("second", "run() returned: " + str);
-                    place1.setText(str + " Server:" + s);
+                    Log.d("Socket", "run() returned: " + s);
+                    Scanner strScan = new Scanner(s);
+                    ArrayList<Player> players = new ArrayList<>();
+                    int i = 0;
+                    while (strScan.hasNext() == true && i < 5)
+                    {
+                        String name = "no name";
+                        int score = 0;
+                        String str = strScan.next();
+                        if(str.equals("Name:"))
+                        {
+                            if(strScan.hasNext())
+                            {
+                                name = strScan.next();
+                            }
+                        }
+                        if(str.equals("Score:"))
+                        {
+                            if(strScan.hasNextInt() == true)
+                            {
+                                score = strScan.nextInt();
+                            }
+                        }
+                        players.add(new Player(name, score));
+                        i++;
+                    }
+                    for (int j = 0; j < 5; j++)
+                    {
+                        Player p = players.get(j);
+                        if (p.getName().equals("no name"))
+                        {
+                            break;
+                        }
+                        if(j == 0)
+                        {
+                            place1.setText(p.getName() + p.getScoreString());
+                        }
+                        else if (j == 1)
+                        {
+                            place2.setText(p.getName() + p.getScoreString());
+                        }
+                        else if (j == 2)
+                        {
+                            place3.setText(p.getName() + p.getScoreString());
+                        }
+                        else if (j == 3)
+                        {
+                            place4.setText(p.getName() + p.getScoreString());
+                        }
+                        else if (j == 4)
+                        {
+                            place5.setText(p.getName() + p.getScoreString());
+                        }
+                    }
                 }
 
                 @Override
