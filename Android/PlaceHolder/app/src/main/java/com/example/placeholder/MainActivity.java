@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
 
     public void openGameList()
     {
-        Intent i = new Intent(this, GameList.class);
+        Intent i = new Intent(this, GameListActivity.class);
         startActivity(i);
     }
 

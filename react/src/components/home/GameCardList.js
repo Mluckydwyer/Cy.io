@@ -39,8 +39,17 @@ class GameCardList extends Component {
             <GameCard key = {card.gameID}
                       value = {card}/>
         );
+        const cardContainer = (
+            <div className = "games-list-cyio">
+                <div className = "container">
+                    <div className = "row">
+                        {cards}
+                    </div>
+                </div>
+            </div>
+        );
         console.log(cards);
-        return cards;
+        return cardContainer;
     }
 }
 

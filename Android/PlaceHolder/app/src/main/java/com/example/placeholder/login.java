@@ -36,7 +36,7 @@ public class login extends AppCompatActivity
         login = (Button)findViewById(R.id.login);
         username = (EditText)findViewById(R.id.usernameEntry);
         password = (EditText)findViewById(R.id.passwordEntry);
-        vt = (TextView) findViewById(R.id.tv1);
+        vt = (TextView) findViewById(R.id.loginPrompt);
         //GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 
         login.setOnClickListener(new View.OnClickListener()
@@ -58,7 +58,7 @@ public class login extends AppCompatActivity
                 {
                     System.out.println(e.getMessage());
                 }
-                String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
+                String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/auth/login";
                 JsonObjectRequest jobj = signon(obj,vt);
                 AppController.getInstance().addToRequestQueue(jobj, tag_json_obj);
                 openHomePage(user);
@@ -89,7 +89,7 @@ public class login extends AppCompatActivity
     }
     public static JsonObjectRequest signon(JSONObject jo, final TextView vt)
     {
-        String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
+        String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/auth/login";
         return new JsonObjectRequest(Request.Method.POST, URL, jo, new Response.Listener<JSONObject>()
         {
             @Override
