@@ -3,11 +3,13 @@ import { useAuth } from "../../routes/auth";
 import '../../css/login/Login.css';
 import { Redirect } from "react-router-dom";
 
-function Login(){
+function Login(props){
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    const { setAuthTokens } = useAuth();    
+    
+    const { setAuthTokens } = useAuth();
+    //const referer = props.location.state.referer || '/';
     
     
     function handleChangeUser(event){
@@ -40,9 +42,10 @@ function Login(){
             }
         }).then(data => {
             setAuthTokens(data);
+            setLoggedIn(true);
             return data;
         }).then(console.log);
-        
+        console.log(setAuthTokens);
     }
     
     if(isLoggedIn) {
@@ -63,6 +66,6 @@ function Login(){
                     </label>
                 </form>
             </div>
-        )
+        )       
     }
 export default Login;

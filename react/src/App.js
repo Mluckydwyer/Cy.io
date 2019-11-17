@@ -11,7 +11,7 @@ import { AuthContext } from "./routes/auth";
 import Signup from "./css/login/Signup";
 
 
-function App(){
+function App(props){
     
     const [authTokens, setAuthTokens] = useState();
     
@@ -32,10 +32,8 @@ function App(){
                                 <GameCardList/>
                             </main>
                         </Route>
-                        <Route path="/login">
-                            <Login />
-                        </Route>
-                        <PrivateRoute path="/user"/>
+                        <Route path="/login" component = {Login}/>
+                        <PrivateRoute path="/user" component = {Signup}/>
                         <Route path="/signup">
                             <Signup />
                         </Route>
