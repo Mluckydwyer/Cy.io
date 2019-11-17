@@ -2,6 +2,7 @@ package com.example.placeholder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,7 @@ public class LeaderBoard extends AppCompatActivity
     private WebSocketClient socket;
     private String url;
     TextView title, place1, place2, place3, place4, place5;
-    Button r;
+    Button r, b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,6 +34,7 @@ public class LeaderBoard extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
         r = (Button)findViewById(R.id.refresh);
+        b = (Button)findViewById(R.id.gohome);
         title = (TextView)findViewById(R.id.lb);
         place1 = (TextView)findViewById(R.id.p1);
         place2 = (TextView)findViewById(R.id.p2);
@@ -136,8 +138,26 @@ public class LeaderBoard extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                r.setText("Refresh");
+                refresh();
             }
         });
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goHome();
+            }
+        });
+    }
+
+    public void refresh()
+    {
+        Intent i = new Intent(this, LeaderBoard.class);
+        startActivity(i);
+    }
+
+    public void goHome()
+    {
+        Intent i = new Intent(this, Home.class);
+        startActivity(i);
     }
 }
