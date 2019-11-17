@@ -23,7 +23,6 @@ public class ChatSocket {
     public ChatMessage sendAll(@Payload ChatMessage msg) {
         //OutputChatMessage out = new OutputChatMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date()));
         System.out.println(msg.getText());
-        System.out.println("TESTSTEST");
         return msg;
     }
 
