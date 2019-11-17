@@ -1,23 +1,30 @@
 package com.cyio.backend.model;
 
+import com.cyio.backend.websockets.ChatSocket;
 import com.cyio.backend.websockets.LeaderboardSocket;
 import com.cyio.backend.websockets.NotificationSocket;
-import org.springframework.data.annotation.Id;
+import com.cyio.backend.websockets.PlayerDataSocket;
+import javax.persistence.Id;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+//@Entity
+
+//@Table(name = "Servers")
 public class GameServer {
 
-    @Id
-    @NotNull
-    private String serverID;
+//    @Id
+    private String serverId;
 
-    @Column(name = "gameId")
+//    @Column(name = "gameId")
     private String gameId;
 
     private HashMap players;
@@ -29,15 +36,26 @@ public class GameServer {
     // Game notifications
     NotificationSocket ns;
 
+    // Game Chat
+    ChatSocket cs;
+
     // Player Data
     PlayerDataSocket pds;
 
+    public GameServer() {
+
+    }
+
     public GameServer(Game game) {
-        this.serverID = UUID.randomUUID().toString();
+        this.serverId = UUID.randomUUID().toString();
         this.game = game;
         this.gameId = this.game.getGameID();
         players = new HashMap<String, Player>();
-        init();
+
+        ls = new LeaderboardSocket();
+        ns = new NotificationSocket();
+        pds = new PlayerDataSocket();
+        cs = new ChatSocket();
     }
 
     public void sendPlayerUpdate(Player player) {
@@ -57,7 +75,7 @@ public class GameServer {
     public Map<String, String> getJoinData() {
         Map<String, String> joinData = new HashMap();
         joinData.put("gameId", gameId);
-        joinData.put("serverId", serverID);
+        joinData.put("serverId", serverId);
         joinData.put("url", "");
         joinData.put("chatWS", "");
         joinData.put("notificationWS", "");
@@ -76,11 +94,11 @@ public class GameServer {
     }
 
     public String getServerID() {
-        return serverID;
+        return serverId;
     }
 
     public void setServerID(String serverID) {
-        this.serverID = serverID;
+        this.serverId = serverID;
     }
 
     public String getGameId() {
@@ -89,8 +107,5 @@ public class GameServer {
 
     public void setGameId(String gameId) {
         this.gameId = gameId;
-    }
-
-    public void init() {
     }
 }

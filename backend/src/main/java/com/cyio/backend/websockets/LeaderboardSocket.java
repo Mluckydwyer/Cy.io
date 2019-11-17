@@ -13,11 +13,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@ServerEndpoint("/gamews")
+@ServerEndpoint("/leaderboard")
 @Component
 public class LeaderboardSocket {
     private final Logger logger = LoggerFactory.getLogger(LeaderboardSocket.class);
     private List<Session> sessionList = new ArrayList<>();
+
+//    public LeaderboardSocket(String serverID) {
+//
+//    }
 
     @OnOpen
     public void onOpen(Session session) throws IOException {

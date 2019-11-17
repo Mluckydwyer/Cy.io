@@ -9,7 +9,8 @@ import { Player } from './controllers/player.mjs';
 import { Controller } from './controllers/controller.mjs';
 
 const framerate = 60;
-let player, controller, config, chatSocket;
+let player, controller, config
+let chatSocket, leaderboardSocket;
 
 // Initial Setup
 async function setup() {
@@ -32,10 +33,12 @@ async function setup() {
 
     // Testing
     chatSocket = new Socket();
-    //chatSocket.init('http://localhost:8080' + chatSocket.SECURED_CHAT_ROOM);
-    chatSocket.init('http://coms-309-nv-4.misc.iastate.edu:8080' + chatSocket.SECURED_CHAT_ROOM);
+    chatSocket.init('http://localhost:8080' + "/chat");
+    //chatSocket.init('http://coms-309-nv-4.misc.iastate.edu:8080' + "/chat");
     await chatSocket.connect().then(function () {
-        chatSocket.subscribe("/room/public");
+        chatSocket.subscribe("/topic/chat");
+        chatSocket.subscribe("/chat");
+        chatSocket.subscribe("/topic/topic/chat");
         chatSocket.sendMessage({text: "This is a test message"});
         let msg = {
             to: "Matt",
@@ -45,6 +48,13 @@ async function setup() {
         chatSocket.sendChatMessage(msg);
         chatSocket.sendPlayerDataMessage(player);
     }).catch(function () {
+        console.log("Chat websocket Failed to connect");
+    });
+
+
+    leaderboardSocket = new Socket();
+    leaderboardSocket.init('http://localhost:8080' + "/leaderboard");
+    await leaderboardSocket.connect().then(function () {}).catch(function () {
         console.log("Chat websocket Failed to connect");
     });
 

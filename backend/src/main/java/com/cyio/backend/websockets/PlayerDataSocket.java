@@ -13,11 +13,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@ServerEndpoint("/????/{username}") // TODO
 @Component
 public class PlayerDataSocket {
     private final Logger logger = LoggerFactory.getLogger(PlayerDataSocket.class);
     private List<Session> sessionList = new ArrayList<>();
+
+    public PlayerDataSocket() {
+
+    }
 
     @OnOpen
     public void onOpen(Session session) throws IOException {

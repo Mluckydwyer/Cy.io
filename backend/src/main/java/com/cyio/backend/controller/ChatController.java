@@ -23,8 +23,6 @@ import static com.cyio.backend.controller.Constants.*;
 @Controller
 public class ChatController {
 
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
     private static final Logger log = LoggerFactory.getLogger(ChatController.class);
 
     @MessageMapping("/SendMessage")

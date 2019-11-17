@@ -5,7 +5,6 @@ import com.cyio.backend.model.Game;
 import com.cyio.backend.model.GameServer;
 import com.cyio.backend.payload.ApiResponse;
 import com.cyio.backend.repository.GameRepository;
-import com.cyio.backend.repository.ServerRepository;
 import com.cyio.backend.websockets.LeaderboardSocket;
 import com.cyio.backend.websockets.NotificationSocket;
 import jdk.nashorn.internal.ir.debug.JSONWriter;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sun.plugin.javascript.ocx.JSObject;
 
+import javax.annotation.PostConstruct;
 import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,25 +29,32 @@ import java.util.UUID;
 @Component
 public class GameServerController {
 
-    @Autowired
-    ServerRepository serverRepository; //using autowire to create an instance of server repository
+//    @Autowired
+//    ServerRepository serverRepository; //using autowire to create an instance of server repository
 
     @Autowired
-    GameRepository gameRepository; //using autowire to create an instance of server repository
+    GameRepository gameRepository; //using autowire to create an instance of game repository
 
-    public GameServerController() {
+    GameServer gs;
+
+    @PostConstruct
+    public void init() {
         generateDummyServer();
     }
 
     private void generateDummyServer() {
-        String dummyGameId = "123-456-789";
-        GameServer dummyGame = new GameServer(gameRepository.getOne(UUID.fromString(dummyGameId)));
-        serverRepository.save(dummyGame);
+        String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
+        String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
+        Game dummyGame = new Game("Game 1", dummyGameId, dummyCreatorId);
+        GameServer dummyGameServer = new GameServer(dummyGame);
+        this.gs = dummyGameServer;
+
+        //serverRepository.save(dummyGame);
     }
 
     @RequestMapping("/join")
     public ApiResponse join(@RequestParam(value="server-id", defaultValue="") String serverId) {
-        GameServer server = serverRepository.findGameServerByServerId(serverId);//.orElseThrow(() -> new ResourceNotFoundException("GameServer", "id", serverId));
+        GameServer server = gs; //serverRepository.findGameServerByServerId(serverId);//.orElseThrow(() -> new ResourceNotFoundException("GameServer", "id", serverId));
         Map<String, String> joinData = server.getJoinData();
         JSONObject jo = new JSONObject(joinData);
         return new ApiResponse(true, jo.toString());
@@ -55,7 +62,12 @@ public class GameServerController {
 
     @RequestMapping("/find")
     public ApiResponse find(@RequestParam(value="game-id", defaultValue="") String gameId) {
-        String serverId = serverRepository.findGameServerByGameId(gameId);//.orElseThrow(() -> new ResourceNotFoundException("GameServer", "id", serverId));
-        return join(serverId);
+//        String serverId = serverRepository.findGameServerByGameId(gameId);
+//        if (serverId == null) {
+//            GameServer server = new GameServer(gameRepository.getOne(UUID.fromString(gameId)));
+//            serverRepository.save(server);
+//        }
+//        return join(serverId);
+        return join(gs.getServerID());
     }
 }

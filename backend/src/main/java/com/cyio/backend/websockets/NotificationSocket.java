@@ -16,7 +16,7 @@ import java.util.Map;
 
 import static com.cyio.backend.model.Notification.NotificationType.*;
 
-@ServerEndpoint("/notificationws/{username}")
+@ServerEndpoint("/notification")
 @Component
 public class NotificationSocket {
     private static Map<Session, String> sessionUsernameMap = new HashMap<>();
