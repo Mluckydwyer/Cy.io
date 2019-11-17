@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/chat")
+@Controller
 public class ChatSocket {
 
     private static final Logger log = LoggerFactory.getLogger(ChatController.class);
@@ -22,7 +22,8 @@ public class ChatSocket {
     @SendTo("/topic/chat")
     public ChatMessage sendAll(@Payload ChatMessage msg) {
         //OutputChatMessage out = new OutputChatMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date()));
-        System.out.println(msg);
+        System.out.println(msg.getText());
+        System.out.println("TESTSTEST");
         return msg;
     }
 

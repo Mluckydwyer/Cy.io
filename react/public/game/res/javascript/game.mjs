@@ -36,27 +36,26 @@ async function setup() {
     chatSocket.init('http://localhost:8080' + "/chat");
     //chatSocket.init('http://coms-309-nv-4.misc.iastate.edu:8080' + "/chat");
     await chatSocket.connect().then(function () {
-        chatSocket.subscribe("/topic/chat");
         chatSocket.subscribe("/chat");
-        chatSocket.subscribe("/topic/topic/chat");
-        chatSocket.sendMessage({text: "This is a test message"});
+        chatSocket.subscribe("/topic/chat");
+        chatSocket.sendMessage({text: "This is a test message"}, "/app/chat");
         let msg = {
             to: "Matt",
             from: "Tom",
             text: "<3"
         };
-        chatSocket.sendChatMessage(msg);
-        chatSocket.sendPlayerDataMessage(player);
+        chatSocket.sendChatMessage(msg, "/app/chat");
+        //chatSocket.sendPlayerDataMessage(player);
     }).catch(function () {
         console.log("Chat websocket Failed to connect");
     });
 
 
-    leaderboardSocket = new Socket();
-    leaderboardSocket.init('http://localhost:8080' + "/leaderboard");
-    await leaderboardSocket.connect().then(function () {}).catch(function () {
-        console.log("Chat websocket Failed to connect");
-    });
+    // leaderboardSocket = new Socket();
+    // leaderboardSocket.init('http://localhost:8080' + "/leaderboard");
+    // await leaderboardSocket.connect().then(function () {}).catch(function () {
+    //     console.log("Chat websocket Failed to connect");
+    // });
 
 
     // let SECURED_CHAT = '/secured/chat';

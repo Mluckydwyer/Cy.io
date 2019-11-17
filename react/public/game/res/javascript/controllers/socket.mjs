@@ -75,7 +75,7 @@ export function Socket() {
         this.sendMessage(msg);
     };
 
-    this.sendChatMessage = function (message) {
+    this.sendChatMessage = function (message, endpoint) {
         let to = message.to;
         let from = message.from;
 
@@ -85,10 +85,10 @@ export function Socket() {
             'text': message.text
         };
 
-        this.sendMessage(msg);
+        this.sendMessage(msg, endpoint);
     };
 
-    this.sendMessage = function (message, endpoint="/app/SendMessage") {
+    this.sendMessage = function (message, endpoint) {
         this.socket.send(endpoint, {}, JSON.stringify(message));
     }
     
