@@ -108,11 +108,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/notifications",
                         "/leaderboard",
                         "/join",
-                        "/notificationws/**",
-                        "/auth/login/**"
+                        "/notificationws/**"
+
                         )
                 .permitAll()
-                .antMatchers("/auth/**", "/oauth2/**")
+                .antMatchers("/auth/**", "/oauth2/**","/auth/login/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -133,6 +133,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add our custom Token based authentication filter
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
 }
