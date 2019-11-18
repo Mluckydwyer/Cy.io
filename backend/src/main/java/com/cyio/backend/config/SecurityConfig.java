@@ -108,7 +108,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/notifications",
                         "/leaderboard",
                         "/join",
-                        "/notificationws/**"
+                        "/notificationws/**",
+                        "/auth/login/**"
                         )
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")

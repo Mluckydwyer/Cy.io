@@ -56,7 +56,7 @@ Last Update: Oct 8th, 2019
 	- Type : GET
 	- Usage: view the current logged in user's information. To load the user, send the get request with the following header:
 		
-	      	Authorization: bearer USER_TOKEN
+	      	Authorization: Bearer USER_TOKEN
 		
 		where USER_TOKEN is the token returned by the login page
 	- Returns: a list of user attributes, in JSON format
