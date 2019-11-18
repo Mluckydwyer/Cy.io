@@ -18,6 +18,7 @@
         android:layout_marginBottom="106dp">
 
         <LinearLayout
+            android:id="@+id/llcr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

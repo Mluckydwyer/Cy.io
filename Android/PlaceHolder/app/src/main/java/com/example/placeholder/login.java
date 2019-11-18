@@ -67,7 +67,26 @@ public class login extends AppCompatActivity
 
 
     }
+    public static JsonObjectRequest credentials(JSONObject jo)
+    {
+        String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/user/me";
+        return new JsonObjectRequest(Request.Method.GET, URL, jo, new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
 
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                VolleyLog.d("Login","Error: "+ error.getMessage());
+            }
+        });
+
+    }
     public static JsonObjectRequest signon(JSONObject jo, final TextView vt)
     {
         String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/auth/login";
@@ -81,6 +100,10 @@ public class login extends AppCompatActivity
                 try
                 {
                     vt.setText(response.getString(tokens.get(0).toString()) + response.getString(tokens.get(1).toString()));
+                    //credentials(tokens.get(0));
+                   // new JsonObjectRequest(Request.Method.GET, "http://coms-309-nv-4.misc.iastate.edu:8080/user/me", )
+                    //get(0) returns randomstring of chars
+                    //get(1) returns bearer
                 }
                 catch (JSONException e)
                 {
@@ -99,7 +122,7 @@ public class login extends AppCompatActivity
     public void openHomePage(String user)
     {
         Intent intent = new Intent(this, Home.class);
-        intent.putExtra(NICKNAME, user);
+        //intent.putExtra(NICKNAME, user);
         startActivity(intent);
     }
 }

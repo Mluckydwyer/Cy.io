@@ -3,7 +3,7 @@ import { useAuth } from "../../routes/auth";
 import '../../css/login/Login.css';
 import { Redirect } from "react-router-dom";
 
-function Login(props){
+function Login(){
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
@@ -42,11 +42,13 @@ function Login(props){
             }
         }).then(data => {
             setAuthTokens(data);
+            localStorage.setItem("token",JSON.stringify(data));
             setLoggedIn(true);
             return data;
         }).then(console.log);
-        console.log(setAuthTokens);
+        console.log(localStorage.getItem("tokens"));
     }
+    
     
     if(isLoggedIn) {
         return <Redirect to="/" />;

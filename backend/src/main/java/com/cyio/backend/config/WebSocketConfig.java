@@ -27,12 +27,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-//        config.enableSimpleBroker("/game/", "/chat/");
-//        config.setApplicationDestinationPrefixes("/app");
-        //config.enableSimpleBroker("/secured/user/queue/specific-user", "/secured");
-        config.enableSimpleBroker("/room");
+        config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
-        //config.setUserDestinationPrefix("/secured/user");
+//        config.setUserDestinationPrefix("/topic");
     }
 
     @Override
@@ -49,9 +46,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //                }
 //                return true;
 //            }}).withSockJS();
-        registry.addEndpoint("/secured/room").setAllowedOrigins("http://localhost:63343").withSockJS();
+        registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/notifications").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/playerdata").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/leaderboard").setAllowedOrigins("*").withSockJS();
         //registry.addEndpoint("/secured/chat").setAllowedOrigins("http://localhost:63343").withSockJS();
-        //registry.addEndpoint("/secured/history").setAllowedOrigins("http://localhost:63343").withSockJS();
         }
 
 }
