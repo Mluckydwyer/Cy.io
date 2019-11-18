@@ -1,6 +1,7 @@
 package com.cyio.backend.repository;
 
 import com.cyio.backend.model.Game;
+import com.cyio.backend.model.GameServer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
