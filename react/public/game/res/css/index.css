@@ -16,10 +16,93 @@ body {
     background: white;
 }
 
+input {
+    width: 100%;
+    height: 100%;
+}
+
+#chat-list > span {
+    display: block;
+    overflow-wrap: break-word;
+    padding: 0.4vw;
+}
+
+#chat-list {
+    animation: all 0.5s 2.5s;
+    /*visibility: hidden;*/
+    background-color: #333;
+    left: 5vw;
+    width: 30vw;
+    margin-right: -5vw;
+    text-align: left;
+    color: #17C923;
+    position: fixed;
+    border-radius: 5px;
+    bottom: 25vh;
+    /*padding: 1vw;*/
+    opacity: 80%;
+    z-index: 1;
+    font-family: 'DejaVu Sans Mono', monospace;
+}
+
+#chat {
+    animation: all 0.5s 2.5s;
+    visibility: hidden;
+    background-color: #333;
+    left: 5vw;
+    width: 30vw;
+    margin-right: -5vw;
+    text-align: left;
+    color: #17C923;
+    position: fixed;
+    border-radius: 5px;
+    bottom: 15vh;
+    padding: 1vw;
+    opacity: 80%;
+    z-index: 1;
+    font-family: 'DejaVu Sans Mono', monospace;
+}
+
+#chat-box {
+    animation: all 0.5s 2.5s;
+    background-color: #333;
+    opacity: 80%;
+    text-align: left;
+    color: #17C923;
+    border-radius: 5px;
+    z-index: 1;
+    font-size: 1em;
+    border: none;
+    overflow-wrap: break-spaces;
+
+    font-family: 'DejaVu Sans Mono', monospace;
+}
+
+#leaderboard {
+    background-color: #333;
+    right: 100%;
+    width: 40vw;
+    margin-left: -20vw;
+    text-align: left;
+    color: #17C923;
+    position: fixed;
+    border-radius: 5px;
+    bottom: 5vh;
+    padding: 1vw;
+    z-index: 1;
+}
+
+#lb-list {
+    font-family: 'DejaVu Sans Mono', monospace;
+    text-align: left;
+    color: #17C923;
+}
+
 .show {
     visibility: visible !important;
     animation: all 0.5s 2.5s;
 }
+
 #snackbar {
     animation: all 0.5s 2.5s;
     visibility: hidden;

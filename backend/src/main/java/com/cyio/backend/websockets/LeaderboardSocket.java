@@ -29,11 +29,10 @@ public class LeaderboardSocket {
     @Scheduled(fixedRate = 5000)
     public void sendUpdate() {
         leaderBoard.generateDummyData();
-        sendToAll(leaderBoard.getMap(10));
+        //sendToAll(leaderBoard.getMap(10));
     }
 
 }
-
 
 /*
 @ServerEndpoint("/leaderboard")

@@ -12,8 +12,10 @@ import { Controller } from './controllers/controller.mjs';
 
 const framerate = 60;
 const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
+// const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
 
-let player, controller, config;
+export let player;
+let controller, config;
 let chatSocket, leaderboardSocket, notificationSocket, playerDataSocket;
 let gameId;
 
@@ -42,59 +44,11 @@ async function setup() {
 
     setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
     controller.enable();
-
-
-
-    // Testing
-    // chatSocket = new Socket();
-    // //chatSocket.init('http://localhost:8080' + "/chat");
-    // chatSocket.init('http://coms-309-nv-4.misc.iastate.edu:8081' + "/chat");
-    // await chatSocket.connect().then(function () {
-    //     chatSocket.subscribe("/topic/chat");
-    //     chatSocket.sendMessage({text: "This is a test message"}, "/app/chat");
-    //     let msg = {
-    //         to: "Matt",
-    //         from: "Tom",
-    //         text: "<3"
-    //     };
-    //     chatSocket.sendChatMessage(msg, "/app/chat");
-    //     //chatSocket.sendPlayerDataMessage(player);
-    // }).catch(function () {
-    //     console.log("Chat websocket Failed to connect");
-    // });
-
-
-    // leaderboardSocket = new Socket();
-    // leaderboardSocket.init('http://localhost:8080' + "/leaderboard");
-    // await leaderboardSocket.connect().then(function () {}).catch(function () {
-    //     console.log("Chat websocket Failed to connect");
-    // });
-
-
-    // let SECURED_CHAT = '/secured/chat';
-    // let SECURED_CHAT_HISTORY = '/secured/history';
-    // let SECURED_CHAT_ROOM = '/secured/room';
-    // let SECURED_CHAT_SPECIFIC_USER = '/secured/user/queue/specific-user';
-
-    // let socket = new SockJS('http://localhost:8080' + SECURED_CHAT);
-    // let sc = Stomp.over(socket);
-    // let sessionID = "";
-    //
-    // sc.connect({}, function (frame) {
-    //         let url = stompClient.ws._transport.url;
-    //         url = url.replace("ws://localhost:8080/spring-security-mvc-socket/secured/room/", "");
-    //         url = url.replace("/websocket", "");
-    //         url = url.replace(/^[0-9]+\//, "");
-    //         console.log("Your current session is: " + url);
-    //         sessionID = url;
-    // });
-
-    // sc.subscribe('secured/user/queue/specific-user'
-    //     + '-user' + that.sessionId, function (msgOut) {
-    //     //handle messages
-    // });
 }
 
+/*
+    Get and connect to all websocket endpoints to join game server
+ */
 function join() {
     showSnackbar("Getting Game Data");
     // Get server info of server running instance of teh game we want to play
@@ -112,9 +66,8 @@ function join() {
             await chatSocket.connect().then(function () {
                 chatSocket.subscribe(json.chatSub, function (frame) {
                     // TODO Update chat on screen
-                    console.log(frame.body);
+                    incomingChat(frame.body);
                 });
-                sendTestChatMessage();
             }).catch(function () {
                 console.log("Chat websocket Failed to connect");
             });
@@ -125,6 +78,7 @@ function join() {
             await leaderboardSocket.connect().then(function () {
                 leaderboardSocket.subscribe(json.leaderboardSub, function (frame) {
                     // TODO update leaderboard on screen
+                    console.log("Leaderboard update received");
                 });
             }).catch(function () {
                 console.log("Leaderboard websocket Failed to connect");
@@ -135,6 +89,7 @@ function join() {
             notificationSocket.init(json.notificationWs);
             await notificationSocket.connect().then(function () {
                 notificationSocket.subscribe(json.notificationSub, function (frame) {
+                    console.log("Notification received");
                     showSnackbar(frame.body);
                 });
             }).catch(function () {
@@ -146,6 +101,7 @@ function join() {
             playerDataSocket.init(json.playerDataWs);
             await playerDataSocket.connect().then(function () {
                 playerDataSocket.subscribe(json.playerDataSub, function (frame) {
+                    console.log("Player Data update received");
                     console.log(frame.body); // TODO update player data
                 });
             }).catch(function () {
@@ -153,14 +109,6 @@ function join() {
             });
         }
     });
-}
-
-function sendTestChatMessage() {
-    let message = new Message();
-    message.to = "ALL";
-    message.from = "User1";
-    message.text = "This is a test message";
-    chatSocket.sendChatMessage(message);
 }
 
 // When done loading, run the setup function
@@ -201,4 +149,34 @@ function showSnackbar(text) {
     setTimeout(function () {
         sb.className = sb.className.replace("show", "");
     }, 3000)
+}
+
+export function toggleChat() {
+    let chat = document.getElementById("chat");
+    if (chat.classList.contains("show")) chat.classList.remove("show");
+    else {
+        chat.classList.add("show");
+        document.getElementById("chat-box").focus();
+    }
+    controller.chatShown = !controller.chatShown;
+}
+
+export function incomingChat(message) {
+    let chatList = document.getElementById("chat-list");
+    let span = document.createElement('span');
+    let json = JSON.parse(message);
+
+    span.innerText = json.text;
+    chatList.appendChild(span);
+    console.log("Message Received: " + message);
+
+    setTimeout(function () {
+        chatList.removeChild(span);
+    }, 10000)
+}
+
+export function sendChat() {
+    let chatbox = document.getElementById("chat-box");
+    chatSocket.sendChatMessage(chatbox.value);
+    chatbox.value = "";
 }

@@ -1,8 +1,10 @@
 // import SockJS from "../libs/";
+import {player} from "../game.mjs";
 
 export function Socket() {
 
     const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
+    // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
 
     this.socket = null;
     this.isConnected = false;
@@ -12,7 +14,7 @@ export function Socket() {
     this.sendEndpoint = "";
 
     this.init = function (url) {
-        this.sendEndpoint = "/app/" + url;
+        this.sendEndpoint = "/app" + url;
         this.url = serverUrl + url;
         return this;
     };
@@ -21,16 +23,18 @@ export function Socket() {
         return new Promise((function (resolve, reject) {
             let socket = new SockJS(this.url);
             let stompClient = Stomp.over(socket);
+            stompClient.debug = () => {}; // Stop debug messages so they don't clog browser console
             this.socket = stompClient;
             this.socket.reconnect_delay = 5000;
 
             this.socket.connect({}, (function (frame) {
                 let url = stompClient.ws._transport.url;
-                console.log(stompClient.ws._transport.url);
+                this.url = url;
+                console.log("Connected to Socket at: " + stompClient.ws._transport.url);
                 url = url.replace("ws://localhost:8080/spring-security-mvc-socket/secured/room/",  "");
                 url = url.replace("/websocket", "");
                 url = url.replace(/^[0-9]+\//, "");
-                console.log("Your current session is: " + url);
+                // console.log("Your current session is: " + url);
                 this.sessionId = url;
                 this.isConnected = true;
                 resolve();
@@ -48,7 +52,7 @@ export function Socket() {
 
         this.socket.disconnect();
         this.isConnected = false;
-        console.log("Socket disconnected at " + this.url);
+        console.log("Socket disconnected at: " + this.url);
     };
 
     this.subscribe = function (endpoint, onMessage=function (frame) {
@@ -72,19 +76,11 @@ export function Socket() {
     };
 
     this.sendChatMessage = function (message) {
-        let to = message.to;
-        let from = message.from;
-
-        let msg = {
-            'from': (from === undefined || from === null ) ? to : from,
-            'to': (to === undefined || to === null ) ? "ALL" : to,
-            'text': message.text
-        };
-
-        this.sendMessage(msg, endpoint);
+        this.sendMessage("[" + player.name + "]: " + message);
     };
 
-    this.sendMessage = function (message, endpoint=) {
+    this.sendMessage = function (message, endpoint=this.sendEndpoint) {
+        console.log("Sending to endpoint: " + endpoint + "\nMessage: " + message);
         this.socket.send(endpoint, {}, JSON.stringify(message));
     }
     

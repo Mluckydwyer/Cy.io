@@ -1,3 +1,4 @@
+import {toggleChat, sendChat} from "../game.mjs";
 export { Controller };
 
 function Controller() {
@@ -17,6 +18,7 @@ function Controller() {
     this.mouseOnScreen = false;
     this.mouseEnabled = false;
     this.keyboardEnabled = false;
+    this.chatShown = false;
 
     this.init = function (config, canvas, enable) {
         this.config(config);
@@ -52,104 +54,103 @@ function Controller() {
     };
 
     this.keyPressed = function (event) {
-        if (this.isEnabled && this.keyboardEnabled) {
+        if (this.isEnabled && this.keyboardEnabled && !this.chatShown) {
             event.preventDefault();
-            console.log("Keydown Event: " + event.which);
+            // console.log("Keydown Event: " + event.which);
             this.inputSource = this.inputs.KEYBOARD;
 
             switch (event.which) {
                 case 37: // Left Arrow
                     this.keys[0] = true;
-                    console.log("Left Arrow Pressed");
                     break;
                 case 65: // 'A' Key
                     this.keys[4] = true;
-                    console.log("\'A\' Key Pressed");
                     break;
                 case 38: // Up Arrow
                     this.keys[1] = true;
-                    console.log("Up Arrow Pressed");
                     break;
                 case 87: // 'W' Key
                     this.keys[5] = true;
-                    console.log("\'W\' Key Pressed");
                     break;
                 case 39: // Right Arrow
                     this.keys[2] = true;
-                    console.log("Right Arrow Pressed");
                     break;
                 case 68: // 'D' Key
                     this.keys[6] = true;
-                    console.log("\'D\' Key Pressed");
                     break;
                 case 40: // Down Arrow
                     this.keys[3] = true;
-                    console.log("Down Arrow Pressed");
                     break;
                 case 83: // 'S' Key
                     this.keys[7] = true;
-                    console.log("\'S\' Key Pressed");
                     break;
             }
 
             // console.log(this.keys);
+        } else if (this.chatShown && event.which === 27) { // escape key pressed
+            toggleChat();
         }
     };
 
     this.keyReleased = function (event) {
-        if (this.isEnabled && this.keyboardEnabled) {
+        if (this.isEnabled && this.keyboardEnabled && !this.chatShown) {
             event.preventDefault();
-            console.log("Keydown Event: " + event.which);
+            // console.log("Keydown Event: " + event.which);
             this.inputSource = this.inputs.KEYBOARD;
 
             switch (event.which) {
                 case 37: // Left Arrow
                     this.keys[0] = false;
-                    console.log("Left Arrow Released");
                     break;
                 case 65: // 'A' Key
                     this.keys[4] = false;
-                    console.log("\'A\' Key Released");
                     break;
                 case 38: // Up Arrow
                     this.keys[1] = false;
-                    console.log("Up Arrow Released");
                     break;
                 case 87: // 'W' Key
                     this.keys[5] = false;
-                    console.log("\'W\' Key Released");
                     break;
                 case 39: // Right Arrow
                     this.keys[2] = false;
-                    console.log("Right Arrow Released");
                     break;
                 case 68: // 'D' Key
                     this.keys[6] = false;
-                    console.log("\'D\' Key Released");
                     break;
                 case 40: // Down Arrow
                     this.keys[3] = false;
-                    console.log("Down Arrow Released");
                     break;
                 case 83: // 'S' Key
                     this.keys[7] = false;
-                    console.log("\'S\' Key Released");
                     break;
+                case 84: // 'T' Key
+                    toggleChat();
             }
 
+        } else if (this.chatShown) {
+            switch (event.which) {
+                case 27: // 'Escape' Key
+                    toggleChat();
+                    break;
+                case 13: // 'Enter' Key
+                    sendChat();
+                    toggleChat();
+                    break;
+            }
         }
     };
 
     this.click = function (event) {
         if (this.isEnabled && this.mouseEnabled) {
             event.preventDefault();
-            console.log("Click Event: " + event.which);
+            // console.log("Click Event: " + event.which);
             this.inputSource = this.inputs.MOUSE;
         }
     };
 
     this.mouseLeave = function (event) {
         if (this.isEnabled && this.mouseEnabled) {
+            event.preventDefault();
             this.mouseOnScreen = false;
             this.inputSource = this.inputs.MOUSE;
         }
@@ -157,6 +158,7 @@ function Controller() {
 
     this.mouseMove = function (event) {
         if (this.isEnabled && this.mouseEnabled) {
+            event.preventDefault();
             this.mouseOnScreen = true;
             this.inputSource = this.inputs.MOUSE;
             this.mouseX = event.clientX;
