@@ -1,101 +1,136 @@
 package com.cyio.backend.websockets;
 
 
+import com.cyio.backend.model.Game;
+import com.cyio.backend.model.LeaderBoard;
+import com.cyio.backend.model.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Controller;
 
-import javax.websocket.*;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-@ServerEndpoint("/notificationws/{username}")
-@Component
+@EnableScheduling
+@Controller
 public class NotificationSocket {
-    private static Map<Session, String> sessionUsernameMap = new HashMap<>();
-    private static Map<String, Session> usernameSessionMap = new HashMap<>();
+    private static final Logger log = LoggerFactory.getLogger(NotificationSocket.class);
+    private LeaderBoard leaderBoard = new LeaderBoard();
 
-    private final Logger logger = LoggerFactory.getLogger(NotificationSocket.class);
+    @Autowired
+    public SimpMessagingTemplate template;
 
-    @OnOpen
-    public void onOpen(
-            Session session,
-            @PathParam("username") String username) throws IOException
-    {
-        logger.info("Entered into Open");
+    public final String endPoint = "/notifications";
+    public final String listenPoint = "/topic" + endPoint;
 
-        sessionUsernameMap.put(session, username);
-        usernameSessionMap.put(username, session);
-
-        String message="User:" + username + " has Joined the Chat";
-        broadcast(message);
-
+    public void sendToAll(Object message) {
+        template.convertAndSend(listenPoint, message);
     }
 
-    @OnMessage
-    public void onMessage(Session session, String message) throws IOException
-    {
-        // Handle new messages
-        logger.info("Entered into Message: Got Message:"+message);
-        String username = sessionUsernameMap.get(session);
-
-        if (message.startsWith("@")) // Direct message to a user using the format "@username <message>"
-        {
-            String destUsername = message.split(" ")[0].substring(1); // don't do this in your code!
-            sendMessageToPArticularUser(destUsername, "[DM] " + username + ": " + message);
-            sendMessageToPArticularUser(username, "[DM] " + username + ": " + message);
-        }
-        else // Message to whole chat
-        {
-            broadcast(username + ": " + message);
-        }
+    public void playerJoined(Player player) {
+        sendToAll(player.getUserName() + " joined the game!");
     }
 
-    @OnClose
-    public void onClose(Session session) throws IOException
-    {
-        logger.info("Entered into Close");
-
-        String username = sessionUsernameMap.get(session);
-        sessionUsernameMap.remove(session);
-        usernameSessionMap.remove(username);
-
-        String message= username + " disconnected";
-        broadcast(message);
+    public void playerLeft(Player player) {
+        sendToAll(player.getUserName() + " disconnected");
     }
 
-    @OnError
-    public void onError(Session session, Throwable throwable)
-    {
-        // Do error handling here
-        logger.info("Entered into Error");
+    public void newLeader(Player player) {
+        sendToAll(player.getUserName() + " has taken the lead!");
     }
 
-    private void sendMessageToPArticularUser(String username, String message)
-    {
-        try {
-            usernameSessionMap.get(username).getBasicRemote().sendText(message);
-        } catch (IOException e) {
-            logger.info("Exception: " + e.getMessage().toString());
-            e.printStackTrace();
-        }
+    public void newGameAdded(Game game) {
+        sendToAll(game.getTitle() + " is now playable");
     }
-
-    private static void broadcast(String message)
-            throws IOException
-    {
-        sessionUsernameMap.forEach((session, username) -> {
-            synchronized (session) {
-                try {
-                    session.getBasicRemote().sendText(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
 }
+
+//
+//@ServerEndpoint("/notification")
+//@Component
+//public class NotificationSocket {
+//    private static Map<Session, String> sessionUsernameMap = new HashMap<>();
+//    private static Map<String, Session> usernameSessionMap = new HashMap<>();
+//
+//    private final Logger logger = LoggerFactory.getLogger(NotificationSocket.class);
+//
+//    public final String endPoint = "/notification";
+//    public final String listenPoint = "/topic" + endPoint;
+//
+//    /**
+//     *  When a new user joins the game, a new notification object is created and broadcasted to everyone with the referenced username added to it
+//     * @param session
+//     * @param username
+//     * @throws IOException
+//     */
+//    @OnOpen
+//    public void onOpen(
+//            Session session,
+//            @PathParam("username") String username) throws IOException
+//    {
+//        logger.info("Entered into Open");
+//
+//        sessionUsernameMap.put(session, username);
+//        usernameSessionMap.put(username, session);
+//        Notification n = new Notification();
+//        n.setType(JOIN);
+//        n.setNotificationMessage("A new user has joined the game");
+//        n.setReferencedUser(username);
+//        String message=n.toString();
+//        broadcast(message);
+//    }
+//
+//    public void newGame(Game game) throws IOException {
+//        logger.info ("Entered into new Game");
+//        Notification n = new Notification();
+//        n.setType(NEWGAME);
+//        n.setNotificationMessage("New game added!");
+//        n.setReferencedUser(game.getCreatorID());
+//        n.setReferencedGame(game.getGameID());
+//        broadcast(n.toString());
+//    }
+//
+//                        /**
+//     * When a user leaves the game, a new notification object is created and broadcasted with the referenced user attached to it
+//     *
+//     * @param session
+//     * @throws IOException
+//     */
+//                        @OnClose
+//    public void onClose(Session session) throws IOException
+//    {
+//        logger.info("Entered into Close");
+//        String username = sessionUsernameMap.get(session);
+//        sessionUsernameMap.remove(session);
+//        usernameSessionMap.remove(username);
+//
+//        Notification n = new Notification();
+//        n.setReferencedUser(username);
+//        n.setNotificationMessage("A user has left the game");
+//        n.setType(LEAVE);
+//        String message= n.toString();
+//        broadcast(message);
+//    }
+//
+//    @OnError
+//    public void onError(Session session, Throwable throwable)
+//    {
+//        // Do error handling here
+//        logger.info("Entered into Error");
+//    }
+//
+//    private static void broadcast(String message)
+//            throws IOException
+//    {
+//        sessionUsernameMap.forEach((session, username) -> {
+//            synchronized (session) {
+//                try {
+//                    session.getBasicRemote().sendText(message);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
+//
+//}
+//

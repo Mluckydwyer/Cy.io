@@ -9,7 +9,7 @@ export function Player() {
 
     this.init = function (config) {
         this.mover = new Mover().init();
-        this.name = "";
+        this.name = "You";
         this.config(config);
         return this;
     };

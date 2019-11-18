@@ -82,4 +82,28 @@ describe('Mover Lib', function() {
         expect(mover.mag).to.equal(1);
     });
 
+    it('#updateMag()', function() {
+        let config = new Config();
+        config.load(JSON.stringify(fakeDefaultConfig));
+        let mover = new Mover().init(config);
+        mover.targetX = 10;
+        mover.targetY = 62;
+        mover.updateMag();
+
+        expect(mover.mag).to.be.closeTo(62.80127387, 0.01);
+    });
+
+    it('#move()', function() {
+        let config = new Config();
+        config.load(JSON.stringify(fakeDefaultConfig));
+        let mover = new Mover().init(config);
+        mover.targetX = 10;
+        mover.targetY = 62;
+        mover.speed = 5;
+        mover.move();
+
+        expect(mover.xPos).to.equal(50);
+        expect(mover.yPos).to.equal(310);
+    });
+
 });

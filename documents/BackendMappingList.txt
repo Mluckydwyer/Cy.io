@@ -3,7 +3,7 @@ These are the mappings for all the current endpoints on the werver.
 Last Update: Oct 8th, 2019
 
 :8080/reactexample
-	- Status: Running - Stable
+	- Status: Deprecated
 	- Type: GET
 	- Usage: none
 	- Returns: JSON for 3 precoded games - not connected to server
