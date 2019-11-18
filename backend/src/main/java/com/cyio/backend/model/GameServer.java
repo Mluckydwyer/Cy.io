@@ -27,7 +27,6 @@ public class GameServer {
 //    @Column(name = "gameId")
     private String gameId;
 
-    private HashMap players;
     private Game game;
 
     // Game Leaderboard
@@ -50,7 +49,6 @@ public class GameServer {
         this.serverId = UUID.randomUUID().toString();
         this.game = game;
         this.gameId = this.game.getGameID();
-        players = new HashMap<String, Player>();
 
         ls = new LeaderboardSocket();
         ns = new NotificationSocket();
@@ -58,19 +56,6 @@ public class GameServer {
         cs = new ChatSocket();
     }
 
-    public void sendPlayerUpdate(Player player) {
-        ArrayList playerData = getAllPlayerGameData();
-    }
-
-    private ArrayList<String> getAllPlayerGameData() {
-        ArrayList<String> data = new ArrayList<String>();
-
-        for (Object key : players.keySet()) {
-            data.add(((Player) players.get(key)).getGameData());
-        }
-
-        return data;
-    }
 
     public Map<String, String> getJoinData() {
         Map<String, String> joinData = new HashMap();
@@ -88,14 +73,6 @@ public class GameServer {
         joinData.put("playerDataSub", pds.listenPoint);
 
         return joinData;
-    }
-
-    public void addPlayer(Player player) {
-        players.put(player.getUserId(), player);
-    }
-
-    public void removePlayer(Player player) {
-        players.remove(player.getUserId());
     }
 
     public String getServerID() {

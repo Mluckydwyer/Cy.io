@@ -3,6 +3,7 @@ package com.cyio.backend.model;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 
 import java.util.Comparator;
+import java.util.Map;
 import java.util.UUID;
 
 public class Player {
@@ -11,10 +12,25 @@ public class Player {
     private int score;
     private SockJsClient socket;
 
+    public void setUserId(String userId) {
+        setUserId(userId);
+    }
+
+    public PlayerData getPlayerData() {
+        return playerData;
+    }
+
+    public void setPlayerData(PlayerData playerData) {
+        setPlayerData(playerData);
+    }
+
+    private PlayerData playerData;
+
 
     public Player(String userName, int score){
-        this.userName = userName;
-        this.score = score;
+        this(UUID.randomUUID().toString());
+        setUserName(userName);
+        setScore(score);
     }
 
     public Player(SockJsClient socket) {
@@ -24,6 +40,7 @@ public class Player {
 
     public Player(String id) {
         this.userId = id;
+        playerData = new PlayerData();
     }
 
     public String getUserName() {
@@ -49,8 +66,8 @@ public class Player {
         return socket;
     }
 
-    public String getGameData() {
-        return "Test Game DATA"; // TODO
+    public void updatePlayerData(Map<String, String> data) {
+
     }
 
     static class PlayerComparater implements Comparator<Player> {
