@@ -19,13 +19,18 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+//import ua.naiksoftware.stomp.Stomp;
+//import ua.naiksoftware.stomp.StompClient;
+
 public class ChatRoom extends AppCompatActivity
 {
     private WebSocketClient socket;
     private String name;
     private String url = "";
+    private String url2 = "";
     Button send;
     EditText et;
+//    private StompClient mStompClient;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -33,7 +38,10 @@ public class ChatRoom extends AppCompatActivity
         setContentView(R.layout.activity_chat_room);
         send = (Button) findViewById(R.id.sendbtn);
         et = (EditText) findViewById(R.id.messagetxt);
-        url = "http://coms-309-nv-4.misc.iastate.edu:8080/secured/room";
+        url = "ws://coms-309-nv-4.misc.iastate.edu:8081/chat";
+        url2 = "http://coms-309-nv-4.misc.iastate.edu:8080/topic/chat";
+//        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
+//        mStompClient.connect();
         try
         {
             socket = new WebSocketClient(new URI(url))
@@ -74,7 +82,7 @@ public class ChatRoom extends AppCompatActivity
             e.printStackTrace();
         }
         socket.connect();
-//        name = (String)getIntent().getExtras().getString(login.NICKNAME);             <----crashes app
+//        name = /(String)getIntent().getExtras().getString(login.NICKNAME);             <----crashes app
 //        socket.
         send.setOnClickListener(new View.OnClickListener()
         {
@@ -87,8 +95,7 @@ public class ChatRoom extends AppCompatActivity
                 t.setTextSize(15);
                 t.setText(et.getText().toString());
                 ll.addView(t);
-
-                //socket.send(et.getText().toString());
+                socket.send(et.getText().toString());
             }
         });
     }

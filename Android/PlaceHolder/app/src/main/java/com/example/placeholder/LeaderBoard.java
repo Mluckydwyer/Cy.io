@@ -41,8 +41,7 @@ public class LeaderBoard extends AppCompatActivity
         place3 = (TextView)findViewById(R.id.p3);
         place4 = (TextView)findViewById(R.id.p4);
         place5 = (TextView)findViewById(R.id.p5);
-        url = "ws://coms-309-nv-4.misc.iastate.edu:8080/gamews";
-
+        url = "ws://coms-309-nv-4.misc.iastate.edu:8080/leaderboard";
         Draft[] drafts = {new Draft_6455()};
         try
         {
