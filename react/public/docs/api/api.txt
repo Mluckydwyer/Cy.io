@@ -64,6 +64,7 @@ Last Update: Nov 17th, 2019
 		where USER_TOKEN is the token returned by the login page
 	- Returns: a list of user attributes, in JSON format
 
+NOTE: ONLY ON DEV SERVER ON PORT 8081
 :8080/find?gameId=GAMEID
 	- Status: dev
 	    -> currently just returns data about single game server running no matter id passed in
@@ -91,6 +92,7 @@ Last Update: Nov 17th, 2019
                		   otherwise,
                			error messages
 
+NOTE: ONLY ON DEV SERVER ON PORT 8081
 :8080/join?serverId=SERVERID
 	- Status: dev
 	    -> currently just returns data about single game server running no matter id passed in
@@ -123,6 +125,7 @@ Last Update: Nov 17th, 2019
 
 
 Server Backend Websocket Endpoints
+NOTE: ALL websockets are still in dev and will not be pushed to prod until shown to work. please assume all are on the dev server at port 8081
 NOTE: {baseUrl} is used to reference the base site url (http://coms-309-nv-4.misc.iastate.edu:8080 in most cases) of wherever the server is being hosted
 
 Implementation:
