@@ -10,7 +10,7 @@ public class ChatMessage {
     public ChatMessage(String text) {
         setText(text);
     }
-    
+
     public String getText() {
         return text;
     }

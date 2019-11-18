@@ -74,6 +74,7 @@ public class GameServer {
 
     public Map<String, String> getJoinData() {
         Map<String, String> joinData = new HashMap();
+        joinData.put("gameTitle", game.getTitle());
         joinData.put("gameId", gameId);
         joinData.put("serverId", serverId);
         joinData.put("url", "");

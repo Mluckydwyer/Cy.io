@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class LeaderBoard {
     private ArrayList<Player> leaderList;
@@ -111,14 +108,30 @@ public class LeaderBoard {
      * @param limit how many players to return
      * @return the complete leaderboard list in a Map
      */
-    public Map<String, Integer> getMap(int limit){
+    public Map<String, Integer> getMap(int limit) {
         sortBoard();
-        Map<String, Integer> leaderData = new HashMap();
-        for (Player p : getLeaderList()) {
-            if (leaderData.size() >= limit) break;
-            leaderData.put(p.getUserName(), p.getScore());
+        TreeMap<String, Integer> leaderData = new TreeMap<String, Integer>();
+        for (int i = 0; i < limit; i++) {
+            leaderData.put(getLeaderList().get(i).getUserName(), getLeaderList().get(i).getScore());
         }
         return leaderData;
+    }
+
+    /**
+     * Creates a list of player scores and names to be sent to clients
+     * @param limit how many players to return
+     * @return the complete leaderboard list in a list
+     */
+    public List<Leader> getLeaderList(int limit) {
+        ArrayList<Leader> leaders = new ArrayList<>();
+        sortBoard();
+        for (int i = 0; i < limit; i++) {
+            Player player = getLeaderList().get(i);
+            Leader leader = new Leader(player.getUserName(), player.getScore());
+            leaders.add(leader);
+        }
+
+        return leaders;
     }
 
     /**

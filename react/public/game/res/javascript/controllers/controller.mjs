@@ -143,7 +143,7 @@ function Controller() {
     this.click = function (event) {
         if (this.isEnabled && this.mouseEnabled) {
             event.preventDefault();
-            // console.log("Click Event: " + event.which);
+            //console.log("Click Event: " + event.which);
             this.inputSource = this.inputs.MOUSE;
         }
     };
@@ -168,7 +168,7 @@ function Controller() {
     };
 
     this.mouseWheel = function (event) {
-        console.log("scroll");
+        //console.log("scroll");
         if (this.isEnabled && this.mouseEnabled) {
             event.preventDefault();
             this.inputSource = this.inputs.MOUSE;
@@ -186,9 +186,9 @@ function Controller() {
         document.addEventListener("keydown", this.keyPressed.bind(this), false);
         document.addEventListener("keyup", this.keyReleased.bind(this), false);
         canvas.addEventListener("mouseleave", this.mouseLeave.bind(this), false);
-        canvas.addEventListener("mousemove", this.mouseMove.bind(this), false);
+        document.addEventListener("mousemove", this.mouseMove.bind(this), false);
         canvas.addEventListener("wheel", this.mouseWheel.bind(this), false);
-        canvas.addEventListener("click", this.click.bind(this), false);
+        document.addEventListener("click", this.click.bind(this), false);
 
         //window.addEventListener("handleEvent", this.defaultEventHandler.bind(this), false);
         // canvas.addEventListener("mousemove", this.mouseMove, false);

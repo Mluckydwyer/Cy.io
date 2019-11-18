@@ -12,14 +12,40 @@
     <title>io - Game</title>
 </head>
 <body>
+
+<div class="overlay show" id="backdrop">
+    <a href="/" id="overlay-logo" title="Mluckydwyer Logo"></a>
+</div>
+
+<div class="hide" id="loader">
+    <div id="loader-icon"></div>
+    <a href="/" id="loader-logo" title="Mluckydwyer Logo"></a>
+</div>
+
+<div class="username-form show" id="name-pop">
+
+    <b id="game-title-text"></b><br>
+
+    <div class="info-field">
+        <input class="u-name" autocomplete="off" id="username-input" maxlength="15" minlength="3" name="username"
+               placeholder="Username"
+               required type="text"><br>
+        <a href="#" id="submit-un">Play</a>
+    </div>
+
+</div>
+
 <canvas id="canvas"></canvas>
-<div id="leaderboard">
-    <ul id="lb-list">
-    </ul>
+<div id="leaderboard" class="hide">
+    <div id="lb-list">
+        <div class="l-title">
+            <span class="l-title"><b>Leaderboard</b></span>
+        </div>
+    </div>
 </div>
 <div id="chat-list"></div>
 <div id="chat">
-    <input id="chat-box" type="text">
+    <label for="chat-box">Chat:</label><input id="chat-box" type="text" tabindex='2'>
 </div>
 <div id="snackbar"></div>
 </body>
