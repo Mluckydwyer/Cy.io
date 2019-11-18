@@ -287,11 +287,11 @@ public class login extends AppCompatActivity
             Intent intent = new Intent(this, Home.class);
             startActivity(intent);
         }
-
-        public void openHomePage(String user)
-        {
-            Intent intent = new Intent(this, Home.class);
-            //intent.putExtra(NICKNAME, user);
-            startActivity(intent);
-        }
+//
+//        public void openHomePage(String user)
+//        {
+//            Intent intent = new Intent(this, Home.class);
+//            //intent.putExtra(NICKNAME, user);
+//            startActivity(intent);
+//        }
 }
