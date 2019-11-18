@@ -13,11 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -27,10 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
 
 
 public class login extends AppCompatActivity
@@ -74,21 +79,92 @@ public class login extends AppCompatActivity
                     String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
                     bear = " ";
                     token = " ";
-                    JsonObjectRequest jobj = signon(obj,vt,vt2);
-                    AppController.getInstance().addToRequestQueue(jobj, tag_json_obj);
-                    Log.d("AHhHhH", token);
-                    //boolean b = credentials(arr.get(0), arr.get(1));
-                    boolean b = credentials(bear, token);
-                    Log.d("AHH", "" + b);
-                    if (b == true)
+                    makeJsonObjectRequest(URL, obj, new VolleyResponseListener()
                     {
-                        openHomePage();
-                    }
-                    openHomePage();
+                        public boolean b = false;
+                        @Override
+                        public void onError(String message)
+                        {
+                            Log.d("ERROR", message);
+                            Log.d("BBB", b + "");
+                        }
+
+                        @Override
+                        public void onResponse(Object response)
+                        {
+                            Log.d("BB", response.toString());
+                            Scanner scan = new Scanner(response.toString());
+                            int q = response.toString().indexOf("accessToken");
+                            int r = response.toString().indexOf("tokenType");
+                            Log.d("BBBB", q + "");
+                            Log.d("BBBB", r + "");
+                            token = response.toString().substring(q + 14,r - 3);
+                            bear = response.toString().substring(r + 12, response.toString().length()- 2);
+                            Log.d("BBBBB", token);
+                            Log.d("BBBBB", bear);
+                            b = credentials(bear, token);
+                            Log.d("BBBBBB", b + "");
+                            openHomePage();
+
+                        }
+                    });
+//                    Log.d("BBb", token);
+//                    Log.d("BBb", bear);
+//                    JsonObjectRequest jobj = signon(obj,vt,vt2);
+//                    AppController.getInstance().addToRequestQueue(jobj, tag_json_obj);
+//                    //boolean b = credentials(arr.get(0), arr.get(1));
+//                    boolean b = credentials(bear, token);
+////                    Log.d("AHH", "" + b);
+//                    if (b == true)
+//                    {
+//                        openHomePage();
+//                    }
+//                    openHomePage();
                 }
             });
 
 
+        }
+
+        public static void makeJsonObjectRequest(String url, JSONObject jo, final VolleyResponseListener listener)
+        {
+            Log.d("B", "here");
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (url, jo, new Response.Listener<JSONObject>()
+                    {
+                        @Override
+                        public void onResponse(JSONObject response)
+                        {
+                            listener.onResponse(response);
+                        }
+                    }, new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error)
+                        {
+                            listener.onError(error.toString());
+                        }
+                    })
+            {
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response)
+                {
+                    try
+                    {
+                        String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+                        return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
+                    }
+                    catch (UnsupportedEncodingException e)
+                    {
+                        return Response.error(new ParseError(e));
+                    }
+                    catch (JSONException je)
+                    {
+                        return Response.error(new ParseError(je));
+                    }
+                }
+            };
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest);
         }
 
         public boolean credentials(String s1, String s2)
@@ -138,7 +214,7 @@ public class login extends AppCompatActivity
 
 
 
-        protected JsonObjectRequest signon(JSONObject jo, final TextView vt, final TextView vt2)
+        public JsonObjectRequest signon(JSONObject jo, final TextView vt, final TextView vt2)
         {
             String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/auth/login";
 
@@ -173,14 +249,14 @@ public class login extends AppCompatActivity
                         tok = response.getString(tokens.get(0).toString());
                         vt2.setText(response.getString(tokens.get(1).toString()));
                         bea = response.getString(tokens.get(0).toString());
-                        Log.d("AHhhhh", response.getString(tokens.get(0).toString()));
+//                        Log.d("AHhhhh", response.getString(tokens.get(0).toString()));
                         updateBear();
                         updateToken();
-                        Log.d("AHhhhh", bear);
+//                        Log.d("AHhhhh", bear);
                         a = new String[] {bear, token};
-                        Log.d("AHj", a[0]);
+//                        Log.d("AHj", a[0]);
                         updateArray(a);
-                        Log.d("AHk", arr[0]);
+//                        Log.d("AHk", arr[0]);
                         //credentials(tokens.get(0));
                         // new JsonObjectRequest(Request.Method.GET, "http://coms-309-nv-4.misc.iastate.edu:8080/user/me", )
                         //get(0) returns randomstring of chars
@@ -200,7 +276,9 @@ public class login extends AppCompatActivity
                     VolleyLog.d("Login","Error: "+ error.getMessage());
                 }
             };
+            String tag_json_obj ="json_obj_req";
             JsonObjectRequest jobj = new JsonObjectRequest(Request.Method.POST, URL, jo, r, e);
+            AppController.getInstance().addToRequestQueue(jobj, tag_json_obj);
             return jobj;
         }
 
