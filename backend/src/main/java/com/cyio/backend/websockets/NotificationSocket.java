@@ -1,33 +1,20 @@
 package com.cyio.backend.websockets;
 
 
-import com.cyio.backend.controller.ChatController;
 import com.cyio.backend.model.Game;
 import com.cyio.backend.model.LeaderBoard;
-import com.cyio.backend.model.Notification;
 import com.cyio.backend.model.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-
-import javax.websocket.*;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.cyio.backend.model.Notification.NotificationType.*;
 
 @EnableScheduling
 @Controller
 public class NotificationSocket {
-    private static final Logger log = LoggerFactory.getLogger(ChatController.class);
+    private static final Logger log = LoggerFactory.getLogger(NotificationSocket.class);
     private LeaderBoard leaderBoard = new LeaderBoard();
 
     @Autowired

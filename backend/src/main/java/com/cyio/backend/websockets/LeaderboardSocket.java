@@ -1,36 +1,19 @@
 package com.cyio.backend.websockets;
 
-import com.cyio.backend.controller.ChatController;
-import com.cyio.backend.model.ChatMessage;
 import com.cyio.backend.model.LeaderBoard;
-import com.cyio.backend.model.Player;
-import com.cyio.backend.payload.ApiResponse;
-import com.cyio.backend.payload.JSONResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-
-import javax.websocket.OnClose;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @EnableScheduling
 @Controller
 public class LeaderboardSocket {
 
-    private static final Logger log = LoggerFactory.getLogger(ChatController.class);
+    private static final Logger log = LoggerFactory.getLogger(LeaderboardSocket.class);
     private LeaderBoard leaderBoard = new LeaderBoard();
 
     @Autowired
