@@ -2,25 +2,23 @@
 
 export function Socket() {
 
-    this.SECURED_CHAT = '/secured/chat';
-    this.SECURED_CHAT_HISTORY = '/secured/history';
-    this.SECURED_CHAT_ROOM = '/secured/room';
-    this.SECURED_CHAT_SPECIFIC_USER = '/secured/user/queue/specific-user';
-    this.APPLICATION_PREFIX = "/app";
+    const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
 
     this.socket = null;
     this.isConnected = false;
     this.url = "";
     this.sessionId = "";
     this.subscriptions = [];
+    this.sendEndpoint = "";
 
     this.init = function (url) {
-        this.url = url;
+        this.sendEndpoint = "/app/" + url;
+        this.url = serverUrl + url;
         return this;
     };
     
     this.connect = function () {
-        let connectPromise = new Promise((function (resolve, reject) {
+        return new Promise((function (resolve, reject) {
             let socket = new SockJS(this.url);
             let stompClient = Stomp.over(socket);
             this.socket = stompClient;
@@ -40,8 +38,6 @@ export function Socket() {
                 reject();
             });
         }).bind(this));
-
-        return connectPromise;
     };
 
     this.disconnect = function () {
@@ -75,7 +71,7 @@ export function Socket() {
         this.sendMessage(msg);
     };
 
-    this.sendChatMessage = function (message, endpoint) {
+    this.sendChatMessage = function (message) {
         let to = message.to;
         let from = message.from;
 
@@ -88,7 +84,7 @@ export function Socket() {
         this.sendMessage(msg, endpoint);
     };
 
-    this.sendMessage = function (message, endpoint) {
+    this.sendMessage = function (message, endpoint=) {
         this.socket.send(endpoint, {}, JSON.stringify(message));
     }
     

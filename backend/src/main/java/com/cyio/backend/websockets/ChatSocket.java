@@ -17,9 +17,11 @@ import javax.websocket.server.ServerEndpoint;
 public class ChatSocket {
 
     private static final Logger log = LoggerFactory.getLogger(ChatController.class);
+    public final String endPoint = "/chat";
+    public final String listenPoint = "/topic" + endPoint;
 
-    @MessageMapping("/chat")
-    @SendTo("/topic/chat")
+    @MessageMapping(endPoint)
+    @SendTo(listenPoint)
     public ChatMessage sendAll(@Payload ChatMessage msg) {
         //OutputChatMessage out = new OutputChatMessage(msg.getFrom(), msg.getText(), new SimpleDateFormat("HH:mm").format(new Date()));
         System.out.println(msg.getText());

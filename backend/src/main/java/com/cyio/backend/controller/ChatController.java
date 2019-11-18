@@ -17,9 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import static com.cyio.backend.controller.Constants.*;
-
-
 @Controller
 public class ChatController {
 

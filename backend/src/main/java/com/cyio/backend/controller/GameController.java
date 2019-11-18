@@ -46,7 +46,7 @@ public class GameController {
 		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
 		Game game = new Game(title,newID.toString(),creatorid);
 		gameRepository.save(game); //Insert new game to the database
-		socket.newGame(game);
+		socket.newGameAdded(game);
 		return "Game \""+ title +"\" Added";
 	}
 }

@@ -77,10 +77,14 @@ public class GameServer {
         joinData.put("gameId", gameId);
         joinData.put("serverId", serverId);
         joinData.put("url", "");
-        joinData.put("chatWS", "");
-        joinData.put("notificationWS", "");
-        joinData.put("leaderboardWS", "");
-        joinData.put("playerDataWS", "");
+        joinData.put("chatWs", cs.endPoint);
+        joinData.put("chatSub", cs.listenPoint);
+        joinData.put("notificationWs", ns.endPoint);
+        joinData.put("notificationSub", ns.listenPoint);
+        joinData.put("leaderboardWs", ls.endPoint);
+        joinData.put("leaderboardSub", ls.listenPoint);
+        joinData.put("playerDataWs", pds.endPoint);
+        joinData.put("playerDataSub", pds.listenPoint);
 
         return joinData;
     }

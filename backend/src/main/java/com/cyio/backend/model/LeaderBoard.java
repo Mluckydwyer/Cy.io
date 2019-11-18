@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class LeaderBoard {
@@ -103,8 +105,24 @@ public class LeaderBoard {
         }
         return null;
     }
+
     /**
-     * convers the current list to an JSON string, for socket use
+     * Creates a map of player scores and usernames to be sent to clients
+     * @param limit how many players to return
+     * @return the complete leaderboard list in a Map
+     */
+    public Map<String, Integer> getMap(int limit){
+        sortBoard();
+        Map<String, Integer> leaderData = new HashMap();
+        for (Player p : getLeaderList()) {
+            if (leaderData.size() >= limit) break;
+            leaderData.put(p.getUserName(), p.getScore());
+        }
+        return leaderData;
+    }
+
+    /**
+     * converts the current list to an JSON string, for socket use
      * @return the complete leaderboard list in JSON format
      */
     @Override

@@ -4,6 +4,7 @@ import com.cyio.backend.exception.ResourceNotFoundException;
 import com.cyio.backend.model.Game;
 import com.cyio.backend.model.GameServer;
 import com.cyio.backend.payload.ApiResponse;
+import com.cyio.backend.payload.JSONResponse;
 import com.cyio.backend.repository.GameRepository;
 import com.cyio.backend.websockets.LeaderboardSocket;
 import com.cyio.backend.websockets.NotificationSocket;
@@ -15,14 +16,17 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Controller
 @Component
+@RestController
 public class GameServerController {
 
 //    @Autowired
@@ -48,22 +52,25 @@ public class GameServerController {
         //serverRepository.save(dummyGame);
     }
 
-    @RequestMapping("/join")
-    public ApiResponse join(@RequestParam(value="server-id", defaultValue="") String serverId) {
+    public Map<String, String> join(String serverId) {
         GameServer server = gs; //serverRepository.findGameServerByServerId(serverId);//.orElseThrow(() -> new ResourceNotFoundException("GameServer", "id", serverId));
         Map<String, String> joinData = server.getJoinData();
-        JSONObject jo = new JSONObject(joinData);
-        return new ApiResponse(true, jo.toString());
+        return joinData;
+    }
+
+    @RequestMapping("/join")
+    public JSONResponse joinRequest(@RequestParam(value="serverId", defaultValue="") String serverId) {
+        return new JSONResponse(true, join(serverId));
     }
 
     @RequestMapping("/find")
-    public ApiResponse find(@RequestParam(value="game-id", defaultValue="") String gameId) {
+    public JSONResponse find(@RequestParam(value="gameId", defaultValue="") String gameId) {
 //        String serverId = serverRepository.findGameServerByGameId(gameId);
 //        if (serverId == null) {
 //            GameServer server = new GameServer(gameRepository.getOne(UUID.fromString(gameId)));
 //            serverRepository.save(server);
 //        }
 //        return join(serverId);
-        return join(gs.getServerID());
+        return new JSONResponse(true, join(gs.getServerID()));
     }
 }
