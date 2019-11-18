@@ -3,17 +3,39 @@ package com.cyio.backend.websockets;
 import com.cyio.backend.model.LeaderBoard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+@EnableScheduling
+@Controller
+public class LeaderboardSocket {
 
-@ServerEndpoint("/gamews")
+    private static final Logger log = LoggerFactory.getLogger(LeaderboardSocket.class);
+    private LeaderBoard leaderBoard = new LeaderBoard();
+
+    @Autowired
+    public SimpMessagingTemplate template;
+
+    public final String endPoint = "/leaderboard";
+    public final String listenPoint = "/topic" + endPoint;
+
+    public void sendToAll(Object message) {
+        template.convertAndSend(listenPoint, message);
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void sendUpdate() {
+        leaderBoard.generateDummyData();
+        sendToAll(leaderBoard.getLeaderList(5));
+    }
+
+}
+
+/*
+@ServerEndpoint("/leaderboard")
 @Component
 public class LeaderboardSocket {
     private final Logger logger = LoggerFactory.getLogger(LeaderboardSocket.class);
@@ -35,9 +57,7 @@ public class LeaderboardSocket {
         logger.info("Socket connection closed");
     }
 
-    private  void broadcast(String message)
-            throws IOException
-    {
+    private  void broadcast(String message) throws IOException {
         for (Session session : sessionList)
         {
             synchronized (session) {
@@ -50,4 +70,10 @@ public class LeaderboardSocket {
         }
     }
 
+    @Scheduled(fixedRate = 5000)
+    public void sendUpdate() {
+        // TODO
+    }
+
 }
+ */
