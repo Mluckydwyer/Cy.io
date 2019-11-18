@@ -11,14 +11,14 @@ import { AuthContext } from "./routes/auth";
 import Signup from "./css/login/Signup";
 
 
-function App(props){
+function App(){
     
     const [authTokens, setAuthTokens] = useState();
     
     const setTokens = (data) => {
         localStorage.setItem("tokens", JSON.stringify(data));
         setAuthTokens(data);
-    }   
+    };   
     
     return(
         <AuthContext.Provider value = {{authTokens, setAuthTokens: setTokens}}>
@@ -33,7 +33,9 @@ function App(props){
                             </main>
                         </Route>
                         <Route path="/login" component = {Login}/>
-                        <PrivateRoute path="/user" component = {Signup}/>
+                        <PrivateRoute path="/user">
+                            <Signup/>
+                        </PrivateRoute>
                         <Route path="/signup">
                             <Signup />
                         </Route>
