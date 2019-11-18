@@ -7,9 +7,7 @@ import com.cyio.backend.security.CurrentUser;
 import com.cyio.backend.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -25,8 +23,11 @@ public class UserController {
     }
 
     @PostMapping("/user/delete")
-    @PreAuthorize("hasRple('ADMIN')")
-    public void deleteUser(User user){
-
+    @PreAuthorize("hasRole('ADMIN')")
+    public @ResponseBody String deleteUser(@RequestParam(value="user") String useridorname){
+        if (userRepository.deleteUserByUserNameOrUserid(useridorname, useridorname)){
+            return useridorname + "deleted";
+        }
+        return "Failed to delete";
     }
 }
