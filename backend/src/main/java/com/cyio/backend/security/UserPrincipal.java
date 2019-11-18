@@ -28,8 +28,12 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     }
 
     public static UserPrincipal create(User user){
-        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 
+
+        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        if (user.isAdmin()){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
         return new UserPrincipal(
                 user.getUserid(),
                 user.getEmail(),
