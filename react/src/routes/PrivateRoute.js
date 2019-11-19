@@ -1,9 +1,8 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from "../routes/auth";
 
 function PrivateRoute({ children, ...rest }) {
-    const {authTokens} = useAuth();
+    const authTokens = localStorage.getItem("token");
     
 
     
@@ -11,7 +10,7 @@ function PrivateRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={({location}) =>
-                authTokens ? (
+                !(authTokens === null) ? (
                     children
                 ) : (
                     <Redirect

@@ -26,8 +26,7 @@ import static android.widget.TextView.BufferType.EDITABLE;
 
 public class MainActivity extends AppCompatActivity
 {
-    Button proceed, game;
-    private WebSocketClient cc;
+    Button proceed;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -42,15 +41,6 @@ public class MainActivity extends AppCompatActivity
                 openLoginPage();
             }
         });
-        game = (Button) findViewById(R.id.games);
-        game.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                openGameList();
-            }
-        });
-
     }
     public void openLoginPage()
     {
@@ -58,12 +48,12 @@ public class MainActivity extends AppCompatActivity
         startActivity(i);
     }
 
+
     public void openGameList()
     {
         Intent i = new Intent(this, GameListActivity.class);
         startActivity(i);
     }
-
     //need to put on response for these
     private static final String TAG = "MainActivity";
 

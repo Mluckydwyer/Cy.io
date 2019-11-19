@@ -1,4 +1,6 @@
 package com.example.placeholder;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -33,6 +35,25 @@ public class LoginTest
     {
         MockitoAnnotations.initMocks(this);
     }
+
+
+    @Test
+    public void userTest()
+    {
+        l.user = "chuck";
+        assertEquals("chuck", l.user);
+    }
+
+    @Test
+    public void null_UserTest()
+    {
+        l.setUser(null);
+        assertEquals(null, l.getUser());
+    }
+
+
+
+
 
 //    @Test
 //    public void loginTest()

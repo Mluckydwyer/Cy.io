@@ -5,7 +5,7 @@ export function Socket() {
 
     //const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
     const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8080"; // Dev server for testing
-
+    
     this.socket = null;
     this.isConnected = false;
     this.url = "";
