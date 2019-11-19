@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 public class LeaderboardSocket {
 
     private static final Logger log = LoggerFactory.getLogger(LeaderboardSocket.class);
-    private LeaderBoard leaderBoard = new LeaderBoard();
+    public LeaderBoard leaderBoard = new LeaderBoard();
 
     @Autowired
     public SimpMessagingTemplate template;
@@ -26,7 +26,7 @@ public class LeaderboardSocket {
         template.convertAndSend(listenPoint, message);
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 1000)
     public void sendUpdate() {
         leaderBoard.generateDummyData();
         sendToAll(leaderBoard.getLeaderList(5));

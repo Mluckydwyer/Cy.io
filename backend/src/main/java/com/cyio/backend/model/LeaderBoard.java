@@ -31,6 +31,15 @@ public class LeaderBoard {
     }
 
     /**
+     * removes a player from the list
+     * @param p the old player to be removed
+     */
+    public void removePlayer(Player p){
+        leaderList.remove(p);
+        sortBoard();
+    }
+
+    /**
      * Sorts the list by score - higher the score -> higher on the list
      * @return
      */
@@ -72,6 +81,7 @@ public class LeaderBoard {
      * for testing purposes, populate a list with 10 players with randomized scores from 0 - 1000
      */
     public void generateDummyData(){
+        leaderList.clear();
         leaderList.add(new Player("Toby", 50));
         leaderList.add(new Player("Calvin", 50));
         leaderList.add(new Player("John", 50));
@@ -83,9 +93,8 @@ public class LeaderBoard {
         leaderList.add(new Player("Melissa", 50));
         leaderList.add(new Player("Lauren", 50));
         leaderList.add(new Player("Riesha", 50));
-        Random rnd = new Random();
         for (Player player:leaderList){
-            player.setScore(rnd.nextInt(1000));
+            player.setScore((int) Math.round(Math.random() * 1000));
         }
         sortBoard();
     }
@@ -118,6 +127,16 @@ public class LeaderBoard {
     }
 
     /**
+     * Returns the player with the top score in the game
+     * @return The player in the lead
+     */
+    public Leader getLeader() {
+        if (getLeaderList().size() < 1) return null;
+        sortBoard();
+        return new Leader(getLeaderList().get(0));
+    }
+
+    /**
      * Creates a list of player scores and names to be sent to clients
      * @param limit how many players to return
      * @return the complete leaderboard list in a list
@@ -125,9 +144,9 @@ public class LeaderBoard {
     public List<Leader> getLeaderList(int limit) {
         ArrayList<Leader> leaders = new ArrayList<>();
         sortBoard();
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i < limit && i < getLeaderList().size(); i++) {
             Player player = getLeaderList().get(i);
-            Leader leader = new Leader(player.getUserName(), player.getScore());
+            Leader leader = new Leader(player);
             leaders.add(leader);
         }
 

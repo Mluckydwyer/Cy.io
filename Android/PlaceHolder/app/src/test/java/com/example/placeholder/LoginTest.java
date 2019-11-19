@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import org.junit.Before;
@@ -51,6 +52,27 @@ public class LoginTest
         assertEquals(null, l.getUser());
     }
 
+    @Test
+    public void falseBoolCredentialTest()
+    {
+        String s1 = "a";
+        String s2 = "a";
+        boolean b = false;
+        when(l.credentials(s1,s2)).thenReturn(false);
+        b = l.credentials(s1,s2);
+        assertEquals(b, false);
+    }
+
+    @Test
+    public void trueBoolCredentialTest()
+    {
+        String s1 = "a";
+        String s2 = "b";
+        boolean b = false;
+        when(l.credentials(s1,s2)).thenReturn(true);
+        b = l.credentials(s1,s2);
+        assertEquals(b, true);
+    }
 
 
 

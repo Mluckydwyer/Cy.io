@@ -1,20 +1,20 @@
-import getRequest from "./libs/requests.mjs";
-
 let canvas; // HTML canvas
 let g; // canvas graphics object
 
-// import { Mover } from './res/javascript/libs/mover.mjs';
 import { Config } from './controllers/config.mjs';
 import { Socket } from './controllers/socket.mjs';
-import { Message } from './objects/message.mjs';
 import { Player } from './controllers/player.mjs';
 import { Controller } from './controllers/controller.mjs';
+import getRequest from "./libs/requests.mjs";
+
 
 const framerate = 60;
+
 const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
 // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
 
 export let player;
+let players;
 let controller, config;
 let chatSocket, leaderboardSocket, notificationSocket, playerDataSocket;
 let gameId;
@@ -41,7 +41,8 @@ async function setup() {
     // Game Elements
     config = await new Config().init();
     controller = new Controller().init(config, canvas, false);
-    player = new Player().init(config); // Create main player
+    player = new Player().init(config, true); // Create main player
+    players = []; // create player list
     await refreshConfig('res/javascript/game-config-test.json');
     document.getElementById("submit-un").addEventListener("click", onPlayClick);
 }
@@ -71,6 +72,30 @@ function pullAndWait() {
         jsonGameData = JSON.parse(response);
         document.getElementById("game-title-text").innerText = jsonGameData.json.gameTitle;
     });
+}
+
+function sendPlayerData() {
+    playerDataSocket.sendPlayerDataMessage("PLAYER_MOVEMENT", player);
+}
+
+function parsePlayerMovement(playerId, payload) {
+    console.log(payload);
+    for (let person in payload) {
+        if (player.playerId === playerId) {
+            let otherPlayer = new Player().init(null, false);
+            otherPlayer.mover.xPos = payload.xPos;
+            otherPlayer.mover.yPos = payload.yPos;
+            otherPlayer.mover.xTarget = payload.xTarget;
+            otherPlayer.mover.yTarget = payload.yTarget;
+            otherPlayer.mover.speed = payload.speed;
+            otherPlayer.mover.size = payload.size;
+            otherPlayer.color = payload.color;
+            otherPlayer.name = payload.username;
+
+            players.push(otherPlayer);
+        }
+    }
+    console.log(players);
 }
 
 /*
@@ -124,12 +149,28 @@ async function join(json) {
         playerDataSocket.init(json.playerDataWs);
         await playerDataSocket.connect().then(function () {
             playerDataSocket.subscribe(json.playerDataSub, function (frame) {
-                console.log("Player Data update received");
-                console.log(frame.body); // TODO update player data
+                let json = JSON.parse(frame.body);
+
+                switch (json.type) {
+                    case "JOIN":
+                        if (json.playerId === player.playerId) {
+                            console.log("Join handshake successful");
+                            setInterval(sendPlayerData, 200);
+                        }
+                        break;
+                    case "PLAYER_MOVEMENT":
+                            parsePlayerMovement(json.playerId, json.payload);
+                        break;
+                    case "ENTITIES":
+
+                        break;
+                }
             });
         }).catch(function () {
             console.log("Player Data websocket Failed to connect");
         });
+
+        playerDataSocket.sendPlayerDataMessage("JOIN", player);
     }
 }
 
@@ -164,7 +205,7 @@ function resizeCanvas() {
     canvas.height = window.innerHeight;
 }
 
-function updateLeaderboard(leaders) {
+export function updateLeaderboard(leaders) {
     let json = JSON.parse(leaders); // parse leaderboard message
 
     // Clear leaderboard
@@ -255,4 +296,13 @@ function getUsername() {
     if (document.getElementById("username-input").value !== "") {
         player.name = document.getElementById("username-input").value;
     }
+}
+
+window.onunload = closingCode;
+window.onbeforeunload = closingCode;
+function closingCode(){
+    leaderboardSocket.disconnect();
+    chatSocket.disconnect();
+    notificationSocket.disconnect();
+    playerDataSocket.disconnect();
 }

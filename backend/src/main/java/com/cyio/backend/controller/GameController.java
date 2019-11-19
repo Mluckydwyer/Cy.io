@@ -11,6 +11,7 @@ import com.cyio.backend.security.UserPrincipal;
 import com.cyio.backend.websockets.NotificationSocket;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,8 +21,8 @@ public class GameController {
 	GameRepository gameRepository; //using autowire to create an instance of game Repository
 
 	@Autowired
-	NotificationSocket socket; //create an instance of
-	
+	public SimpMessagingTemplate template;
+
 //  @CrossOrigin(origins = "http://localhost:3000")
 //	@RequestMapping("/restexample")
 //	public Game game(@RequestParam(value = "title", defaultValue = "cy.io") String title){
@@ -49,7 +50,7 @@ public class GameController {
 		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
 		Game game = new Game(title,newID.toString(),creatorid);
 		gameRepository.save(game); //Insert new game to the database
-		socket.newGameAdded(game);
+		template.convertAndSend("/topic/notifications", "New Game " + game.getTitle() +" Added!");
 		return "Game \""+ title +"\" Added";
 	}
 
