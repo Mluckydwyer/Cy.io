@@ -19,6 +19,9 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.StompClient;
+
 //import ua.naiksoftware.stomp.Stomp;
 //import ua.naiksoftware.stomp.StompClient;
 
@@ -28,6 +31,7 @@ public class ChatRoom extends AppCompatActivity
     private String name;
     private String url = "";
     private String url2 = "";
+    private StompClient mStompClient;
     Button send;
     EditText et;
 //    private StompClient mStompClient;
@@ -40,8 +44,14 @@ public class ChatRoom extends AppCompatActivity
         et = (EditText) findViewById(R.id.messagetxt);
         url = "ws://coms-309-nv-4.misc.iastate.edu:8081/chat";
         url2 = "http://coms-309-nv-4.misc.iastate.edu:8080/topic/chat";
-//        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
-//        mStompClient.connect();
+        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
+        mStompClient.connect();
+        mStompClient.topic("/topic/chat").subscribe();
+
+
+
+        mStompClient.send("/app/chat", et.getText().toString());
+        mStompClient.disconnect();
 //        try
 //        {
 //            socket = new WebSocketClient(new URI(url))

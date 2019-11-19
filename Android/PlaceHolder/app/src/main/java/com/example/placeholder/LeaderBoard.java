@@ -14,12 +14,19 @@ import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
+import org.reactivestreams.Subscriber;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
@@ -31,6 +38,7 @@ public class LeaderBoard extends AppCompatActivity
     TextView title, place1, place2, place3, place4, place5;
     Button r, b;
     private StompClient mStompClient;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +54,94 @@ public class LeaderBoard extends AppCompatActivity
         place5 = (TextView) findViewById(R.id.p5);
         url = "ws://coms-309-nv-4.misc.iastate.edu:8080/leaderboard";
         Draft[] drafts = {new Draft_6455()};
+
+        compositeDisposable = new CompositeDisposable();
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
         mStompClient.connect();
-        mStompClient.topic("/topic/leaderboard").
+        Log.d("AR", "here");
+        Disposable dispTopic = mStompClient.topic("/topic/leaderboard")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage ->
+                {
+                    String s = topicMessage.getPayload();
+
+//                    Log.d("Socket", "run() returned: " + s);
+//                    Scanner strScan = new Scanner(s);
+//                    ArrayList<Player> players = new ArrayList<>();
+//                    int i = 0;
+//                    Log.d("SOCKETS1", strScan.next());
+//                    Log.d("SOCKETS2", strScan.next());
+//                    Log.d("SOCKETS3", strScan.next());
+//                    Log.d("SOCKETS4", strScan.next());
+//                    Log.d("SOCKETS5", strScan.next());
+//                    while (strScan.hasNext() == true && i < 5)
+//                    {
+//                        String name = "no name";
+//                        int score = 0;
+//                        String str = strScan.next();
+//                        if(str.equals("\"userName\""))
+//                        {
+//                            place1.setText("here");
+//                            strScan.next();
+//                            name = strScan.next();
+//                            name = name.substring(1, name.length() - 2);
+//                            place2.setText(name);
+//                            strScan.next(); //"userId"
+//                            strScan.next(); // :
+//                            strScan.next(); // null,
+//                            strScan.next(); //"score"
+//                            strScan.next(); // :
+//                            String scor = strScan.next();
+//                            scor = scor.substring(0, scor.length() - 1);
+//                            int p = 0;
+//                            for (int k = 0; k < scor.length(); k++)
+//                            {
+//                                p *= 10;
+//                                p += scor.charAt(k) - 48;
+//                            }
+//                            score = p;
+//                            place3.setText(scor);
+//                            place4.setText(p + "");
+//                            Log.d("SCORE", p + "");
+//                            if(!(name.equals("no name")) && (score != 0))
+//                            {
+//                                players.add(new Player(name, score));
+//                                i++;
+//                            }
+//                        }
+//                    }
+//                    for (int j = 0; j < 5; j++)
+//                    {
+//                        Player p = players.get(j);
+//                        if(j == 0)
+//                        {
+//                            place1.setText("1. " + p.getName() + ", " + p.getScoreString());
+//                        }
+//                        else if (j == 1)
+//                        {
+//                            place2.setText("2. " + p.getName() + ", " + p.getScoreString());
+//                        }
+//                        else if (j == 2)
+//                        {
+//                            place3.setText("3. " + p.getName() + ", " + p.getScoreString());
+//                        }
+//                        else if (j == 3)
+//                        {
+//                            place4.setText("4. " + p.getName() + ", " + p.getScoreString());
+//                        }
+//                        else if (j == 4)
+//                        {
+//                            place5.setText("5. " + p.getName() + ", " + p.getScoreString());
+//                        }
+//                    }
+                }, throwable ->
+                {
+                    Log.e("error", "Error on subscribe topic", throwable);
+                });
+        compositeDisposable.add(dispTopic);
+
+        mStompClient.disconnect();
 //        try {
 //            Log.d("Socket:", "Trying socket");
 //            socket = new WebSocketClient(new URI(url), (Draft) drafts[0])
@@ -176,4 +269,6 @@ public class LeaderBoard extends AppCompatActivity
         Intent i = new Intent(this, Home.class);
         startActivity(i);
     }
+
+
 }
