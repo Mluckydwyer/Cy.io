@@ -81,6 +81,7 @@ public class LeaderBoard {
      * for testing purposes, populate a list with 10 players with randomized scores from 0 - 1000
      */
     public void generateDummyData(){
+        leaderList.clear();
         leaderList.add(new Player("Toby", 50));
         leaderList.add(new Player("Calvin", 50));
         leaderList.add(new Player("John", 50));
@@ -93,7 +94,7 @@ public class LeaderBoard {
         leaderList.add(new Player("Lauren", 50));
         leaderList.add(new Player("Riesha", 50));
         for (Player player:leaderList){
-            player.setScore((int) Math.random() * 1000);
+            player.setScore((int) Math.round(Math.random() * 1000));
         }
         sortBoard();
     }
