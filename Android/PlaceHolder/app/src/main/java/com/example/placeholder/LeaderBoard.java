@@ -142,6 +142,7 @@ public class LeaderBoard extends AppCompatActivity
         compositeDisposable.add(dispTopic);
         Log.d("ARRR",dispTopic.toString());
 
+        mStompClient.send("/app/leaderboard");
 
         mStompClient.disconnect();
 //        try {
