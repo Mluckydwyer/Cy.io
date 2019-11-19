@@ -42,6 +42,13 @@ public class User {
         this.userName = newID.toString();
     }
 
+    public User(String userName, Boolean isAdmin) {
+        UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
+        this.userid = newID.toString();
+        this.userName = userName;
+        this.admin = isAdmin;
+    }
+
     public boolean isAdmin() {
         return admin;
     }

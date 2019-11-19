@@ -31,7 +31,7 @@ public class UserController {
         if (!principal.isAdmin())
             return "unauthorized user";
         userRepository.deleteUserByUserNameOrUserid(useridorname, useridorname);
-            return useridorname + "deleted";
+            return useridorname + " deleted";
 
     }
 

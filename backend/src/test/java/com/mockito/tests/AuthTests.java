@@ -78,7 +78,6 @@ public class AuthTests {
         when(encoder.encode("password")).thenReturn("password");
 
         ResponseEntity response = controller.registerUser(request);
-
     }
 
 
