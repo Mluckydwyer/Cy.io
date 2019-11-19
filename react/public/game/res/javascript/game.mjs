@@ -10,8 +10,7 @@ import getRequest from "./libs/requests.mjs";
 
 const framerate = 60;
 
-const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
-// const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
+let serverUrl;
 
 export let player;
 let players;
@@ -22,6 +21,10 @@ let jsonGameData;
 
 // Initial Setup
 async function setup() {
+
+    serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
+    // serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
+
 
     // Check URL for a game id, if present proceed with game loading, if not, redirect ot home page
     let urlParams = new URLSearchParams(window.location.search);
@@ -175,7 +178,7 @@ async function join(json) {
 }
 
 // When done loading, run the setup function
-window.onload = setup;
+//window.onload = setup;
 
 // Refresh teh game config file
 async function refreshConfig(json) {
@@ -298,8 +301,8 @@ function getUsername() {
     }
 }
 
-window.onunload = closingCode;
-window.onbeforeunload = closingCode;
+//window.onunload = closingCode;
+//window.onbeforeunload = closingCode;
 function closingCode(){
     leaderboardSocket.disconnect();
     chatSocket.disconnect();
