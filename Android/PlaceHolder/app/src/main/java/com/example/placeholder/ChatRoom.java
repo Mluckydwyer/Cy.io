@@ -12,13 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
-import org.w3c.dom.Text;
 
-import java.net.Socket;
-import java.net.URI;
-import java.net.URISyntaxException;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
@@ -29,24 +27,59 @@ public class ChatRoom extends AppCompatActivity
 {
     private WebSocketClient socket;
     private String name;
-    private String url = "";
-    private String url2 = "";
+    private String url = "ws://coms-309-nv-4.misc.iastate.edu:8080/chat/websocket";
     private StompClient mStompClient;
-    Button send;
-    EditText et;
-//    private StompClient mStompClient;
+    private CompositeDisposable compositeDisposable;
+    public static final String TAG = "lb-socket";
+    Button sendBtn;
+    EditText userMessageTextBox;
+    LinearLayout chatHistoryParent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
-        send = (Button) findViewById(R.id.sendbtn);
-        et = (EditText) findViewById(R.id.messagetxt);
-        url = "ws://coms-309-nv-4.misc.iastate.edu:8081/chat";
-        url2 = "http://coms-309-nv-4.misc.iastate.edu:8080/topic/chat";
-        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
+        sendBtn = (Button) findViewById(R.id.sendbtn);
+        userMessageTextBox = (EditText) findViewById(R.id.messagetxt);
+        chatHistoryParent = (LinearLayout) findViewById(R.id.llcr);
+
+
+        compositeDisposable = new CompositeDisposable();
+        mStompClient = Stomp.over(Stomp.ConnectionProvider.JWS, url);
+        Disposable dispLifecycle = mStompClient.lifecycle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lifecycleEvent -> {
+                    switch (lifecycleEvent.getType()) {
+                        case OPENED:
+                            Log.d(TAG, "Stomp connection opened");
+                            break;
+                        case ERROR:
+                            Log.e(TAG, "Stomp connection error", lifecycleEvent.getException());
+                            break;
+                        case CLOSED:
+                            Log.d(TAG, "Stomp connection closed");
+                            break;
+                        case FAILED_SERVER_HEARTBEAT:
+                            Log.d(TAG, "Stomp failed server heartbeat");
+                            break;
+                    }
+                });
         mStompClient.connect();
-        mStompClient.topic("/topic/chat").subscribe();
+
+        Disposable dispTopic = mStompClient.topic("/topic/chat").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(topicMessage ->
+        {
+            Log.d(TAG, "MESSAGE: " + topicMessage.getPayload());
+            String chatLog = userMessageTextBox.getText() + "\n" + topicMessage.getPayload();
+            userMessageTextBox.setText(chatLog);
+        }, throwable ->
+        {
+            Log.e("error", "Error on subscribe topic", throwable);
+        });
+        compositeDisposable.add(dispTopic);
+        Log.d(TAG,dispTopic.toString());
+
 
 
 //        try
@@ -90,25 +123,18 @@ public class ChatRoom extends AppCompatActivity
 //        }
 //        socket.connect();
 
-        send.setOnClickListener(new View.OnClickListener()
+        sendBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                LinearLayout ll = (LinearLayout) findViewById(R.id.llcr);
-                TextView t = new TextView(getApplicationContext());
-                t.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                t.setTextSize(15);
-                t.setText(et.getText().toString());
-                ll.addView(t);
-                mStompClient.send("/app/chat", et.getText().toString()).subscribe();
-//                socket.send(et.getText().toString());
+                TextView newChat = new TextView(getApplicationContext());
+                newChat.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                //newChat.setTextSize(15);
+                newChat.setText(userMessageTextBox.getText().toString());
+                chatHistoryParent.addView(newChat);
+                mStompClient.send("/app/chat", userMessageTextBox.getText().toString()); //.subscribe();
             }
         });
-
-
-        mStompClient.disconnect();
-
-
     }
 }

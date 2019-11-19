@@ -8,8 +8,8 @@
     tools:context=".ChatRoom">
 
     <ScrollView
-        android:layout_width="346dp"
-        android:layout_height="464dp"
+        android:layout_width="402dp"
+        android:layout_height="569dp"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
         android:layout_marginTop="70dp"
