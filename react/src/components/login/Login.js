@@ -42,7 +42,6 @@ function Login(){
                 throw new Error('Something went wrong...');
             }
         }).then(data => {
-            setAuthTokens(data);
             localStorage.setItem("token",JSON.stringify(data));
             setLoggedIn(true);
             return data;
