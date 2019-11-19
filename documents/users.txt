@@ -1,0 +1,7 @@
+username 	password	isAdmin
+
+chucknorris	password	yes
+tommy2		password	no
+root		password	yes
+
+Please don't delete these users 
