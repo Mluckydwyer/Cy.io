@@ -64,7 +64,7 @@ Last Update: Oct 8th, 2019
 :8080/deletegame?game=TITLE
 	- Status: planned
 	- Type: POST
-	- Usage: Only availabe to the game's creater and admin user. This method searches for the game specificed by "TITLE" where "TITLE" can be either the game title or game id and deletes it 
+	- Usage: Only availabe to the game's creater and admin user. This method searches for the game specificed by "TITLE" where "TITLE" is the game title and deletes it 
 	- Returns success message when operation was successful and error messages othersiwe 
 	
 :8080/deleteuser?user=USER

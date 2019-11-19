@@ -6,7 +6,10 @@ import java.util.UUID;
 
 import com.cyio.backend.model.Game;
 import com.cyio.backend.repository.GameRepository;
+import com.cyio.backend.security.CurrentUser;
+import com.cyio.backend.security.UserPrincipal;
 import com.cyio.backend.websockets.NotificationSocket;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +51,21 @@ public class GameController {
 		gameRepository.save(game); //Insert new game to the database
 		socket.newGameAdded(game);
 		return "Game \""+ title +"\" Added";
+	}
+
+	@PostMapping("/deletegame")
+	public @ResponseBody String deleteGame(@RequestParam (value="game") String titleOrId, @CurrentUser UserPrincipal userPrincipal){
+//    	int id = -1;
+//    	if (StringUtils.isNumeric(titleOrId))
+//    		id = Integer.parseInt(titleOrId);
+    	List<Game> resultList = gameRepository.findGameByTitleContaining(titleOrId);
+    	Game game = null;
+    	if (!resultList.isEmpty())
+    		 game = resultList.get(0);
+    	if (game != null && (userPrincipal.isAdmin() || game.getCreatorID().equals(userPrincipal.getId()))){
+    		gameRepository.deleteGameByTitle(titleOrId);
+    		return "Success";
+		}
+    	return "Game does not exist or not authorized";
 	}
 }

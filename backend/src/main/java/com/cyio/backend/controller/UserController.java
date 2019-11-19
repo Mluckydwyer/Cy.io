@@ -26,24 +26,25 @@ public class UserController {
     }
 
     @PostMapping("/deleteuser")
-    @PreAuthorize("hasRole('ADMIN')")
-    public @ResponseBody String deleteUser(@RequestParam(value="user") String useridorname){
-        if (userRepository.deleteUserByUserNameOrUserid(useridorname, useridorname)){
+    public @ResponseBody String deleteUser(@RequestParam(value="user") String useridorname, @CurrentUser UserPrincipal principal){
+        if (!principal.isAdmin())
+            return "unauthorized user";
+        userRepository.deleteUserByUserNameOrUserid(useridorname, useridorname);
             return useridorname + "deleted";
-        }
-        return "Failed to delete";
+
     }
 
     @PostMapping("/toggleadmin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public @ResponseBody String toggleAdmin(@RequestParam(value="user") String useridorname){
-        List<User> userOp = userRepository.findByUserNameOrUserid(useridorname, useridorname);
+    public @ResponseBody String toggleAdmin(@RequestParam(value="user") String useridorname, @CurrentUser UserPrincipal principal){
+        if (!principal.isAdmin())
+            return "unauthorized user";
+        List<User> userOp = userRepository.findUserByUserNameOrUserid(useridorname, useridorname);
         if(userOp.isEmpty()){
             return "No such user found";
         }
         for(User u : userOp){
-            if (u.isAdmin()) u.setAdmin(false);
-            else u.setAdmin(true);
+            if (u.isAdmin()) userRepository.updateAdmin(false,useridorname, useridorname);
+            else userRepository.updateAdmin(true ,useridorname, useridorname);
         }
         return "Success";
     }
