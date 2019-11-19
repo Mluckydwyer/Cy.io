@@ -48,15 +48,12 @@ public class MainActivity extends AppCompatActivity
         startActivity(i);
     }
 
-<<<<<<< HEAD
-=======
+
     public void openGameList()
     {
         Intent i = new Intent(this, GameListActivity.class);
         startActivity(i);
     }
-
->>>>>>> ff51ed4de8c713abafaabf0059ac5818e77e4dbd
     //need to put on response for these
     private static final String TAG = "MainActivity";
 
