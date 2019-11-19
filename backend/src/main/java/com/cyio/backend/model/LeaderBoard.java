@@ -92,9 +92,8 @@ public class LeaderBoard {
         leaderList.add(new Player("Melissa", 50));
         leaderList.add(new Player("Lauren", 50));
         leaderList.add(new Player("Riesha", 50));
-        Random rnd = new Random();
         for (Player player:leaderList){
-            player.setScore(rnd.nextInt(1000));
+            player.setScore((int) Math.random() * 1000);
         }
         sortBoard();
     }
