@@ -44,7 +44,7 @@ public class LeaderBoard extends AppCompatActivity {
     private StompClient mStompClient;
     private CompositeDisposable compositeDisposable;
     public static final String TAG = "lb-socket";
-
+    public ArrayList<Player> players;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,7 @@ public class LeaderBoard extends AppCompatActivity {
         r = (Button) findViewById(R.id.refresh);
         b = (Button) findViewById(R.id.gohome);
         title = (TextView) findViewById(R.id.lb);
-
+        players = new ArrayList<>();
         // Get leaderboard textViews
         ArrayList<TextView> leaders = new ArrayList<>();
         leaders.add((TextView) findViewById(R.id.p1));
@@ -86,15 +86,17 @@ public class LeaderBoard extends AppCompatActivity {
                     }
                 });
         mStompClient.connect();
-
         Disposable dispTopic = mStompClient.topic("/topic/leaderboard").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(topicMessage ->
                 {
                     Log.d(TAG, "MESSAGE: " + topicMessage.getPayload());
+                    players = new ArrayList<>();
                     JSONArray jsonArray = new JSONArray(topicMessage.getPayload());
-                    for (int i = 0; i < leaders.size(); i++) {
+                    for (int i = 0; i < leaders.size(); i++)
+                    {
                         JSONObject leader = (JSONObject) jsonArray.get(i);
                         String leaderText = "1. " + leader.getString("name") + " - " + leader.getString("score");
-                       leaders.get(i).setText(leaderText);
+                        players.add(new Player(leader.getString("name"), leader.getInt("score")));
+                        leaders.get(i).setText(leaderText);
                     }
                 }, throwable ->
                 {
@@ -117,6 +119,25 @@ public class LeaderBoard extends AppCompatActivity {
         });
     }
 
+    public String seePlayers()
+    {
+        String s = "";
+        for(int i = 0; i < players.size(); i++)
+        {
+            s += players.get(i).getName() + ", " + players.get(i).getScoreString();
+        }
+        return s;
+    }
+
+    public String getPlayerName(int i)
+    {
+        return players.get(i).getName();
+    }
+
+    public int getPlayerScore(int i)
+    {
+        return players.get(i).getScore();
+    }
     public void refresh() {
         Intent i = new Intent(this, LeaderBoard.class);
         startActivity(i);
