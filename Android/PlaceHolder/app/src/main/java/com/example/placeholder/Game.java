@@ -11,11 +11,11 @@ import java.util.ListIterator;
 
 public class Game
 {
-    public String title;
-    public String blurb;
-    public String about;
-    public String gameID;
-    public String creatorID;
+    private String title;
+    private  String blurb;
+    private String about;
+    private String gameID;
+    private String creatorID;
     //add thumbnail
 
     public Game()

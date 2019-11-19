@@ -15,3 +15,289 @@ body {
     min-height: 100%;
     background: white;
 }
+
+input {
+    width: 100%;
+    height: 100%;
+}
+
+#chat-list > span {
+    display: block;
+    overflow-wrap: break-word;
+    padding: 0.4vw;
+}
+
+#chat-list {
+    animation: all 0.5s 2.5s;
+    /*visibility: hidden;*/
+    background-color: #333;
+    left: 5vw;
+    width: 30vw;
+    margin-right: -5vw;
+    text-align: left;
+    color: #17C923;
+    position: fixed;
+    border-radius: 5px;
+    bottom: 25vh;
+    /*padding: 1vw;*/
+    opacity: 70%;
+    z-index: 1;
+    font-family: 'DejaVu Sans Mono', monospace;
+}
+
+#chat {
+    animation: all 0.5s 2.5s;
+    visibility: hidden;
+    background-color: #333;
+    left: 5vw;
+    width: 30vw;
+    margin-right: -5vw;
+    text-align: left;
+    color: #17C923;
+    position: fixed;
+    border-radius: 5px;
+    bottom: 15vh;
+    padding: 1vw;
+    opacity: 70%;
+    z-index: 1;
+    font-family: 'DejaVu Sans Mono', monospace;
+}
+
+#chat-box {
+    animation: all 0.5s 2.5s;
+    background-color: #333;
+    opacity: 70%;
+    text-align: left;
+    color: #17C923;
+    border-radius: 5px;
+    z-index: 1;
+    font-size: 1em;
+    border: none;
+    overflow-wrap: break-spaces;
+
+    font-family: 'DejaVu Sans Mono', monospace;
+}
+
+#leaderboard {
+    background-color: #333;
+    right: 2vw;
+    width: 25vw;
+    text-align: left;
+    color: #17C923;
+    opacity: 80%;
+    position: fixed;
+    font-size: 0.85em;
+    border-radius: 5px;
+    top: 2vh;
+    padding: 1vw;
+    z-index: 1;
+}
+
+.leader {
+    padding: 0.4vh;
+}
+
+.l-title {
+    width: 100%;
+    overflow-wrap: break-word;
+    text-align: center !important;
+}
+
+.l-name {
+    width: 65%;
+    overflow-wrap: break-word;
+}
+
+.l-score {
+    text-align: right;
+    float: right;
+}
+
+
+#lb-list {
+    font-family: 'DejaVu Sans Mono', monospace;
+    text-align: left;
+    color: #17C923;
+}
+
+.show {
+    visibility: visible !important;
+    animation: all 0.5s 2.5s;
+}
+
+#snackbar {
+    animation: all 0.5s 2.5s;
+    visibility: hidden;
+    background-color: #333;
+    left: 50%;
+    width: 40vw;
+    font-family: 'DejaVu Sans Mono', monospace;
+    margin-left: -20vw;
+    text-align: center;
+    color: #17C923;
+    position: fixed;
+    border-radius: 5px;
+    bottom: 5vh;
+    padding: 1vw;
+    opacity: 70%;
+    z-index: 1;
+}
+
+.username-form {
+    position: fixed;
+    background-color: transparent;
+    transition: all ease-in-out .5s;
+    text-align: center;
+    top: 0;
+    width: 70vw;
+    margin: 10vh 0 0 15vw;
+    height: 70vh;
+}
+
+.u-name {
+    width: 40vw;
+    padding: 14px 20px;
+    margin: 30vh 5vw 15vh 5vw;
+    border: 0;
+    border-bottom: 1px solid #ffffff;
+    background: transparent;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 40px;
+    transition: all 1s ease-in-out;
+}
+
+.u-name:hover, .u-name:active, .u-name:focus {
+    color: #4bcb2b;
+    text-shadow: 0 0 30px #5bc0de;
+    border-bottom-color: #4bcb2b;
+}
+
+.info-field {
+    text-align: center;
+}
+
+#overlay-logo {
+    margin: 20px;
+    width: 180px;
+    height: 110px;
+    float: left;
+    /*background: transparent url("/domains/mluckydwyer.com/first/Resourcesrces/Images/Logo.png") center top no-repeat;*/
+    background-size: contain;
+    transition: all .5s ease;
+    display: block;
+}
+
+#loader-logo {
+    margin-top: 60px;
+    margin-left: 35px;
+    width: 100px;
+    height: 73.3px;
+    float: left;
+    /*background: transparent url("/domains/mluckydwyer.com/first/Resourcesrces/Images/Logo.png") center top no-repeat;*/
+    background-size: contain;
+    transition: all .5s ease;
+    display: block;
+}
+
+#loader-logo:hover, #loader-logo:active, #overlay-logo:hover, #overlay-logo:active {
+    /*background: transparent url("/domains/mluckydwyer.com/first/Resourcesrces/Images/Logo Face.png") center top no-repeat;*/
+    background-size: contain;
+    transform: rotate3d(240, 200, 0, 30deg);
+}
+
+.overlay {
+    transition: visibility ease 1s;
+    background-color: #333;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.hide {
+    transition: all 1s ease-in-out;
+    visibility: hidden !important;
+    z-index: -1;
+}
+
+.show {
+    transition: all 1s ease-in-out;
+    visibility: visible !important;
+    animation: fadein 2s;
+    z-index: 1;
+}
+
+label {
+    color: #ffffff;
+    font-family: 'DejaVu Sans Mono', monospace;
+    text-align: center;
+}
+
+#game-title-text {
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 100px;
+    color: #4bcb2b;
+}
+
+#submit-un {
+    color: #ffffff;
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 50px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.5s ease-in-out;
+}
+
+#submit-un:hover {
+    color: #4bcb2b;
+    text-shadow: 0px 0px 30px #5bc0de;
+}
+
+#loader-icon {
+    position: fixed;
+    border-top: 15px solid #4bcb2b;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #5bc0de;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    pointer-events: none;
+    animation: spin 3.5s infinite;
+}
+
+#loader {
+    width: 150px;
+    height: 150px;
+    margin-top: calc(50vh - 75px);
+    margin-left: calc(50vw - 75px);
+    position: fixed;
+    transition: all ease 1s;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg)
+    }
+    50% {
+        transform: rotate(1080deg)
+    }
+    100% {
+        transform: rotate(0deg)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

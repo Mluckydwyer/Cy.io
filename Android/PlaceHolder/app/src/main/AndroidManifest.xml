@@ -16,7 +16,7 @@
         <activity android:name=".LeaderBoard"></activity>
         <activity android:name=".ChatRoom" />
         <activity android:name=".Home" />
-        <activity android:name=".GameList" />
+        <activity android:name=".GameListActivity" />
         <activity android:name=".login" />
         <activity android:name=".MainActivity">
             <intent-filter>

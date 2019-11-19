@@ -1,0 +1,161 @@
+Server Backend API Mappings
+These are the mappings for all the current endpoints on the server.
+
+Last Update: Nov 17th, 2019
+
+:8080/reactexample
+	- Status: Running - Stable
+	- Type: GET
+	- Usage: none
+	- Returns: JSON for 3 precoded games - not connected to server
+
+:8080/gamelist
+	- Status: Running
+	- Type: GET
+	- Usage: none - Stable
+	- Returns: JSON for the compelete list of games in the database 
+
+:8080/addgame?title=TITLE&creatorid=CREATORID
+	- Status: Running - Stable
+	- Type: POST
+	- Usage: TITLE is the title of the new game; CREATORID is the creator's userid
+	- Returns: "game added successfully" if game was added, error messages otherwise
+
+:8080/searchby?searchtype=TYPE&query=QUERY
+	- Status: Running - Stable 
+	- Type: GET
+	- Usage: TYPE is the parameter the query is going to search. Options are: all(Default), title, blurb, and about. If TYPE is not specified or omitted, all fields will be searched 	
+		 QUERY is the keyword(s) to be searched
+	- Returns: JSON for all matched games
+
+:8080/auth/signup
+	- Status: Stable
+	- Type: POST
+	- Usage: to register a new user, call this endpoint with a json of the following format:
+			{"userName":"USERNAME",
+			 "email":"EMAIL",
+			 "password":"PASSWORD"}
+		where USERNAME is the username, EMAIL is the email address, PASSWORD is the password, in plain text
+	- Returns: if successful, 
+			{"success": true,
+			 "message": "user registered successfully"}
+		   otherwise, 
+			error messages
+
+:8080/auth/login
+	- Status: Stab;e
+	- Type: POST
+	- Usage: to log a user in, call this endpoint with the following json:
+			{"userName":"USERNAME",
+			 "password":"PASSWORD"}
+		 where USERNAME is teh usernme, PASSWORD is the password, in plain text
+	- Returns: if successful,
+			{"accesstoken":"ACCESSTOKEN",
+			 "tokenType":"TOKENTYPE"}
+		   otherwise, error messages
+
+:8080/user/me
+	- Status: stable
+	- Type : GET
+	- Usage: view the current logged in user's information. To load the user, send the get request with the following header:
+		
+	      	Authorization: bearer USER_TOKEN
+		
+		where USER_TOKEN is the token returned by the login page
+	- Returns: a list of user attributes, in JSON format
+
+NOTE: ONLY ON DEV SERVER ON PORT 8081
+:8080/find?gameId=GAMEID
+	- Status: dev
+	    -> currently just returns data about single game server running no matter id passed in
+	    -> url is currently blank, might remove later if unneeded
+	- Type : GET
+	- Usage: to get a server id and connection endpoints that is currently hosting the game associated with the game id
+	         Where GAMEID is a valid game id from the Games database
+	- Returns: if successful (Example):
+               			{
+                          "success": true,
+                          "json": {
+                            "gameId": "123e4567-e89b-12d3-a456-426655440000",
+                            "notificationSub": "/topic/notification",
+                            "chatWs": "/chat",
+                            "playerDataSub": "/topic/playerData",
+                            "playerDataWs": "/playerData",
+                            "chatSub": "/topic/chat",
+                            "leaderboardWs": "/leaderboard",
+                            "notificationWs": "/notification",
+                            "serverId": "45400c7b-7a7b-462a-bc4a-ad65004ed1d1",
+                            "url": "",
+                            "leaderboardSub": "/topic/leaderboard"
+                          }
+                        }
+               		   otherwise,
+               			error messages
+
+NOTE: ONLY ON DEV SERVER ON PORT 8081
+:8080/join?serverId=SERVERID
+	- Status: dev
+	    -> currently just returns data about single game server running no matter id passed in
+	    -> url is currently blank, might remove later if unneeded
+	- Type : GET
+	- Usage: to get a server id and connection endpoints that is currently hosting for the requested server
+		         Where SERVERID is a valid server id from the server repository and currently is running
+	- Returns: if successful (Example):
+               			{
+                          "success": true,
+                          "json": {
+                            "gameId": "123e4567-e89b-12d3-a456-426655440000",
+                            "notificationSub": "/topic/notification",
+                            "chatWs": "/chat",
+                            "playerDataSub": "/topic/playerData",
+                            "playerDataWs": "/playerData",
+                            "chatSub": "/topic/chat",
+                            "leaderboardWs": "/leaderboard",
+                            "notificationWs": "/notification",
+                            "serverId": "45400c7b-7a7b-462a-bc4a-ad65004ed1d1",
+                            "url": "",
+                            "leaderboardSub": "/topic/leaderboard"
+                          }
+                        }
+               		   otherwise,
+               			error messages
+
+
+
+
+
+Server Backend Websocket Endpoints
+NOTE: ALL websockets are still in dev and will not be pushed to prod until shown to work. please assume all are on the dev server at port 8081
+NOTE: {baseUrl} is used to reference the base site url (http://coms-309-nv-4.misc.iastate.edu:8080 in most cases) of wherever the server is being hosted
+
+Implementation:
+NOTE: All sockets are currently implemented using the SockJS framework
+Listed below are the endpoints one must connect to in order to properly communicate with each web socket
+In practice and actual implementation, all of these endpoints can be obtained though a request to the join endpoint documented above,
+this is to allow for the dynamic changing of endpoints for teh sockets as not to interrupt client side code
+
+Endpoint Types:
+    - Connection Endpoint: Used to connect to the server and establish a session
+    - Subscribe Endpoint: Used listen for messages sent from the server
+    - Send Endpoint: Used to send messages back to the server for processing
+
+
+Notifications:
+    - Connection Endpoint: /notifications
+    - Subscribe Endpoint: /topic/notifications
+    - Send Endpoint: /app/notifications
+
+Player Data:
+    - Connection Endpoint: /playerdata
+    - Subscribe Endpoint: /topic/playerdata
+    - Send Endpoint: /app/playerdata
+
+Chat:
+    - Connection Endpoint: /chat
+    - Subscribe Endpoint: /topic/chat
+    - Send Endpoint: /app/chat
+
+Leaderboard:
+    - Connection Endpoint: /leaderboard
+    - Subscribe Endpoint: /topic/leaderboard
+    - Send Endpoint: /app/leaderboard

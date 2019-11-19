@@ -32,15 +32,21 @@ class GameCardList extends Component {
     }
     
     render() {
-        
-        console.log(this.state);
-        console.log(this.state.cards[0]);
         const cards = this.state.cards.map((card)=>
             <GameCard key = {card.gameID}
                       value = {card}/>
         );
+        const cardContainer = (
+            <div className = "games-list-cyio">
+                <div className = "container">
+                    <div className = "row">
+                        {cards}
+                    </div>
+                </div>
+            </div>
+        );
         console.log(cards);
-        return cards;
+        return cardContainer;
     }
 }
 

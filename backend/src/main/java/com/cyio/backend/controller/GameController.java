@@ -1,10 +1,12 @@
 package com.cyio.backend.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import com.cyio.backend.model.Game;
 import com.cyio.backend.repository.GameRepository;
+import com.cyio.backend.websockets.NotificationSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
 
     @Autowired
-	GameRepository gameRepository; //using autowire to create an instance of blog Repository
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-	@RequestMapping("/restexample")
-	public Game game(@RequestParam(value = "title", defaultValue = "cy.io") String title){
-		return new Game("Tommy.io", "3fe2ff3a", "Tommy, the best comedian in succ");
+	GameRepository gameRepository; //using autowire to create an instance of game Repository
 
-	}
+	@Autowired
+	NotificationSocket socket; //create an instance of
+	
+//  @CrossOrigin(origins = "http://localhost:3000")
+//	@RequestMapping("/restexample")
+//	public Game game(@RequestParam(value = "title", defaultValue = "cy.io") String title){
+//		return new Game("Tommy.io", "3fe2ff3a", "Tommy, the mediocre at best");
+//	}
 
     @CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/gamelist")
@@ -38,10 +42,11 @@ public class GameController {
 	}
 
 	@PostMapping("/addgame")
-	public @ResponseBody String addGame(@RequestParam String title, @RequestParam String creatorid){ //adds a new row in the games table
+	public @ResponseBody String addGame(@RequestParam String title, @RequestParam String creatorid) throws IOException { //adds a new row in the games table
 		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
 		Game game = new Game(title,newID.toString(),creatorid);
 		gameRepository.save(game); //Insert new game to the database
+		socket.newGameAdded(game);
 		return "Game \""+ title +"\" Added";
 	}
 }

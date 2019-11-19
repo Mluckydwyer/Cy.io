@@ -6,11 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 //communication between backend and server
-
+@Repository
 public interface UserRepository extends JpaRepository<User,String> {
         Optional<User> findByUserName(String userName);
-
         Boolean existsByEmail(String email);
 }
