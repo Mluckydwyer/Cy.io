@@ -14,6 +14,7 @@ const serverUrl = window.location.protocol + "//" + window.location.hostname + "
 // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
 
 export let player;
+let players;
 let controller, config;
 let chatSocket, leaderboardSocket, notificationSocket, playerDataSocket;
 let gameId;
@@ -40,7 +41,8 @@ async function setup() {
     // Game Elements
     config = await new Config().init();
     controller = new Controller().init(config, canvas, false);
-    player = new Player().init(config); // Create main player
+    player = new Player().init(config, true); // Create main player
+    players = []; // create player list
     await refreshConfig('res/javascript/game-config-test.json');
     document.getElementById("submit-un").addEventListener("click", onPlayClick);
 }
@@ -70,6 +72,25 @@ function pullAndWait() {
         jsonGameData = JSON.parse(response);
         document.getElementById("game-title-text").innerText = jsonGameData.json.gameTitle;
     });
+}
+
+function sendPlayerData() {
+    playerDataSocket.sendPlayerDataMessage(player);
+}
+
+function parsePlayerMovement(payload) {
+    for (let person in payload) {
+        let otherPlayer = new Player().init(null, false);
+        otherPlayer.mover.xPos = payload.xPos;
+        otherPlayer.mover.yPos = payload.yPos;
+        otherPlayer.mover.xTarget = payload.xTarget;
+        otherPlayer.mover.yTarget = payload.yTarget;
+        otherPlayer.mover.speed = payload.speed;
+        otherPlayer.mover.size = payload.size;
+        otherPlayer.color = payload.color;
+
+        players.push(otherPlayer);
+    }
 }
 
 /*
@@ -123,18 +144,27 @@ async function join(json) {
         playerDataSocket.init(json.playerDataWs);
         await playerDataSocket.connect().then(function () {
             playerDataSocket.subscribe(json.playerDataSub, function (frame) {
-                //console.log("Player Data update received");
-                //console.log(frame.body); // TODO update player data
+                let json = JSON.parse(frame.body);
+
+                switch (json.type) {
+                    case "JOIN":
+                        if (json.playerId === player.playerId) {
+                            setInterval(sendPlayerData, 200);
+                        }
+                        break;
+                    case "PLAYER_MOVEMENT":
+                            parsePlayerMovement(json.payload);
+                        break;
+                    case "ENTITIES":
+
+                        break;
+                }
             });
         }).catch(function () {
             console.log("Player Data websocket Failed to connect");
         });
 
-        playerDataSocket.sendMessage({
-            username: player.name,
-            playerId: player.playerId,
-            
-        });
+        playerDataSocket.sendPlayerDataMessage("JOIN", player);
     }
 }
 

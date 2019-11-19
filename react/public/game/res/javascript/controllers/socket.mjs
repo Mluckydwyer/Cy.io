@@ -61,16 +61,36 @@ export function Socket() {
         this.subscriptions.push(this.socket.subscribe(endpoint, onMessage, {}));
     };
 
-    this.sendPlayerDataMessage = function (player) {
+    this.sendPlayerDataMessage = function (type, player) {
         let msg = {
-            name: player.name,
-            xPos: player.mover.xPos,
-            yPos: player.mover.yPos,
-            xTarget: player.mover.xTarget,
-            yTarget: player.mover.yTarget,
-            speed: player.mover.speed,
-            size: player.mover.size
+            type: type,
+            playerId: player.playerId,
+            payload: null
         };
+
+        switch (type) {
+            case "JOIN":
+                msg.payload = {username: player.name};
+                break;
+            case "LEAVE":
+                msg.payload = {};
+                break;
+            case "PLAYER_MOVEMENT":
+                msg.payload = {
+                    xPos: player.mover.xPos,
+                    yPos: player.mover.yPos,
+                    xTarget: player.mover.xTarget,
+                    yTarget: player.mover.yTarget,
+                    speed: player.mover.speed,
+                    size: player.mover.size,
+                    color: player.color
+                };
+                break;
+            case "ENTITIES":
+                msg.payload = {username: player.name};
+                // TODO ???
+                break;
+        }
 
         this.sendMessage(msg);
     };

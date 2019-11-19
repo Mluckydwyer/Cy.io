@@ -1,13 +1,26 @@
 package com.cyio.backend.model;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Entity {
     private int size;
-    private Color color;
+    private String color;
     private int xPos;
     private int yPos;
     private int scoreValue;
+
+    public Entity() {
+        setSize((int) Math.round(Math.random() * 3));
+        setxPos((int) Math.round(Math.random() * 1000));
+        setyPos((int) Math.round(Math.random() * 1000));
+        setScoreValue((int) Math.round(Math.random() * 200));
+        setColor(getRandomColor());
+    }
+
+    private String getRandomColor() {
+        return String.format("#%06x", new Random().nextInt(0xffffff + 1));
+    }
 
     public int getSize() {
         return size;
@@ -17,11 +30,11 @@ public class Entity {
         this.size = size;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 

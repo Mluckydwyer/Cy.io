@@ -1,10 +1,9 @@
 package com.cyio.backend.websockets;
 
+import com.cyio.backend.model.Entity;
 import com.cyio.backend.model.Player;
-import com.cyio.backend.observerpatterns.PlayerListObserver;
-import com.cyio.backend.observerpatterns.Subject;
+import com.cyio.backend.observerpatterns.*;
 import com.cyio.backend.payload.PlayerData;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,26 +18,29 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @EnableScheduling
 @Component
-public class PlayerDataSocket implements Subject {
+public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     private final Logger logger = LoggerFactory.getLogger(PlayerDataSocket.class);
 
     @Autowired
     public SimpMessagingTemplate template;
 
     private HashMap players;
+    private HashMap entities;
+
     private ArrayList<PlayerListObserver> playerListObservers;
-    private PlayerListObserver playerListObserver;
+    private ArrayList<EntityListObserver> entityListObservers;
 
     public final String endPoint = "/playerdata";
     public final String listenPoint = "/topic" + endPoint;
 
     public PlayerDataSocket() {
         players = new HashMap<String, Player>();
+        entities = new HashMap<String, Entity>();
         playerListObservers = new ArrayList<>();
+        entityListObservers = new ArrayList<>();
     }
 
     @MessageMapping(endPoint)
@@ -56,11 +58,13 @@ public class PlayerDataSocket implements Subject {
                 case "JOIN":
                     String username = payload.getString("username");
                     players.put(playerId, new Player(username, playerId));
-                    notifyObservers();
+                    notifyPlayerListObservers();
+                    HashMap<String, String> values = new HashMap<>();
+                    sendToAll(new PlayerData("JOIN", playerId, new JSONObject()));
                     break;
                 case "LEAVE":
                     players.remove(playerId);
-                    notifyObservers();
+                    notifyPlayerListObservers();
                     break;
                 case "PLAYER_MOVEMENT":
                     p = (Player) players.get(playerId);
@@ -68,7 +72,7 @@ public class PlayerDataSocket implements Subject {
                     break;
                 case "ENTITIES":
                     p = (Player) players.get(playerId);
-
+                    // TODO ???
                     break;
             }
         } catch (JSONException e) {
@@ -84,10 +88,6 @@ public class PlayerDataSocket implements Subject {
     public void sendUpdate() {
         ArrayList<PlayerData> playerData = getAllPlayerData();
         sendToAll(playerData);
-    }
-
-    public void updatePlayerData(String playerId, Map<String, String> data) {
-        ((Player) players.get(playerId)).updatePlayerData(data);
     }
 
     public ArrayList<PlayerData> getAllPlayerData() {
@@ -119,9 +119,26 @@ public class PlayerDataSocket implements Subject {
     }
 
     @Override
-    public void notifyObservers() {
+    public void registerObserver(EntityListObserver observer) {
+        entityListObservers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(EntityListObserver observer) {
+        entityListObservers.remove(observer);
+    }
+
+    @Override
+    public void notifyEntityListObservers() {
+        for (EntityListObserver entityListObserver : entityListObservers) {
+            entityListObserver.update(entities);
+        }
+    }
+
+    @Override
+    public void notifyPlayerListObservers() {
         for (PlayerListObserver playerListObserver : playerListObservers) {
-            playerListObserver.update(this, players);
+            playerListObserver.update(players);
         }
     }
 }

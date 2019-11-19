@@ -46,7 +46,6 @@ public class Player {
 
     public Player(String id) {
         this.userId = id;
-        playerData = new PlayerData();
     }
 
     public String getUserName() {
