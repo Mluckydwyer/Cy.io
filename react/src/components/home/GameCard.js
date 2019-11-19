@@ -14,7 +14,7 @@ class GameCard extends Component {
         const card = (
             <div className="col-md-4">  
                 <div className="card mb-4 shadow-sm card-cyio">
-                    <img className="card-img-top" src={this.state.thumbnailID} width="100%" height="225"/>
+                    <img className="card-img-top" src={this.state.thumbnailID} width="100%" height="225" alt={placeholder}/>
                     <div className="card-body">
                         <p className="card-text">{this.state.about}</p>
                         <div className="d-flex justify-content-between align-items-center">

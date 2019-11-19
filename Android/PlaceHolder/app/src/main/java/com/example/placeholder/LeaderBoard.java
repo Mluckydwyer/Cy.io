@@ -14,6 +14,7 @@ import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.reactivestreams.Subscriber;
 
 import java.net.URI;
@@ -26,19 +27,23 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.internal.subscribers.BlockingBaseSubscriber;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.dto.StompMessage;
 
-public class LeaderBoard extends AppCompatActivity
-{
+public class LeaderBoard extends AppCompatActivity {
 
     private WebSocketClient socket;
-    private String url;
+    private final String url = "ws://coms-309-nv-4.misc.iastate.edu:8080/leaderboard/websocket";
     TextView title, place1, place2, place3, place4, place5;
     Button r, b;
     private StompClient mStompClient;
     private CompositeDisposable compositeDisposable;
+    public static final String TAG = "lb-socket";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,228 +52,77 @@ public class LeaderBoard extends AppCompatActivity
         r = (Button) findViewById(R.id.refresh);
         b = (Button) findViewById(R.id.gohome);
         title = (TextView) findViewById(R.id.lb);
-        place1 = (TextView) findViewById(R.id.p1);
-        place2 = (TextView) findViewById(R.id.p2);
-        place3 = (TextView) findViewById(R.id.p3);
-        place4 = (TextView) findViewById(R.id.p4);
-        place5 = (TextView) findViewById(R.id.p5);
-        url = "ws://coms-309-nv-4.misc.iastate.edu:8080/leaderboard";
+
+        // Get leaderboard textViews
+        ArrayList<TextView> leaders = new ArrayList<>();
+        leaders.add((TextView) findViewById(R.id.p1));
+        leaders.add((TextView) findViewById(R.id.p2));
+        leaders.add((TextView) findViewById(R.id.p3));
+        leaders.add((TextView) findViewById(R.id.p4));
+        leaders.add((TextView) findViewById(R.id.p5));
+
         Draft[] drafts = {new Draft_6455()};
+        Log.d(TAG, "On Create");
 
         compositeDisposable = new CompositeDisposable();
-        mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
-        mStompClient.connect();
-        Log.d("AR", "here");
-        Disposable dispTopic = mStompClient.topic("/topic/leaderboard")
+        mStompClient = Stomp.over(Stomp.ConnectionProvider.JWS, url);
+        Disposable dispLifecycle = mStompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage ->
-                {
-                    String s = topicMessage.getPayload();
-
-                    Log.d("Socket", "run() returned: " + s);
-                    Scanner strScan = new Scanner(s);
-                    ArrayList<Player> players = new ArrayList<>();
-                    int i = 0;
-                    Log.d("SOCKETS1", strScan.next());
-                    Log.d("SOCKETS2", strScan.next());
-                    Log.d("SOCKETS3", strScan.next());
-                    Log.d("SOCKETS4", strScan.next());
-                    Log.d("SOCKETS5", strScan.next());
-                    while (strScan.hasNext() == true && i < 5)
-                    {
-                        String name = "no name";
-                        int score = 0;
-                        String str = strScan.next();
-                        if(str.equals("\"userName\""))
-                        {
-                            place1.setText("here");
-                            strScan.next();
-                            name = strScan.next();
-                            name = name.substring(1, name.length() - 2);
-                            place2.setText(name);
-                            strScan.next(); //"userId"
-                            strScan.next(); // :
-                            strScan.next(); // null,
-                            strScan.next(); //"score"
-                            strScan.next(); // :
-                            String scor = strScan.next();
-                            scor = scor.substring(0, scor.length() - 1);
-                            int p = 0;
-                            for (int k = 0; k < scor.length(); k++)
-                            {
-                                p *= 10;
-                                p += scor.charAt(k) - 48;
-                            }
-                            score = p;
-                            place3.setText(scor);
-                            place4.setText(p + "");
-                            Log.d("SCORE", p + "");
-                            if(!(name.equals("no name")) && (score != 0))
-                            {
-                                players.add(new Player(name, score));
-                                i++;
-                            }
-                        }
+                .subscribe(lifecycleEvent -> {
+                    switch (lifecycleEvent.getType()) {
+                        case OPENED:
+                            Log.d(TAG, "Stomp connection opened");
+                            break;
+                        case ERROR:
+                            Log.e(TAG, "Stomp connection error", lifecycleEvent.getException());
+                            break;
+                        case CLOSED:
+                            Log.d(TAG, "Stomp connection closed");
+                            break;
+                        case FAILED_SERVER_HEARTBEAT:
+                            Log.d(TAG, "Stomp failed server heartbeat");
+                            break;
                     }
-                    for (int j = 0; j < 5; j++)
-                    {
-                        Player p = players.get(j);
-                        if(j == 0)
-                        {
-                            place1.setText("1. " + p.getName() + ", " + p.getScoreString());
-                        }
-                        else if (j == 1)
-                        {
-                            place2.setText("2. " + p.getName() + ", " + p.getScoreString());
-                        }
-                        else if (j == 2)
-                        {
-                            place3.setText("3. " + p.getName() + ", " + p.getScoreString());
-                        }
-                        else if (j == 3)
-                        {
-                            place4.setText("4. " + p.getName() + ", " + p.getScoreString());
-                        }
-                        else if (j == 4)
-                        {
-                            place5.setText("5. " + p.getName() + ", " + p.getScoreString());
-                        }
+                });
+        mStompClient.connect();
+
+        Disposable dispTopic = mStompClient.topic("/topic/leaderboard").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(topicMessage ->
+                {
+                    Log.d(TAG, "MESSAGE: " + topicMessage.getPayload());
+                    JSONArray jsonArray = new JSONArray(topicMessage.getPayload());
+                    for (int i = 0; i < leaders.size(); i++) {
+                        JSONObject leader = (JSONObject) jsonArray.get(i);
+                        String leaderText = "1. " + leader.getString("name") + " - " + leader.getString("score");
+                       leaders.get(i).setText(leaderText);
                     }
                 }, throwable ->
                 {
                     Log.e("error", "Error on subscribe topic", throwable);
                 });
         compositeDisposable.add(dispTopic);
-        Log.d("ARRR",dispTopic.toString());
+        Log.d(TAG,dispTopic.toString());
 
-        mStompClient.send("/app/leaderboard");
+        r.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goHome();
+            }
+        });
+    }
 
-        mStompClient.disconnect();
-//        try {
-//            Log.d("Socket:", "Trying socket");
-//            socket = new WebSocketClient(new URI(url), (Draft) drafts[0])
-//            {
-//                @Override
-//                public void onOpen(ServerHandshake serverHandshake)
-//                {
-//                    Log.d("OPEN", "run() returned: " + "is connecting");
-//                }
-//
-//                @Override
-//                public void onMessage(String s)
-//                {
-//                    Log.d("Socket", "run() returned: " + s);
-//                    Scanner strScan = new Scanner(s);
-//                    ArrayList<Player> players = new ArrayList<>();
-//                    int i = 0;
-//                    Log.d("SOCKETS1", strScan.next());
-//                    Log.d("SOCKETS2", strScan.next());
-//                    Log.d("SOCKETS3", strScan.next());
-//                    Log.d("SOCKETS4", strScan.next());
-//                    Log.d("SOCKETS5", strScan.next());
-//                    while (strScan.hasNext() == true && i < 5)
-//                    {
-//                        String name = "no name";
-//                        int score = 0;
-//                        String str = strScan.next();
-//                        if(str.equals("\"userName\""))
-//                        {
-//                            place1.setText("here");
-//                            strScan.next();
-//                            name = strScan.next();
-//                            name = name.substring(1, name.length() - 2);
-//                            place2.setText(name);
-//                            strScan.next(); //"userId"
-//                            strScan.next(); // :
-//                            strScan.next(); // null,
-//                            strScan.next(); //"score"
-//                            strScan.next(); // :
-//                            String scor = strScan.next();
-//                            scor = scor.substring(0, scor.length() - 1);
-//                            int p = 0;
-//                            for (int k = 0; k < scor.length(); k++)
-//                            {
-//                                p *= 10;
-//                                p += scor.charAt(k) - 48;
-//                            }
-//                            score = p;
-//                            place3.setText(scor);
-//                            place4.setText(p + "");
-//                            Log.d("SCORE", p + "");
-//                            if(!(name.equals("no name")) && (score != 0))
-//                            {
-//                                players.add(new Player(name, score));
-//                                i++;
-//                            }
-//                        }
-//                    }
-//                    for (int j = 0; j < 5; j++)
-//                    {
-//                        Player p = players.get(j);
-//                        if(j == 0)
-//                        {
-//                            place1.setText("1. " + p.getName() + ", " + p.getScoreString());
-//                        }
-//                        else if (j == 1)
-//                        {
-//                            place2.setText("2. " + p.getName() + ", " + p.getScoreString());
-//                        }
-//                        else if (j == 2)
-//                        {
-//                            place3.setText("3. " + p.getName() + ", " + p.getScoreString());
-//                        }
-//                        else if (j == 3)
-//                        {
-//                            place4.setText("4. " + p.getName() + ", " + p.getScoreString());
-//                        }
-//                        else if (j == 4)
-//                        {
-//                            place5.setText("5. " + p.getName() + ", " + p.getScoreString());
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onClose(int i, String s, boolean b)
-//                {
-//                    Log.d("CLOSE", "onClose() returned: " + s);
-//                }
-//
-//                @Override
-//                public void onError(Exception e)
-//                {
-//                    Log.d("Exception:", e.toString());
-//                }
-//            };
-//        }
-//        catch (URISyntaxException e)
-//        {
-//            Log.d("Exception:", e.getMessage().toString());
-//            e.printStackTrace();
-//        }
-//        socket.connect();
-            r.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    refresh();
-                }
-            });
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goHome();
-                }
-            });
-        }
-    public void refresh()
-    {
+    public void refresh() {
         Intent i = new Intent(this, LeaderBoard.class);
         startActivity(i);
     }
 
-    public void goHome()
-    {
+    public void goHome() {
         Intent i = new Intent(this, Home.class);
         startActivity(i);
     }

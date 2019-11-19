@@ -2,10 +2,8 @@ package com.example.placeholder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,14 +14,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.placeholder.app.AppController;
 
 import org.json.JSONArray;
@@ -31,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -40,29 +35,31 @@ import java.util.Scanner;
 
 public class login extends AppCompatActivity
 {
-        Button logi;
+        Button login;
         EditText username, password;
         TextView vt, vt2;
         public static final String NICKNAME = "username";
         public String bear;
         public String token;
         public String[] arr;
-        public String user;
+        public static String user;
         public String pass;
         boolean next = false;
+        public static final String TAG = "Login-Page";
+
         @Override
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
-            logi = (Button)findViewById(R.id.login);
+            login = (Button)findViewById(R.id.login);
             username = (EditText)findViewById(R.id.usernameEntry);
             password = (EditText)findViewById(R.id.passwordEntry);
             vt = (TextView) findViewById(R.id.tv1);
             vt2 = (TextView) findViewById(R.id.tv2);
             Log.d("vt has text", vt.getText().toString());
 
-            logi.setOnClickListener(new View.OnClickListener()
+            login.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -96,18 +93,18 @@ public class login extends AppCompatActivity
                         @Override
                         public void onResponse(Object response)
                         {
-                            Log.d("BB", response.toString());
+                            Log.d(TAG, response.toString());
                             Scanner scan = new Scanner(response.toString());
                             int q = response.toString().indexOf("accessToken");
                             int r = response.toString().indexOf("tokenType");
-                            Log.d("BBBB", q + "");
-                            Log.d("BBBB", r + "");
+                            Log.d(TAG, q + "");
+                            Log.d(TAG, r + "");
                             token = response.toString().substring(q + 14,r - 3);
                             bear = response.toString().substring(r + 12, response.toString().length()- 2);
-                            Log.d("BBBBB", token);
-                            Log.d("BBBBB", bear);
+                            Log.d(TAG, token);
+                            Log.d(TAG, bear);
                             b = credentials(bear, token);
-                            Log.d("BBBBBB", b + "");
+                            Log.d(TAG, b + "");
                             openHomePage();
 
                         }
@@ -126,7 +123,6 @@ public class login extends AppCompatActivity
 //                    openHomePage();
                 }
             });
-
 
         }
 
@@ -183,7 +179,7 @@ public class login extends AppCompatActivity
 //            arr.add(s1);
 //            arr.add(s2);
             final String a1 = s1;
-            final String a2 = s2;
+            final String authToken = s2;
             //RequestQueue queue = Volley.newRequestQueue
             String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/user/me";
             StringRequest getRequest = new StringRequest(Request.Method.GET, URL,
@@ -208,7 +204,7 @@ public class login extends AppCompatActivity
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("Authorization", "Bearer " + a2);
+                    params.put("Authorization", "Bearer " + authToken);
                     return params;
                 }
             };

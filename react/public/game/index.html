@@ -5,12 +5,48 @@
     <link href="res/css/index.css" rel="stylesheet" type="text/css">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
           name=viewport>
-    <script src="res/javascript/libs/socket.io.js" type="text/javaScript"></script>
-    <script src="res/javascript/libs/mover.js" type="text/javaScript"></script>
-    <script src="res/javascript/game.js" type="text/javaScript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="res/javascript/libs/jquery-3.4.1.min.js"></script>
+    <script src="res/javascript/game.mjs" type="module"></script>
     <title>io - Game</title>
 </head>
 <body>
+
+<div class="overlay show" id="backdrop">
+    <a href="/" id="overlay-logo" title="Mluckydwyer Logo"></a>
+</div>
+
+<div class="hide" id="loader">
+    <div id="loader-icon"></div>
+    <a href="/" id="loader-logo" title="Mluckydwyer Logo"></a>
+</div>
+
+<div class="username-form show" id="name-pop">
+
+    <b id="game-title-text"></b><br>
+
+    <div class="info-field">
+        <input class="u-name" autocomplete="off" id="username-input" maxlength="15" minlength="3" name="username"
+               placeholder="Username"
+               required type="text"><br>
+        <a href="#" id="submit-un">Play</a>
+    </div>
+
+</div>
+
 <canvas id="canvas"></canvas>
+<div id="leaderboard" class="hide">
+    <div id="lb-list">
+        <div class="l-title">
+            <span class="l-title"><b>Leaderboard</b></span>
+        </div>
+    </div>
+</div>
+<div id="chat-list"></div>
+<div id="chat">
+    <label for="chat-box">Chat:</label><input id="chat-box" type="text" tabindex='2'>
+</div>
+<div id="snackbar"></div>
 </body>
 </html>

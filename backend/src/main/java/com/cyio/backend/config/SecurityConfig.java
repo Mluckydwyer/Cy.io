@@ -94,9 +94,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
+                .antMatchers("/**",
                         "/gamelist",
-                        "/user/me"
+                        "/user/me", //TODO: remove this bad boii
+                        "/game/*",
+                        "/chat/user-123456789",
+                        "/secured/**",
+                        "/history/**",
+                        "/chat/**",
+                        "/user/**",
+                        "/chat",
+                        "/topic/**",
+                        "/notifications",
+                        "/leaderboard",
+                        "/join",
+                        "/notificationws/**"
                         )
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
