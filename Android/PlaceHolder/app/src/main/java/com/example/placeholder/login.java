@@ -35,7 +35,6 @@ import java.util.Scanner;
 
 public class login extends AppCompatActivity
 {
-<<<<<<< HEAD
         Button login;
         EditText username, password;
         TextView vt, vt2;
@@ -50,24 +49,6 @@ public class login extends AppCompatActivity
 
         @Override
         protected void onCreate(Bundle savedInstanceState)
-=======
-    Button login;
-    EditText username, password;
-    TextView vt;
-    public static final String NICKNAME = "username";
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        login = (Button)findViewById(R.id.login);
-        username = (EditText)findViewById(R.id.usernameEntry);
-        password = (EditText)findViewById(R.id.passwordEntry);
-        vt = (TextView) findViewById(R.id.loginPrompt);
-        //GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-
-        login.setOnClickListener(new View.OnClickListener()
->>>>>>> ff51ed4de8c713abafaabf0059ac5818e77e4dbd
         {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
@@ -141,17 +122,7 @@ public class login extends AppCompatActivity
 //                    }
 //                    openHomePage();
                 }
-<<<<<<< HEAD
             });
-
-=======
-                String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/auth/login";
-                JsonObjectRequest jobj = signon(obj,vt);
-                AppController.getInstance().addToRequestQueue(jobj, tag_json_obj);
-                openHomePage(user);
-            }
-        });
->>>>>>> ff51ed4de8c713abafaabf0059ac5818e77e4dbd
 
         }
 
@@ -243,15 +214,7 @@ public class login extends AppCompatActivity
 
 
 
-<<<<<<< HEAD
         public JsonObjectRequest signon(JSONObject jo, final TextView vt, final TextView vt2)
-=======
-    }
-    public static JsonObjectRequest signon(JSONObject jo, final TextView vt)
-    {
-        String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/auth/login";
-        return new JsonObjectRequest(Request.Method.POST, URL, jo, new Response.Listener<JSONObject>()
->>>>>>> ff51ed4de8c713abafaabf0059ac5818e77e4dbd
         {
             String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/auth/login";
 
