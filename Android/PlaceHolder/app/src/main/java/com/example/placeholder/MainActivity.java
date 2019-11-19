@@ -27,7 +27,6 @@ import static android.widget.TextView.BufferType.EDITABLE;
 public class MainActivity extends AppCompatActivity
 {
     Button proceed;
-    private WebSocketClient cc;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

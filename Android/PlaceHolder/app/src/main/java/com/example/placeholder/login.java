@@ -42,7 +42,7 @@ public class login extends AppCompatActivity
         public String bear;
         public String token;
         public String[] arr;
-        public String user;
+        public static String user;
         public String pass;
         boolean next = false;
         public static final String TAG = "Login-Page";

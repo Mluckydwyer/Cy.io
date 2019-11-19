@@ -12,10 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
+import org.json.JSONObject;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
@@ -36,8 +40,7 @@ public class ChatRoom extends AppCompatActivity
     LinearLayout chatHistoryParent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
         sendBtn = (Button) findViewById(R.id.sendbtn);
@@ -71,70 +74,34 @@ public class ChatRoom extends AppCompatActivity
         Disposable dispTopic = mStompClient.topic("/topic/chat").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(topicMessage ->
         {
             Log.d(TAG, "MESSAGE: " + topicMessage.getPayload());
-            String chatLog = userMessageTextBox.getText() + "\n" + topicMessage.getPayload();
-            userMessageTextBox.setText(chatLog);
+            String chatLog = new JSONObject(topicMessage.getPayload()).getString("text");
+
+            TextView newChat = new TextView(getApplicationContext());
+            newChat.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            //newChat.setTextSize(15);
+            newChat.setText(chatLog);
+            chatHistoryParent.addView(newChat);
         }, throwable ->
         {
             Log.e("error", "Error on subscribe topic", throwable);
         });
         compositeDisposable.add(dispTopic);
-        Log.d(TAG,dispTopic.toString());
+        Log.d(TAG, dispTopic.toString());
 
-
-
-//        try
-//        {
-//            socket = new WebSocketClient(new URI(url))
-//            {
-//                LinearLayout ll = (LinearLayout) findViewById(R.id.llcr);
-//                @Override
-//                public void onOpen(ServerHandshake serverHandshake)
-//                {
-//                    Log.d("OPEN", "run() returned: " + "is connecting");
-//                }
-//
-//                @Override
-//                public void onMessage(String s)
-//                {
-//                    Log.d("", "run() returned: " + s);
-//                    TextView t = new TextView(getApplicationContext());
-//                    t.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                    t.setTextSize(15);
-//                    t.setText(s);
-//                    ll.addView(t);
-//                }
-//
-//                @Override
-//                public void onClose(int i, String s, boolean b)
-//                {
-//                    Log.d("CLOSE", "onClose() returned: " + s);
-//                }
-//
-//                @Override
-//                public void onError(Exception e)
-//                {
-//                    Log.d("Exception:", e.toString());
-//                }
-//            };
-//        }
-//        catch (URISyntaxException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        socket.connect();
-
-        sendBtn.setOnClickListener(new View.OnClickListener()
-        {
+        sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                TextView newChat = new TextView(getApplicationContext());
-                newChat.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                //newChat.setTextSize(15);
-                newChat.setText(userMessageTextBox.getText().toString());
-                chatHistoryParent.addView(newChat);
-                mStompClient.send("/app/chat", userMessageTextBox.getText().toString()); //.subscribe();
+            public void onClick(View v) {
+                if (userMessageTextBox.getText().toString().equals("")) return;
+                Log.d(TAG, "Send Message: " + userMessageTextBox.getText().toString());
+                String payload = JSONObject.quote("[" + login.user + "] " + userMessageTextBox.getText().toString());
+                Disposable disposable = mStompClient.send("/app/chat", payload).subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        userMessageTextBox.setText("");
+                    }
+                });
             }
         });
+
     }
 }
