@@ -3,6 +3,7 @@ package com.cyio.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
