@@ -1,5 +1,6 @@
 package com.cyio.backend.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -9,6 +10,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import javax.servlet.http.HttpSession;
@@ -18,14 +20,16 @@ import java.util.Map;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter(){
+        return new ServerEndpointExporter();
+    }
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-//        config.enableSimpleBroker("/game/", "/chat/");
-//        config.setApplicationDestinationPrefixes("/app");
-        //config.enableSimpleBroker("/secured/user/queue/specific-user", "/secured");
-        config.enableSimpleBroker("/room");
+        config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
-        //config.setUserDestinationPrefix("/secured/user");
+//        config.setUserDestinationPrefix("/topic");
     }
 
     @Override
@@ -42,9 +46,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //                }
 //                return true;
 //            }}).withSockJS();
-        registry.addEndpoint("/secured/room").setAllowedOrigins("http://localhost:63343").withSockJS();
+        registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/notifications").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/playerdata").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/leaderboard").setAllowedOrigins("*").withSockJS();
         //registry.addEndpoint("/secured/chat").setAllowedOrigins("http://localhost:63343").withSockJS();
-        //registry.addEndpoint("/secured/history").setAllowedOrigins("http://localhost:63343").withSockJS();
         }
 
 }

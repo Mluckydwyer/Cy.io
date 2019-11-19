@@ -111,7 +111,7 @@ function Mover() {
         if (!(keys[1] || keys[5] || keys[3] || keys[7]))
             this.targetY = 0; // If no y-coord keys pressed, reset target
 
-        console.log("X: " + this.targetX + " Y: " + this.targetY);
+        // console.log("X: " + this.targetX + " Y: " + this.targetY);
         this.normalize();
     };
 

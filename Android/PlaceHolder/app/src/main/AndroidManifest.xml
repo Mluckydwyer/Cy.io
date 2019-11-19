@@ -13,8 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".GameList"></activity>
-        <activity android:name=".HomePage" />
+        <activity android:name=".LeaderBoard"></activity>
+        <activity android:name=".ChatRoom" />
+        <activity android:name=".Home" />
+        <activity android:name=".GameListActivity" />
         <activity android:name=".login" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -24,6 +26,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

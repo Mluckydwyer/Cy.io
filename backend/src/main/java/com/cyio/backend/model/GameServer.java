@@ -1,40 +1,93 @@
 package com.cyio.backend.model;
 
+import com.cyio.backend.websockets.ChatSocket;
+import com.cyio.backend.websockets.LeaderboardSocket;
+import com.cyio.backend.websockets.NotificationSocket;
+import com.cyio.backend.websockets.PlayerDataSocket;
+import javax.persistence.Id;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.websocket.server.ServerEndpoint;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+//@Entity
+
+//@Table(name = "Servers")
 public class GameServer {
 
-    private String serverID;
+//    @Id
+    private String serverId;
 
-    private HashMap players;
+//    @Column(name = "gameId")
+    private String gameId;
+
     private Game game;
 
+    // Game Leaderboard
+    LeaderboardSocket ls;
+
+    // Game notifications
+    NotificationSocket ns;
+
+    // Game Chat
+    ChatSocket cs;
+
+    // Player Data
+    PlayerDataSocket pds;
+
+    public GameServer() {
+
+    }
 
     public GameServer(Game game) {
-        this.serverID = UUID.randomUUID().toString();
+        this.serverId = UUID.randomUUID().toString();
         this.game = game;
-        players = new HashMap();
+        this.gameId = this.game.getGameID();
+
+        ls = new LeaderboardSocket();
+        ns = new NotificationSocket();
+        pds = new PlayerDataSocket();
+        cs = new ChatSocket();
     }
 
-    public void addPlayer(Player player) {
-        players.put(player.getId(), player);
-    }
 
+    public Map<String, String> getJoinData() {
+        Map<String, String> joinData = new HashMap();
+        joinData.put("gameTitle", game.getTitle());
+        joinData.put("gameId", gameId);
+        joinData.put("serverId", serverId);
+        joinData.put("url", "");
+        joinData.put("chatWs", cs.endPoint);
+        joinData.put("chatSub", cs.listenPoint);
+        joinData.put("notificationWs", ns.endPoint);
+        joinData.put("notificationSub", ns.listenPoint);
+        joinData.put("leaderboardWs", ls.endPoint);
+        joinData.put("leaderboardSub", ls.listenPoint);
+        joinData.put("playerDataWs", pds.endPoint);
+        joinData.put("playerDataSub", pds.listenPoint);
 
-
-    public void removePlayer(Player player) {
-        players.remove(player.getId());
+        return joinData;
     }
 
     public String getServerID() {
-        return serverID;
+        return serverId;
     }
 
     public void setServerID(String serverID) {
-        this.serverID = serverID;
+        this.serverId = serverID;
     }
 
-    public void init() {
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 }
