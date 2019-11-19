@@ -1,14 +1,12 @@
-import getRequest from "./libs/requests.mjs";
-
 let canvas; // HTML canvas
 let g; // canvas graphics object
 
-// import { Mover } from './res/javascript/libs/mover.mjs';
 import { Config } from './controllers/config.mjs';
 import { Socket } from './controllers/socket.mjs';
-import { Message } from './objects/message.mjs';
 import { Player } from './controllers/player.mjs';
 import { Controller } from './controllers/controller.mjs';
+import getRequest from "./libs/requests.mjs";
+
 
 const framerate = 60;
 
