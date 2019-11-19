@@ -78,20 +78,24 @@ function sendPlayerData() {
     playerDataSocket.sendPlayerDataMessage("PLAYER_MOVEMENT", player);
 }
 
-function parsePlayerMovement(payload) {
+function parsePlayerMovement(playerId, payload) {
+    console.log(payload);
     for (let person in payload) {
-        let otherPlayer = new Player().init(null, false);
-        otherPlayer.mover.xPos = payload.xPos;
-        otherPlayer.mover.yPos = payload.yPos;
-        otherPlayer.mover.xTarget = payload.xTarget;
-        otherPlayer.mover.yTarget = payload.yTarget;
-        otherPlayer.mover.speed = payload.speed;
-        otherPlayer.mover.size = payload.size;
-        otherPlayer.color = payload.color;
-        otherPlayer.name = payload.username;
+        if (player.playerId === playerId) {
+            let otherPlayer = new Player().init(null, false);
+            otherPlayer.mover.xPos = payload.xPos;
+            otherPlayer.mover.yPos = payload.yPos;
+            otherPlayer.mover.xTarget = payload.xTarget;
+            otherPlayer.mover.yTarget = payload.yTarget;
+            otherPlayer.mover.speed = payload.speed;
+            otherPlayer.mover.size = payload.size;
+            otherPlayer.color = payload.color;
+            otherPlayer.name = payload.username;
 
-        players.push(otherPlayer);
+            players.push(otherPlayer);
+        }
     }
+    console.log(players);
 }
 
 /*
@@ -155,7 +159,7 @@ async function join(json) {
                         }
                         break;
                     case "PLAYER_MOVEMENT":
-                            parsePlayerMovement(json.payload);
+                            parsePlayerMovement(json.playerId, json.payload);
                         break;
                     case "ENTITIES":
 

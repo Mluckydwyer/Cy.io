@@ -23,7 +23,7 @@ export function Socket() {
         return new Promise((function (resolve, reject) {
             let socket = new SockJS(this.url);
             let stompClient = Stomp.over(socket);
-            //stompClient.debug = () => {}; // Stop debug messages so they don't clog browser console
+            stompClient.debug = () => {}; // Stop debug messages so they don't clog browser console
             this.socket = stompClient;
             this.socket.reconnect_delay = 5000;
 

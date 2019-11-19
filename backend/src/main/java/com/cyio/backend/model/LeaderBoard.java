@@ -31,6 +31,15 @@ public class LeaderBoard {
     }
 
     /**
+     * removes a player from the list
+     * @param p the old player to be removed
+     */
+    public void removePlayer(Player p){
+        leaderList.remove(p);
+        sortBoard();
+    }
+
+    /**
      * Sorts the list by score - higher the score -> higher on the list
      * @return
      */
@@ -135,7 +144,7 @@ public class LeaderBoard {
     public List<Leader> getLeaderList(int limit) {
         ArrayList<Leader> leaders = new ArrayList<>();
         sortBoard();
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i < limit && i < getLeaderList().size(); i++) {
             Player player = getLeaderList().get(i);
             Leader leader = new Leader(player);
             leaders.add(leader);

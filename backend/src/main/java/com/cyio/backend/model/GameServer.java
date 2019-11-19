@@ -99,13 +99,15 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         for (String playerId : players.keySet()) {
             if (!this.players.containsKey(playerId)) {
                 ns.playerJoined(players.get(playerId));
+                ls.leaderBoard.addPlayer(players.get(playerId));
             }
         }
 
         // Find old players that might have left
         for (String playerId : this.players.keySet()) {
             if (!players.containsKey(playerId)) {
-                ns.playerLeft(players.get(playerId));
+                ns.playerLeft(this.players.get(playerId));
+                ls.leaderBoard.removePlayer(this.players.get(playerId));
             }
         }
 
@@ -125,6 +127,6 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         if (!this.entities.equals(entities)) {
             pds.fillEntities();
         }
-        //this.entities = entities;
+        this.entities = entities;
     }
 }
