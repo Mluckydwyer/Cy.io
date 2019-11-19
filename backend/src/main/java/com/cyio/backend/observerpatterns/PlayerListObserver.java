@@ -5,5 +5,5 @@ import com.cyio.backend.model.Player;
 import java.util.HashMap;
 
 public interface PlayerListObserver extends Observer {
-    public void update(HashMap<String, Player> players);
+    public void updatePlayerList(HashMap<String, Player> players);
 }

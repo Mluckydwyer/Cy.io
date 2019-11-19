@@ -3,17 +3,17 @@ package com.cyio.backend.payload;
 import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
+import java.util.Map;
+
 public class PlayerData {
 
     private String type;
     private String playerId;
-    private String payload;
+    private Map<String, String> payload;
 
-    public PlayerData(String type, String playerId, JSONObject jsonObject) {
-        this(type, playerId, jsonObject.toString());
-    }
+    public PlayerData() { }
 
-    public PlayerData(String type, String playerId, String payload) {
+    public PlayerData(String type, String playerId, Map<String, String> payload) {
         setType(type);
         setPlayerId(playerId);
         setPayload(payload);
@@ -35,11 +35,11 @@ public class PlayerData {
         this.playerId = playerId;
     }
 
-    public String getPayload() {
+    public Map<String, String> getPayload() {
         return payload;
     }
 
-    public void setPayload(String payload) {
+    public void setPayload(Map<String, String> payload) {
         this.payload = payload;
     }
 }

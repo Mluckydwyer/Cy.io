@@ -1,10 +1,13 @@
 package com.cyio.backend.model;
 
 import com.cyio.backend.payload.PlayerData;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 
 public class Player {
@@ -12,6 +15,7 @@ public class Player {
     private String userId;
     private int score;
     private SockJsClient socket;
+    private PlayerData playerData;
 
     public void setUserId(String userId) {
         setUserId(userId);
@@ -25,7 +29,6 @@ public class Player {
         setPlayerData(playerData);
     }
 
-    private PlayerData playerData;
 
     public Player(String userName, String playerId){
         this(playerId);
@@ -71,8 +74,18 @@ public class Player {
         return socket;
     }
 
-    public void updatePlayerData(JSONObject data) {
+    public void updatePlayerData(HashMap<String, String> payloadMap) {
+        playerData = new PlayerData("PLAYER_MOVEMENT", getUserId(), payloadMap);
+    }
 
+    public void updatePlayerData(JSONObject data) throws JSONException {
+        HashMap<String, String> payloadMap = new HashMap<>();
+        Iterator it = data.keys();
+        while (it.hasNext()) {
+            String key = (String) it.next();
+            payloadMap.put(key, data.getString(key));
+        }
+        updatePlayerData(payloadMap);
     }
 
     static class PlayerComparater implements Comparator<Player> {

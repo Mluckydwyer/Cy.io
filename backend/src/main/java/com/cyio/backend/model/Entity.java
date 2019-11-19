@@ -2,6 +2,7 @@ package com.cyio.backend.model;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 public class Entity {
     private int size;
@@ -9,6 +10,7 @@ public class Entity {
     private int xPos;
     private int yPos;
     private int scoreValue;
+    private String id;
 
     public Entity() {
         setSize((int) Math.round(Math.random() * 3));
@@ -16,10 +18,19 @@ public class Entity {
         setyPos((int) Math.round(Math.random() * 1000));
         setScoreValue((int) Math.round(Math.random() * 200));
         setColor(getRandomColor());
+        setId(UUID.randomUUID().toString());
     }
 
     private String getRandomColor() {
         return String.format("#%06x", new Random().nextInt(0xffffff + 1));
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getSize() {

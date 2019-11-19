@@ -23,7 +23,7 @@ export function Socket() {
         return new Promise((function (resolve, reject) {
             let socket = new SockJS(this.url);
             let stompClient = Stomp.over(socket);
-            stompClient.debug = () => {}; // Stop debug messages so they don't clog browser console
+            //stompClient.debug = () => {}; // Stop debug messages so they don't clog browser console
             this.socket = stompClient;
             this.socket.reconnect_delay = 5000;
 
@@ -49,7 +49,7 @@ export function Socket() {
             console.log("Cannot disconnect from unconnected socket at " + this.url);
             return;
         }
-
+        this.sendDisconnectMessage();
         this.socket.disconnect();
         this.isConnected = false;
         console.log("Socket disconnected at: " + this.url);
@@ -83,7 +83,8 @@ export function Socket() {
                     yTarget: player.mover.yTarget,
                     speed: player.mover.speed,
                     size: player.mover.size,
-                    color: player.color
+                    color: player.color,
+                    username: player.username
                 };
                 break;
             case "ENTITIES":
@@ -99,8 +100,16 @@ export function Socket() {
         this.sendMessage("[" + player.name + "]: " + message);
     };
 
+    this.sendDisconnectMessage = function () {
+        this.sendMessage({
+            type: "LEAVE",
+            playerId: player.playerId,
+            payload: {}
+        });
+    };
+
     this.sendMessage = function (message, endpoint=this.sendEndpoint) {
-        console.log("Sending to endpoint: " + endpoint + "\nMessage: " + message);
+        console.log("Sending to endpoint: " + endpoint + "\nMessage: " + JSON.stringify(message));
         this.socket.send(endpoint, {}, JSON.stringify(message));
     }
     

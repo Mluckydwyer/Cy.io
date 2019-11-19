@@ -26,6 +26,7 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
     private Game game;
 
     HashMap<String, Player> players;
+    HashMap<String, Entity> entities;
     LeaderBoard leaderBoard;
 
     // Game Leaderboard
@@ -53,6 +54,8 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         ns = new NotificationSocket();
         pds = new PlayerDataSocket();
         cs = new ChatSocket();
+
+        pds.fillEntities();
     }
 
 
@@ -91,7 +94,7 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
     }
 
     @Override
-    public void update(HashMap<String, Player> players) {
+    public void updatePlayerList(HashMap<String, Player> players) {
         // Find new players that might have joined
         for (String playerId : players.keySet()) {
             if (!this.players.containsKey(playerId)) {
@@ -110,10 +113,18 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
     }
 
     @Override
-    public void update(LeaderBoard leaderBoard) {
+    public void updateLeaderBoard(LeaderBoard leaderBoard) {
         if (this.leaderBoard.getLeader().getPlayerId() != leaderBoard.getLeader().getPlayerId()) {
             ns.newLeader(players.get(leaderBoard.getLeader().getPlayerId()));
         }
         this.leaderBoard = leaderBoard; // update local leader list
+    }
+
+    @Override
+    public void updateEntityList(HashMap<String, Entity> entities) {
+        if (!this.entities.equals(entities)) {
+            pds.fillEntities();
+        }
+        //this.entities = entities;
     }
 }

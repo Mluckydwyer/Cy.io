@@ -6,5 +6,5 @@ import com.cyio.backend.model.Player;
 import java.util.HashMap;
 
 public interface LeaderboardObserver extends Observer {
-    public void update(LeaderBoard leaderBoard);
+    public void updateLeaderBoard(LeaderBoard leaderBoard);
 }

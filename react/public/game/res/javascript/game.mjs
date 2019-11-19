@@ -75,7 +75,7 @@ function pullAndWait() {
 }
 
 function sendPlayerData() {
-    playerDataSocket.sendPlayerDataMessage(player);
+    playerDataSocket.sendPlayerDataMessage("PLAYER_MOVEMENT", player);
 }
 
 function parsePlayerMovement(payload) {
@@ -88,6 +88,7 @@ function parsePlayerMovement(payload) {
         otherPlayer.mover.speed = payload.speed;
         otherPlayer.mover.size = payload.size;
         otherPlayer.color = payload.color;
+        otherPlayer.name = payload.username;
 
         players.push(otherPlayer);
     }
@@ -149,6 +150,7 @@ async function join(json) {
                 switch (json.type) {
                     case "JOIN":
                         if (json.playerId === player.playerId) {
+                            console.log("Join handshake successful");
                             setInterval(sendPlayerData, 200);
                         }
                         break;
@@ -290,4 +292,13 @@ function getUsername() {
     if (document.getElementById("username-input").value !== "") {
         player.name = document.getElementById("username-input").value;
     }
+}
+
+window.onunload = closingCode;
+window.onbeforeunload = closingCode;
+function closingCode(){
+    leaderboardSocket.disconnect();
+    chatSocket.disconnect();
+    notificationSocket.disconnect();
+    playerDataSocket.disconnect();
 }
