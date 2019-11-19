@@ -1,4 +1,5 @@
-import { Mover } from "./mover.mjs";
+import {Mover} from "./mover.mjs";
+
 // export { Player };
 
 export function Player() {
@@ -6,10 +7,12 @@ export function Player() {
 
     let mover;
     let name = "";
+    let playerId = "";
 
     this.init = function (config) {
         this.mover = new Mover().init();
         this.name = "You";
+        this.playerId = generateUUID();
         this.config(config);
         return this;
     };
@@ -30,4 +33,14 @@ export function Player() {
         g.strokeStyle = '#003300'; // Have an outline of dark green
         g.stroke();
     };
+
+    // Generate a unique UUID for the playerId
+    function generateUUID() {
+        let dt = new Date().getTime();
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            let r = (dt + Math.random() * 16) % 16 | 0;
+            dt = Math.floor(dt / 16);
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
 }

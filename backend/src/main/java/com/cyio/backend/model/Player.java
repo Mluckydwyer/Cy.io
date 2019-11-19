@@ -1,9 +1,10 @@
 package com.cyio.backend.model;
 
+import com.cyio.backend.payload.PlayerData;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 
 import java.util.Comparator;
-import java.util.Map;
 import java.util.UUID;
 
 public class Player {
@@ -26,6 +27,11 @@ public class Player {
 
     private PlayerData playerData;
 
+    public Player(String userName, String playerId){
+        this(playerId);
+        setUserName(userName);
+        setScore(0);
+    }
 
     public Player(String userName, int score){
         this(UUID.randomUUID().toString());
@@ -66,7 +72,7 @@ public class Player {
         return socket;
     }
 
-    public void updatePlayerData(Map<String, String> data) {
+    public void updatePlayerData(JSONObject data) {
 
     }
 

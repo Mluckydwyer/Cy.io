@@ -9,6 +9,11 @@ public class Leader {
         setScore(score);
     }
 
+    public Leader(Player player) {
+        setName(player.getUserName());
+        setScore(player.getScore());
+    }
+
     public String getName() {
         return name;
     }

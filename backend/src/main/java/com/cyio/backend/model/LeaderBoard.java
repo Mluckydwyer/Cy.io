@@ -118,6 +118,16 @@ public class LeaderBoard {
     }
 
     /**
+     * Returns the player with the top score in the game
+     * @return The player in the lead
+     */
+    public Leader getLeader() {
+        if (getLeaderList().size() < 1) return null;
+        sortBoard();
+        return new Leader(getLeaderList().get(0));
+    }
+
+    /**
      * Creates a list of player scores and names to be sent to clients
      * @param limit how many players to return
      * @return the complete leaderboard list in a list
@@ -127,7 +137,7 @@ public class LeaderBoard {
         sortBoard();
         for (int i = 0; i < limit; i++) {
             Player player = getLeaderList().get(i);
-            Leader leader = new Leader(player.getUserName(), player.getScore());
+            Leader leader = new Leader(player);
             leaders.add(leader);
         }
 

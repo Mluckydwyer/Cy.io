@@ -1,17 +1,12 @@
 package com.cyio.backend.model;
 
+import com.cyio.backend.observerpatterns.LeaderboardObserver;
+import com.cyio.backend.observerpatterns.PlayerListObserver;
 import com.cyio.backend.websockets.ChatSocket;
 import com.cyio.backend.websockets.LeaderboardSocket;
 import com.cyio.backend.websockets.NotificationSocket;
 import com.cyio.backend.websockets.PlayerDataSocket;
-import javax.persistence.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.websocket.server.ServerEndpoint;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -19,7 +14,7 @@ import java.util.UUID;
 //@Entity
 
 //@Table(name = "Servers")
-public class GameServer {
+public class GameServer implements PlayerListObserver, LeaderboardObserver {
 
 //    @Id
     private String serverId;
@@ -28,6 +23,9 @@ public class GameServer {
     private String gameId;
 
     private Game game;
+
+    HashMap<String, Player> players;
+    LeaderBoard leaderBoard;
 
     // Game Leaderboard
     LeaderboardSocket ls;
@@ -89,5 +87,30 @@ public class GameServer {
 
     public void setGameId(String gameId) {
         this.gameId = gameId;
+    }
+
+    @Override
+    public void update(PlayerListObserver playerListObserver, HashMap<String, Player> players) {
+        // Find new players that might have joined
+        for (String playerId : players.keySet()) {
+            if (!this.players.containsKey(playerId)) {
+                ns.playerJoined(players.get(playerId));
+            }
+        }
+
+        // Find old players that might have left
+        for (String playerId : this.players.keySet()) {
+            if (!players.containsKey(playerId)) {
+                ns.playerLeft(players.get(playerId));
+            }
+        }
+
+        this.players = players; // update local player list
+    }
+
+    @Override
+    public void update(LeaderboardObserver playerListObserver, LeaderBoard leaderBoard) {
+        if (this.leaderBoard.getTop())
+        this.leaderBoard = leaderBoard;
     }
 }

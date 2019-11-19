@@ -123,11 +123,17 @@ async function join(json) {
         playerDataSocket.init(json.playerDataWs);
         await playerDataSocket.connect().then(function () {
             playerDataSocket.subscribe(json.playerDataSub, function (frame) {
-                console.log("Player Data update received");
-                console.log(frame.body); // TODO update player data
+                //console.log("Player Data update received");
+                //console.log(frame.body); // TODO update player data
             });
         }).catch(function () {
             console.log("Player Data websocket Failed to connect");
+        });
+
+        playerDataSocket.sendMessage({
+            username: player.name,
+            playerId: player.playerId,
+            
         });
     }
 }
