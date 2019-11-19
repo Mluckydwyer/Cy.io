@@ -205,7 +205,7 @@ function resizeCanvas() {
     canvas.height = window.innerHeight;
 }
 
-function updateLeaderboard(leaders) {
+export function updateLeaderboard(leaders) {
     let json = JSON.parse(leaders); // parse leaderboard message
 
     // Clear leaderboard
