@@ -22,4 +22,11 @@ public class LeaderBoardTest
 {
     @Mock
     LeaderBoard l;
+
+    @Before
+    public void init()
+    {
+        MockitoAnnotations.initMocks(this);
+    }
+
 }

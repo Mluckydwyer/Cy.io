@@ -49,9 +49,6 @@ public class ChatRoom extends AppCompatActivity
         mStompClient.topic("/topic/chat").subscribe();
 
 
-
-        mStompClient.send("/app/chat", et.getText().toString());
-        mStompClient.disconnect();
 //        try
 //        {
 //            socket = new WebSocketClient(new URI(url))
@@ -104,8 +101,14 @@ public class ChatRoom extends AppCompatActivity
                 t.setTextSize(15);
                 t.setText(et.getText().toString());
                 ll.addView(t);
+                mStompClient.send("/app/chat", et.getText().toString()).subscribe();
 //                socket.send(et.getText().toString());
             }
         });
+
+
+        mStompClient.disconnect();
+
+
     }
 }

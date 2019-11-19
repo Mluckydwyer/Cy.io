@@ -22,4 +22,13 @@ public class ChatRoomTest
 {
     @Mock
     ChatRoom cr;
+
+    @Before
+    public void init()
+    {
+        MockitoAnnotations.initMocks(this);
+    }
+
+
+
 }

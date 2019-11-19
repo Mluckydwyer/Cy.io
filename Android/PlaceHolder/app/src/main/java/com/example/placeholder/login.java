@@ -40,31 +40,35 @@ import java.util.Scanner;
 
 public class login extends AppCompatActivity
 {
-        Button login;
+        Button logi;
         EditText username, password;
         TextView vt, vt2;
         public static final String NICKNAME = "username";
         public String bear;
         public String token;
         public String[] arr;
+        public String user;
+        public String pass;
+        boolean next = false;
         @Override
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
-            login = (Button)findViewById(R.id.login);
+            logi = (Button)findViewById(R.id.login);
             username = (EditText)findViewById(R.id.usernameEntry);
             password = (EditText)findViewById(R.id.passwordEntry);
             vt = (TextView) findViewById(R.id.tv1);
             vt2 = (TextView) findViewById(R.id.tv2);
             Log.d("vt has text", vt.getText().toString());
-            login.setOnClickListener(new View.OnClickListener()
+
+            logi.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
-                    String user = username.getText().toString();
-                    String pass = password.getText().toString();
+                    setUser(username.getText().toString());
+                    setPass(password.getText().toString());
                     String tag_json_obj ="json_obj_req";
                     JSONObject obj = new JSONObject();
                     try
@@ -284,8 +288,32 @@ public class login extends AppCompatActivity
 
         public void openHomePage()
         {
+            next = true;
             Intent intent = new Intent(this, Home.class);
             startActivity(intent);
+        }
+
+        public boolean getNext()
+        {
+            return next;
+        }
+
+        public void setPass(String s)
+        {
+            pass = s;
+        }
+        public String getPass()
+        {
+            return pass;
+        }
+
+        public void setUser(String s)
+        {
+            user = s;
+        }
+        public String getUser()
+        {
+            return user;
         }
 //
 //        public void openHomePage(String user)
