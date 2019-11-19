@@ -8,17 +8,18 @@ import BottomFooter from './components/base/BottomFooter';
 import Login from "./components/login/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthContext } from "./routes/auth";
-import Signup from "./css/login/Signup";
+import Signup from "./components/login/Signup";
+/*import NotificationCard from './components/home/NotificationCard';*/
 
 
-function App(props){
+function App(){
     
     const [authTokens, setAuthTokens] = useState();
     
     const setTokens = (data) => {
         localStorage.setItem("tokens", JSON.stringify(data));
         setAuthTokens(data);
-    }   
+    };   
     
     return(
         <AuthContext.Provider value = {{authTokens, setAuthTokens: setTokens}}>
@@ -33,7 +34,9 @@ function App(props){
                             </main>
                         </Route>
                         <Route path="/login" component = {Login}/>
-                        <PrivateRoute path="/user" component = {Signup}/>
+                        <PrivateRoute path="/user">
+                            <Signup/>
+                        </PrivateRoute>
                         <Route path="/signup">
                             <Signup />
                         </Route>

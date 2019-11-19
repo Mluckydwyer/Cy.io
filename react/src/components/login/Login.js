@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import { useAuth } from "../../routes/auth";
 import '../../css/login/Login.css';
 import { Redirect } from "react-router-dom";
+import {userInfo} from "./User";
 
-function Login(props){
+function Login(){
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
@@ -41,14 +42,16 @@ function Login(props){
                 throw new Error('Something went wrong...');
             }
         }).then(data => {
-            setAuthTokens(data);
+            localStorage.setItem("token",JSON.stringify(data));
             setLoggedIn(true);
             return data;
         }).then(console.log);
-        console.log(setAuthTokens);
+        console.log(localStorage.getItem("tokens"));
     }
     
+    
     if(isLoggedIn) {
+        userInfo();
         return <Redirect to="/" />;
     }   
     

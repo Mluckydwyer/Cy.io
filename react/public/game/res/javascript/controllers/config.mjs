@@ -1,5 +1,5 @@
 export { Config };
-import getConfig from "../libs/requests.mjs";
+import getRequest from "../libs/requests.mjs";
 
 let defaultConfigUri = 'res/javascript/game-config-default.json';
 
@@ -11,7 +11,7 @@ function Config() {
     };
 
     this.load = async function (uri) {
-        let json = await getConfig(uri);
+        let json = await getRequest(uri);
         this.loadRaw(json);
     };
 

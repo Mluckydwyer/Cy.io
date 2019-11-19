@@ -17,23 +17,30 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private String id;
     private String email;
     private String password;
+    private boolean admin = false;
     private Collection<? extends GrantedAuthority> authorities; //list of access the user has
     private Map<String, Object> attributes;
 
-    public  UserPrincipal (String id, String email, String password, Collection<? extends GrantedAuthority> authorities){
+    public  UserPrincipal (String id, String email, String password, Boolean admin, Collection<? extends GrantedAuthority> authorities){
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.admin = admin;
     }
 
     public static UserPrincipal create(User user){
-        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 
+
+        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+//        if (user.isAdmin()){
+//            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//        }
         return new UserPrincipal(
                 user.getUserid(),
                 user.getEmail(),
                 user.getPassword(),
+                user.isAdmin(),
                 authorities
         );
     }
@@ -50,6 +57,10 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 
     @Override
@@ -81,6 +92,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

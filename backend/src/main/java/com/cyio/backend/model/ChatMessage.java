@@ -1,23 +1,16 @@
 package com.cyio.backend.model;
 
 public class ChatMessage {
-    private String from;
-    private String to;
     private String text;
 
-    public String getFrom() {
-        return from;
-    }
-    public void setFrom(String from) {
-        this.from = from;
+    public ChatMessage() {
+
     }
 
-    public String getTo() {
-        return to;
+    public ChatMessage(String text) {
+        setText(text);
     }
-    public void setTo(String to) {
-        this.to = to;
-    }
+
     public String getText() {
         return text;
     }

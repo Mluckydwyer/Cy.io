@@ -6,8 +6,12 @@ import java.util.UUID;
 
 import com.cyio.backend.model.Game;
 import com.cyio.backend.repository.GameRepository;
+import com.cyio.backend.security.CurrentUser;
+import com.cyio.backend.security.UserPrincipal;
 import com.cyio.backend.websockets.NotificationSocket;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,8 +21,8 @@ public class GameController {
 	GameRepository gameRepository; //using autowire to create an instance of game Repository
 
 	@Autowired
-	NotificationSocket socket; //create an instance of
-	
+	public SimpMessagingTemplate template;
+
 //  @CrossOrigin(origins = "http://localhost:3000")
 //	@RequestMapping("/restexample")
 //	public Game game(@RequestParam(value = "title", defaultValue = "cy.io") String title){
@@ -46,7 +50,23 @@ public class GameController {
 		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
 		Game game = new Game(title,newID.toString(),creatorid);
 		gameRepository.save(game); //Insert new game to the database
-		socket.newGame(game);
+		template.convertAndSend("/topic/notifications", "New Game " + game.getTitle() +" Added!");
 		return "Game \""+ title +"\" Added";
+	}
+
+	@PostMapping("/deletegame")
+	public @ResponseBody String deleteGame(@RequestParam (value="game") String titleOrId, @CurrentUser UserPrincipal userPrincipal){
+//    	int id = -1;
+//    	if (StringUtils.isNumeric(titleOrId))
+//    		id = Integer.parseInt(titleOrId);
+    	List<Game> resultList = gameRepository.findGameByTitleContaining(titleOrId);
+    	Game game = null;
+    	if (!resultList.isEmpty())
+    		 game = resultList.get(0);
+    	if (game != null && (userPrincipal.isAdmin() || game.getCreatorID().equals(userPrincipal.getId()))){
+    		gameRepository.deleteGameByTitle(titleOrId);
+    		return "Success";
+		}
+    	return "Game does not exist or not authorized";
 	}
 }

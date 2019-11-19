@@ -32,9 +32,6 @@ class GameCardList extends Component {
     }
     
     render() {
-        
-        console.log(this.state);
-        console.log(this.state.cards[0]);
         const cards = this.state.cards.map((card)=>
             <GameCard key = {card.gameID}
                       value = {card}/>

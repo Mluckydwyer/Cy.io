@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class LeaderBoard {
     private ArrayList<Player> leaderList;
@@ -28,6 +27,15 @@ public class LeaderBoard {
      */
     public void addPlayer(Player p){
         leaderList.add(p);
+        sortBoard();
+    }
+
+    /**
+     * removes a player from the list
+     * @param p the old player to be removed
+     */
+    public void removePlayer(Player p){
+        leaderList.remove(p);
         sortBoard();
     }
 
@@ -73,6 +81,7 @@ public class LeaderBoard {
      * for testing purposes, populate a list with 10 players with randomized scores from 0 - 1000
      */
     public void generateDummyData(){
+        leaderList.clear();
         leaderList.add(new Player("Toby", 50));
         leaderList.add(new Player("Calvin", 50));
         leaderList.add(new Player("John", 50));
@@ -84,9 +93,8 @@ public class LeaderBoard {
         leaderList.add(new Player("Melissa", 50));
         leaderList.add(new Player("Lauren", 50));
         leaderList.add(new Player("Riesha", 50));
-        Random rnd = new Random();
         for (Player player:leaderList){
-            player.setScore(rnd.nextInt(1000));
+            player.setScore((int) Math.round(Math.random() * 1000));
         }
         sortBoard();
     }
@@ -103,8 +111,50 @@ public class LeaderBoard {
         }
         return null;
     }
+
     /**
-     * convers the current list to an JSON string, for socket use
+     * Creates a map of player scores and usernames to be sent to clients
+     * @param limit how many players to return
+     * @return the complete leaderboard list in a Map
+     */
+    public Map<String, Integer> getMap(int limit) {
+        sortBoard();
+        TreeMap<String, Integer> leaderData = new TreeMap<String, Integer>();
+        for (int i = 0; i < limit; i++) {
+            leaderData.put(getLeaderList().get(i).getUserName(), getLeaderList().get(i).getScore());
+        }
+        return leaderData;
+    }
+
+    /**
+     * Returns the player with the top score in the game
+     * @return The player in the lead
+     */
+    public Leader getLeader() {
+        if (getLeaderList().size() < 1) return null;
+        sortBoard();
+        return new Leader(getLeaderList().get(0));
+    }
+
+    /**
+     * Creates a list of player scores and names to be sent to clients
+     * @param limit how many players to return
+     * @return the complete leaderboard list in a list
+     */
+    public List<Leader> getLeaderList(int limit) {
+        ArrayList<Leader> leaders = new ArrayList<>();
+        sortBoard();
+        for (int i = 0; i < limit && i < getLeaderList().size(); i++) {
+            Player player = getLeaderList().get(i);
+            Leader leader = new Leader(player);
+            leaders.add(leader);
+        }
+
+        return leaders;
+    }
+
+    /**
+     * converts the current list to an JSON string, for socket use
      * @return the complete leaderboard list in JSON format
      */
     @Override

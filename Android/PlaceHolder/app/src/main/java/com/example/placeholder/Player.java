@@ -24,4 +24,10 @@ public class Player
     {
         return score;
     }
+
+    public String getScoreString()
+    {
+        int i = getScore();
+        return "" + i;
+    }
 }

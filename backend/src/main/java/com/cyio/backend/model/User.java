@@ -3,6 +3,7 @@ package com.cyio.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -33,10 +34,28 @@ public class User {
     @Column(name = "games_owned")
     private int gamesOwned;
 
+    @Column(name = "admin")
+    private boolean admin;
+
     public User() {
         UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
         this.userid = newID.toString();
         this.userName = newID.toString();
+    }
+
+    public User(String userName, Boolean isAdmin) {
+        UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
+        this.userid = newID.toString();
+        this.userName = userName;
+        this.admin = isAdmin;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public String getPassword() {
