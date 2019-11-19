@@ -88,6 +88,14 @@ function Mover() {
         this.yPos += this.targetY * this.speed;
     };
 
+    this.checkPlayerCollisions = function () {
+        // TODO
+    };
+
+    this.checkEntitityCollisions = function () {
+        // TODO
+    };
+
     // Handles Keyboard input
     this.checkKeys = function () {
         let keys = this.keys;

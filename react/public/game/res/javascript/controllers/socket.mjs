@@ -4,7 +4,7 @@ import {player} from "../game.mjs";
 export function Socket() {
 
     const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
-    // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
+    // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8080"; // Dev server for testing
 
     this.socket = null;
     this.isConnected = false;
@@ -49,7 +49,7 @@ export function Socket() {
             console.log("Cannot disconnect from unconnected socket at " + this.url);
             return;
         }
-
+        this.sendDisconnectMessage();
         this.socket.disconnect();
         this.isConnected = false;
         console.log("Socket disconnected at: " + this.url);
@@ -61,16 +61,37 @@ export function Socket() {
         this.subscriptions.push(this.socket.subscribe(endpoint, onMessage, {}));
     };
 
-    this.sendPlayerDataMessage = function (player) {
+    this.sendPlayerDataMessage = function (type, player) {
         let msg = {
-            name: player.name,
-            xPos: player.mover.xPos,
-            yPos: player.mover.yPos,
-            xTarget: player.mover.xTarget,
-            yTarget: player.mover.yTarget,
-            speed: player.mover.speed,
-            size: player.mover.size
+            type: type,
+            playerId: player.playerId,
+            payload: null
         };
+
+        switch (type) {
+            case "JOIN":
+                msg.payload = {username: player.name};
+                break;
+            case "LEAVE":
+                msg.payload = {};
+                break;
+            case "PLAYER_MOVEMENT":
+                msg.payload = {
+                    xPos: player.mover.xPos,
+                    yPos: player.mover.yPos,
+                    xTarget: player.mover.xTarget,
+                    yTarget: player.mover.yTarget,
+                    speed: player.mover.speed,
+                    size: player.mover.size,
+                    color: player.color,
+                    username: player.username
+                };
+                break;
+            case "ENTITIES":
+                msg.payload = {username: player.name};
+                // TODO ???
+                break;
+        }
 
         this.sendMessage(msg);
     };
@@ -79,8 +100,16 @@ export function Socket() {
         this.sendMessage("[" + player.name + "]: " + message);
     };
 
+    this.sendDisconnectMessage = function () {
+        this.sendMessage({
+            type: "LEAVE",
+            playerId: player.playerId,
+            payload: {}
+        });
+    };
+
     this.sendMessage = function (message, endpoint=this.sendEndpoint) {
-        console.log("Sending to endpoint: " + endpoint + "\nMessage: " + message);
+        console.log("Sending to endpoint: " + endpoint + "\nMessage: " + JSON.stringify(message));
         this.socket.send(endpoint, {}, JSON.stringify(message));
     }
     

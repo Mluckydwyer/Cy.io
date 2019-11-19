@@ -1,11 +1,11 @@
 package com.cyio.backend.model;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.UUID;
 
 @Entity
-
 @Table(name = "Games")
 public class Game{
 
