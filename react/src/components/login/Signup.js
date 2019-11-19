@@ -7,6 +7,7 @@ function Signup(){
     function logOut(){
         setAuthTokens();
         localStorage.removeItem("token");
+        localStorage.removeItem("info");
     }
     
     return (

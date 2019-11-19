@@ -8,7 +8,8 @@ import BottomFooter from './components/base/BottomFooter';
 import Login from "./components/login/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthContext } from "./routes/auth";
-import Signup from "./css/login/Signup";
+import Signup from "./components/login/Signup";
+/*import NotificationCard from './components/home/NotificationCard';*/
 
 
 function App(){
