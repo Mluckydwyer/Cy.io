@@ -1,5 +1,7 @@
 package com.example.placeholder;
 
+import android.widget.Button;
+
 import org.json.JSONException;
 import org.junit.Test;
 
@@ -29,6 +31,11 @@ public class ChatRoomTest
         MockitoAnnotations.initMocks(this);
     }
 
+    @Test
+    public void sendTest()
+    {
 
+
+    }
 
 }
