@@ -26,6 +26,17 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
     }
 
+    /**
+     * :8080/deleteuser?user=USER
+     * 	- Status: stable
+     * 	- Type: POST
+     * 	- Usage: Only available to admin user. The method searhces for the user specified by "USER" where "USER" can be either the username or user id and deletes it
+     * 	- Returns: message statingg whether the operation was successful
+     *
+     * @param useridorname
+     * @param principal
+     * @return
+     */
     @PostMapping("/deleteuser")
     public @ResponseBody String deleteUser(@RequestParam(value="user") String useridorname, @CurrentUser UserPrincipal principal){
         if (!principal.isAdmin())
@@ -35,6 +46,17 @@ public class UserController {
 
     }
 
+    /**
+     * :8080/toggleadmin?user=USER
+     * 	- Status: stable
+     * 	- Type: POST
+     * 	- Usage: Only available to admin user. This method makes the user specified by "USER" where "USER" can be either the username or user id and make it an admin user if it previously wasn't one and make an admin user into a regular user
+     * 	- Returns: message stating whether the operation was successful
+     *
+     * @param useridorname
+     * @param principal
+     * @return
+     */
     @PostMapping("/toggleadmin")
     public @ResponseBody String toggleAdmin(@RequestParam(value="user") String useridorname, @CurrentUser UserPrincipal principal){
         if (!principal.isAdmin())
