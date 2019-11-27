@@ -1,4 +1,6 @@
 package com.example.placeholder;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -14,6 +16,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import org.junit.Before;
@@ -33,6 +36,46 @@ public class LoginTest
     {
         MockitoAnnotations.initMocks(this);
     }
+
+
+    @Test
+    public void userTest()
+    {
+        l.user = "chuck";
+        assertEquals("chuck", l.user);
+    }
+
+    @Test
+    public void null_UserTest()
+    {
+        l.setUser(null);
+        assertEquals(null, l.getUser());
+    }
+
+    @Test
+    public void falseBoolCredentialTest()
+    {
+        String s1 = "a";
+        String s2 = "a";
+        boolean b = false;
+        when(l.credentials(s1,s2)).thenReturn(false);
+        b = l.credentials(s1,s2);
+        assertEquals(b, false);
+    }
+
+    @Test
+    public void trueBoolCredentialTest()
+    {
+        String s1 = "a";
+        String s2 = "b";
+        boolean b = false;
+        when(l.credentials(s1,s2)).thenReturn(true);
+        b = l.credentials(s1,s2);
+        assertEquals(b, true);
+    }
+
+
+
 
 //    @Test
 //    public void loginTest()

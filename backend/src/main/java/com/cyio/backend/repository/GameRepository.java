@@ -1,8 +1,10 @@
 package com.cyio.backend.repository;
 
 import com.cyio.backend.model.Game;
+import com.cyio.backend.model.GameServer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,4 +16,7 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
     List<Game> findGameByTitleContaining(String Title);
     List<Game> findGameByBlurbContaining(String Blurb);
     List<Game> findGameByAboutContaining(String About);
+    //List<Game> findGameByGameIDOOrTitle(int GameID, String Title);
+    @Transactional
+    int deleteGameByTitle(String title);
 }

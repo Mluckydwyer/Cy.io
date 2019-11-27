@@ -27,10 +27,10 @@ Last Update: Oct 8th, 2019
 		 QUERY is the keyword(s) to be searched
 	- Returns: JSON for all matched games
 
-:8080/auth/signup
+:8080/auth/signup   
 	- Status: Stable
 	- Type: POST
-	- Usage: to register a new user, call this endpoint with a json of the folllowing format:
+	- Usage: to register a new user, call this endpoint with a json of the following format:
 			{"userName":"USERNAME",
 			 "email":"EMAIL",
 			 "password":"PASSWORD"}
@@ -41,7 +41,7 @@ Last Update: Oct 8th, 2019
 		   otherwise, 
 			error messages
 :8080/auth/login
-	- Status: Stab;e
+	- Status: Stable
 	- Type: POST
 	- Usage: to log a user in, call this endpoint with the following json:
 			{"userName":"USERNAME",
@@ -56,10 +56,26 @@ Last Update: Oct 8th, 2019
 	- Type : GET
 	- Usage: view the current logged in user's information. To load the user, send the get request with the following header:
 		
-	      	Authorization: bearer USER_TOKEN
+	      	Authorization: Bearer USER_TOKEN
 		
 		where USER_TOKEN is the token returned by the login page
 	- Returns: a list of user attributes, in JSON format
+
+:8080/deletegame?game=TITLE
+	- Status: planned
+	- Type: POST
+	- Usage: Only availabe to the game's creater and admin user. This method searches for the game specificed by "TITLE" where "TITLE" is the game title and deletes it 
+	- Returns success message when operation was successful and error messages othersiwe 
 	
-	   	
+:8080/deleteuser?user=USER
+	- Status: planned
+	- Type: POST
+	- Usage: Only available to admin user. The method searhces for the user specified by "USER" where "USER" can be either the username or user id and deletes it 
+	- Returns: message statingg whether the operation was successful
+
+:8080/toggleadmin?user=USER
+	- Status: planned 
+	- Type: POST
+	- Usage: Only available to admin user. This method makes the user specified by "USER" where "USER" can be either the username or user id and make it an admin user if it previously wasn't one and make an admin user into a regular user
+	- Returns: message stating whether the operation was successful
 		

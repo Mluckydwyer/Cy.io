@@ -8,8 +8,8 @@
     tools:context=".ChatRoom">
 
     <ScrollView
-        android:layout_width="346dp"
-        android:layout_height="464dp"
+        android:layout_width="402dp"
+        android:layout_height="569dp"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
         android:layout_marginTop="70dp"
@@ -18,6 +18,7 @@
         android:layout_marginBottom="106dp">
 
         <LinearLayout
+            android:id="@+id/llcr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

@@ -94,19 +94,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", // the list of whitelisted endpoints: no log in required to access
+                .antMatchers("/**",
                         "/gamelist",
+                        "/user/me", //TODO: remove this bad boii
                         "/game/*",
                         "/chat/user-123456789",
                         "/secured/**",
                         "/history/**",
                         "/chat/**",
                         "/user/**",
-                        "/gamews",
+                        "/chat",
+                        "/topic/**",
+                        "/notifications",
+                        "/leaderboard",
+                        "/join",
                         "/notificationws/**"
+
                         )
                 .permitAll()
-                .antMatchers("/auth/**", "/oauth2/**")
+                .antMatchers("/auth/**", "/oauth2/**","/auth/login/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -127,6 +133,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add our custom Token based authentication filter
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
 }
