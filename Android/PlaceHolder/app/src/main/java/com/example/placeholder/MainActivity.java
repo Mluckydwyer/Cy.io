@@ -4,25 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.placeholder.app.AppController;
-
-import org.java_websocket.client.WebSocketClient;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import static android.widget.TextView.BufferType.EDITABLE;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -32,7 +15,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        proceed = (Button) findViewById(R.id.proceed);
+        proceed = (Button) findViewById(R.id.MainToLoginButton);
         proceed.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -44,7 +27,7 @@ public class MainActivity extends AppCompatActivity
     }
     public void openLoginPage()
     {
-        Intent i = new Intent(this, login.class);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
 

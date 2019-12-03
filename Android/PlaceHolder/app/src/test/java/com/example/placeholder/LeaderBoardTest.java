@@ -1,8 +1,5 @@
 package com.example.placeholder;
 
-import android.widget.TextView;
-
-import org.json.JSONException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,23 +8,18 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import ua.naiksoftware.stomp.StompClient;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LeaderBoardTest
 {
     @Mock
-    LeaderBoard l;
+    LeaderBoardActivity l;
 
     @Before
     public void init()

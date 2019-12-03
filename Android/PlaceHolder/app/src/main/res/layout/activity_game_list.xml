@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/games"
+        android:id="@+id/GameListTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -17,7 +17,7 @@
         android:textSize="30dp" />
 
     <Button
-        android:id="@+id/back"
+        android:id="@+id/BackButtonGameList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -31,7 +31,7 @@
         android:textSize="30dp" />
 
     <ScrollView
-        android:id="@+id/scrollview"
+        android:id="@+id/ScrollViewGameList"
         android:layout_width="match_parent"
         android:layout_height="464dp"
         android:layout_marginStart="9dp"
@@ -42,48 +42,12 @@
         android:layout_marginBottom="106dp">
 
         <LinearLayout
-            android:id="@+id/llMain"
+            android:id="@+id/LinearLayoutGameList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
         </LinearLayout>
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/scrolledText"-->
-        <!--                android:layout_width="150dp"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_alignParentStart="true"-->
-        <!--                android:layout_alignParentLeft="true"-->
-        <!--                android:layout_alignParentTop="true"-->
-        <!--                android:layout_centerHorizontal="true"-->
-        <!--                android:layout_marginStart="107dp"-->
-        <!--                android:layout_marginLeft="107dp"-->
-        <!--                android:layout_marginTop="31dp"-->
-        <!--                android:layout_weight='1'-->
-        <!--                android:text="Games" />-->
-
     </ScrollView>
-
-
-    <!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical" />-->
-<!--        <TextView-->
-<!--            android:id="@+id/scrolledText"-->
-<!--            android:layout_weight = '1'-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentStart="true"-->
-<!--            android:layout_alignParentLeft="true"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_marginStart="107dp"-->
-<!--            android:layout_marginLeft="107dp"-->
-<!--            android:layout_marginTop="31dp"-->
-<!--            android:text=""-->
-<!--        />-->
-<!--    </ScrollView>-->
 </RelativeLayout>
 

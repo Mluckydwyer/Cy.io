@@ -1,17 +1,5 @@
 package com.example.placeholder;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +8,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -29,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class LoginTest
 {
     @Mock
-    login l;
+    LoginActivity l;
 
     @Before
     public void init()
@@ -67,7 +54,7 @@ public class LoginTest
     public void trueBoolCredentialTest()
     {
         String s1 = "a";
-        String s2 = "b";
+        String s2 = "returnToHomeBtn";
         boolean b = false;
         when(l.credentials(s1,s2)).thenReturn(true);
         b = l.credentials(s1,s2);
