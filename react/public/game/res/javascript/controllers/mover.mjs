@@ -1,6 +1,8 @@
 export { Mover };
 
 function Mover() {
+    this.width = 0;
+    this.height = 0;
     this.xPos = 0;
     this.yPos = 0;
     this.targetX = 0;
@@ -20,7 +22,10 @@ function Mover() {
     this.config = function (config) {
         this.size = config.players.shape.playerSize;
         this.speed = config.players.movement.playerSpeed;
-        this.expMovement = config.players.movement.movementStyle === 'exponential';
+        this.expMovement = (config.players.movement.movementStyle === 'exponential');
+        this.width = config.gameplay.width;
+        this.height = config.gameplay.height;
+
         this.centerPos();
         return this;
     };
@@ -64,19 +69,24 @@ function Mover() {
     };
 
     // Update movement based on current input
-    this.update = function (controller) {
-        if (!controller.mouseOnScreen) return; // If mouse has left hte screen don't update position
-        this.setCoords(controller.mouseX, controller.mouseY); // Set new mouse coords
-        this.setKeys(controller.keys);
+    this.update = function (controller=null) {
+        if (controller !== null) {
+            if (!controller.mouseOnScreen) { // If mouse has left the screen don't update position
+                this.setCoords(0, 0); // Set new mouse coords
+                return;
+            }
+            this.setCoords(controller.mouseX, controller.mouseY); // Set new mouse coords
+            this.setKeys(controller.keys);
 
-        // Use the current input source to get current movement data
-        switch (controller.inputSource) {
-            case 'keyboard':
-                this.checkKeys(); // Keyboard input
-                break;
-            case 'mouse':
-                this.checkMouse(); // Mouse input data
-                break;
+            // Use the current input source to get current movement data
+            switch (controller.inputSource) {
+                case 'keyboard':
+                    this.checkKeys(); // Keyboard input
+                    break;
+                case 'mouse':
+                    this.checkMouse(); // Mouse input data
+                    break;
+            }
         }
 
         this.move(); // Execute calculated move
@@ -86,6 +96,7 @@ function Mover() {
     this.move = function () {
         this.xPos += this.targetX * this.speed;
         this.yPos += this.targetY * this.speed;
+
     };
 
     this.checkPlayerCollisions = function () {

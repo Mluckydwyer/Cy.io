@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,8 @@ import java.util.Map;
 @EnableScheduling
 @Controller
 public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
-    private final Logger logger = LoggerFactory.getLogger(PlayerDataSocket.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(PlayerDataSocket.class);
+    private final int UPDATE_INTERVAL = 15;
 
     @Autowired
     public SimpMessagingTemplate template;
@@ -83,15 +85,26 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
         template.convertAndSend(listenPoint, message);
     }
 
-    @Scheduled(fixedRate = 200)
+    @Scheduled(fixedRate = UPDATE_INTERVAL)
     public void sendPlayerUpdate() {
         ArrayList<PlayerData> playerData = getAllPlayerData();
         sendToAll(playerData);
     }
 
-    @Scheduled(fixedRate = 200)
+    @Scheduled(fixedRate = UPDATE_INTERVAL)
     public void sendEntityUpdate() {
+        fillEntities();
         sendToAll(getAllEntities());
+    }
+
+    @Scheduled(fixedRate = 1000)
+    public void cullDeadConnections() {
+        for (Object key : players.keySet()) {
+            LocalDateTime playerDataRecency = ((Player) players.get(key)).getPayloadRecency();
+            if (playerDataRecency.isBefore(LocalDateTime.now().minusSeconds(3))) {
+                players.remove(players.get(key));
+            }
+        }
     }
 
     public ArrayList<PlayerData> getAllPlayerData() {
