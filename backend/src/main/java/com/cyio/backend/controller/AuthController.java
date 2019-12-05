@@ -40,9 +40,15 @@ public class AuthController {
     @Autowired
     private TokenProvider tokenProvider;
 
+    /**
+     * This method handles the login process. If success, it returns the token for the curent user session. If failed, then it would return the error message
+     * @param loginRequest
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+        //uses the Springboot authenticationManager to check if the username password combo exists
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getuserName(),
@@ -52,6 +58,7 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        //if log in was successful, it uses the token provider class to generate a token secret
         String token = tokenProvider.createToken(authentication);
         return ResponseEntity.ok(new AuthResponse(token));
     }

@@ -62,19 +62,19 @@ Last Update: Oct 8th, 2019
 	- Returns: a list of user attributes, in JSON format
 
 :8080/deletegame?game=TITLE
-	- Status: planned
+	- Status: stable
 	- Type: POST
 	- Usage: Only availabe to the game's creater and admin user. This method searches for the game specificed by "TITLE" where "TITLE" is the game title and deletes it 
 	- Returns success message when operation was successful and error messages othersiwe 
 	
 :8080/deleteuser?user=USER
-	- Status: planned
+	- Status: stable
 	- Type: POST
 	- Usage: Only available to admin user. The method searhces for the user specified by "USER" where "USER" can be either the username or user id and deletes it 
 	- Returns: message statingg whether the operation was successful
 
 :8080/toggleadmin?user=USER
-	- Status: planned 
+	- Status: stable 
 	- Type: POST
 	- Usage: Only available to admin user. This method makes the user specified by "USER" where "USER" can be either the username or user id and make it an admin user if it previously wasn't one and make an admin user into a regular user
 	- Returns: message stating whether the operation was successful

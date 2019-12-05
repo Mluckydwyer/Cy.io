@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.*;
 
 /*
-    this class provides data to the CostumUserDetailsService
+    this class provides data to the CostumUserDetailsService and other spring components, such as controllers
     TODO: Implement username in this class as well
  */
 
@@ -33,9 +33,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
 
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
-//        if (user.isAdmin()){
-//            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-//        }
         return new UserPrincipal(
                 user.getUserid(),
                 user.getEmail(),
@@ -45,6 +42,13 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         );
     }
 
+    /**
+     * Static UserPrincipal constructor
+     *
+     * @param user
+     * @param attributes
+     * @return
+     */
     public static UserPrincipal create(User user, Map<String, Object> attributes){
         UserPrincipal userPrincipal = UserPrincipal.create(user);
         userPrincipal.setAttributes(attributes);

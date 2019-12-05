@@ -45,6 +45,13 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * This endpoint allows all users to add a new game to the server
+	 * @param title
+	 * @param creatorid
+	 * @return
+	 * @throws IOException
+	 */
 	@PostMapping("/addgame")
 	public @ResponseBody String addGame(@RequestParam String title, @RequestParam String creatorid) throws IOException { //adds a new row in the games table
 		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
@@ -54,11 +61,19 @@ public class GameController {
 		return "Game \""+ title +"\" Added";
 	}
 
+	/**
+	 * :8080/deletegame?game=TITLE
+	 * 	- Status: active
+	 * 	- Type: POST
+	 * 	- Usage: Only availabe to the game's creater and admin user. This method searches for the game specificed by "TITLE" where "TITLE" is the game title and deletes it
+	 * 	- Returns success message when operation was successful and error messages othersiwe
+	 *
+	 * @param titleOrId
+	 * @param userPrincipal
+	 * @return
+	 */
 	@PostMapping("/deletegame")
 	public @ResponseBody String deleteGame(@RequestParam (value="game") String titleOrId, @CurrentUser UserPrincipal userPrincipal){
-//    	int id = -1;
-//    	if (StringUtils.isNumeric(titleOrId))
-//    		id = Integer.parseInt(titleOrId);
     	List<Game> resultList = gameRepository.findGameByTitleContaining(titleOrId);
     	Game game = null;
     	if (!resultList.isEmpty())
