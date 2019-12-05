@@ -1,20 +1,19 @@
-let canvas; // HTML canvas
-let g; // canvas graphics object
-
+import {Entity} from "./controllers/entity.mjs";
 import { Config } from './controllers/config.mjs';
 import { Socket } from './controllers/socket.mjs';
 import { Player } from './controllers/player.mjs';
 import { Controller } from './controllers/controller.mjs';
 import getRequest from "./libs/requests.mjs";
 
-
+let canvas; // HTML canvas
+let g; // canvas graphics object
 const framerate = 60;
 
 const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
 // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
 
 //export let clientPlayer;
-let players;
+let players, entities;
 let controller, config;
 let chatSocket, leaderboardSocket, notificationSocket, playerDataSocket;
 let gameId;
@@ -44,6 +43,7 @@ async function setup() {
 
     // Setup Client Player
     players = []; // create player list
+    entities = [];
     let clientPlayer = new Player().init(config, true, true); // Create main player
     players.push(clientPlayer);
 
@@ -155,8 +155,8 @@ async function join(json) {
             playerDataSocket.subscribe(json.playerDataSub, function (frame) {
                 let json = JSON.parse(frame.body);
                 console.log("Player Data: " + frame.body);
-                for (let packetIndex in json) {
-                    let packet = json[packetIndex];
+                for (let i = 0; i < json.length; i++) {
+                    let packet = json[i];
 
                     switch (packet.type) {
                         case "JOIN":
@@ -172,8 +172,9 @@ async function join(json) {
                         case "PLAYER_MOVEMENT":
                             parsePlayerMovement(packet.playerId, packet.payload);
                             break;
-                        case "ENTITIES":
-
+                        case "ENTITY":
+                            if (i === 0) entities = []; // if json packet of entities first in list clear list to update
+                            entities.push(new Entity(packet));
                             break;
                     }
                 }
@@ -210,7 +211,6 @@ async function refreshConfig(json) {
 
 // Main function that handles all game logic and graphics (called FPS times per second)
 function run() {
-    // drawEntities();
     // checkCollisions();
 
     movePlayers();
@@ -223,6 +223,11 @@ function run() {
 function draw() {
     // Clear screen
     g.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw entities
+    for (let i = 0; i < entities.length; i++) {
+        entities[i].draw(g);
+    }
 
     // Draw players
     for (let i = 0; i < players.length; i++) {

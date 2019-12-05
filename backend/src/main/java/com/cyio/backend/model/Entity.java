@@ -11,6 +11,7 @@ public class Entity {
     private int yPos;
     private int scoreValue;
     private String id;
+    private String type;
 
     public Entity() {
         setSize((int) Math.round(Math.random() * 3));
@@ -19,6 +20,7 @@ public class Entity {
         setScoreValue((int) Math.round(Math.random() * 200));
         setColor(getRandomColor());
         setId(UUID.randomUUID().toString());
+        setType("ENTITY");
     }
 
     private String getRandomColor() {
@@ -31,6 +33,14 @@ public class Entity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getSize() {

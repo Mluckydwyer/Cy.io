@@ -1,8 +1,8 @@
 export { Mover };
 
 function Mover() {
-    this.width = 0;
-    this.height = 0;
+    this.width = 0; // TODO implement fixed game size independent of canvas size
+    this.height = 0; // TODO implement fixed game size independent of canvas size
     this.xPos = 0;
     this.yPos = 0;
     this.targetX = 0;
