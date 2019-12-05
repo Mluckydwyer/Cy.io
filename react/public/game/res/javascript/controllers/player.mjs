@@ -10,6 +10,7 @@ export function Player() {
     let playerId = "";
     let color = "";
     let isClientPlayer = false;
+    let lastUpdate;
 
     this.init = function (config, loadConfig, isClientPlayer=false) {
         this.mover = new Mover().init();
@@ -17,6 +18,7 @@ export function Player() {
         this.playerId = this.generateUUID();
         this.color = this.generateRandomColor();
         this.isClientPlayer = isClientPlayer;
+        lastUpdate = new Date().getTime();
         if (loadConfig) this.config(config);
         return this;
     };

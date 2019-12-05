@@ -62,6 +62,8 @@ function onPlayClick() {
             document.getElementById("backdrop").classList.add("hide");
             document.getElementById("submit-un").removeEventListener("click", onPlayClick);
 
+            setInterval(cullStalePlayers, 1000);
+
             setTimeout(function () {
                 setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
                 document.getElementById("leaderboard").classList.remove("hide");
@@ -83,6 +85,13 @@ function sendPlayerData() {
     playerDataSocket.sendPlayerDataMessage("PLAYER_MOVEMENT", getClientPlayer());
 }
 
+function cullStalePlayers() {
+    for (let i = 0; i < players.length; i++) {
+        let player = players[i];
+        if (player.lastUpdate - new Date().getTime() >= 1000) players.remove(player);
+    }
+}
+
 function parsePlayerMovement(playerId, payload) {
     if (getClientPlayer().playerId !== playerId) {
         let otherPlayer = getPlayerById(playerId);
@@ -99,6 +108,7 @@ function parsePlayerMovement(playerId, payload) {
         otherPlayer.mover.size = parseInt(payload.size);
         otherPlayer.color = payload.color;
         otherPlayer.name = payload.name;
+        otherPlayer.lastUpdate = new Date().getTime();
     }
 }
 
