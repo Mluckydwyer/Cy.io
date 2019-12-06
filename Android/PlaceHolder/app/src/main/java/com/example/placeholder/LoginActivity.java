@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -16,32 +15,26 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.placeholder.app.AppController;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-
 
 
 public class LoginActivity extends AppCompatActivity
 {
-    Button login;
+    Button loginBtn;
     EditText username, password;
-    TextView vt, vt2;
     public static final String NICKNAME = "username";
-    public String bear;
+    public String bearer;
     public String token;
-    public String[] arr;
     public static String user;
     public String pass;
     boolean next = false;
@@ -52,21 +45,17 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        login = (Button)findViewById(R.id.LoginButton);
-        username = (EditText)findViewById(R.id.LoginUsernameTextBox);
-        password = (EditText)findViewById(R.id.LoginPasswordTextBox);
-        vt = (TextView) findViewById(R.id.tv1);
-        vt2 = (TextView) findViewById(R.id.tv2);
-        Log.d("vt has text", vt.getText().toString());
+        loginBtn = findViewById(R.id.LoginButton);
+        username = findViewById(R.id.LoginUsernameTextBox);
+        password = findViewById(R.id.LoginPasswordTextBox);
 
-        login.setOnClickListener(new View.OnClickListener()
+        loginBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 setUser(username.getText().toString());
                 setPass(password.getText().toString());
-                String tag_json_obj ="json_obj_req";
                 JSONObject obj = new JSONObject();
                 try
                 {
@@ -78,35 +67,30 @@ public class LoginActivity extends AppCompatActivity
                     System.out.println(e.getMessage());
                 }
                 String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
-                bear = " ";
+                bearer = " ";
                 token = " ";
                 makeJsonObjectRequest(URL, obj, new VolleyResponseListener()
                 {
-                    public boolean b = false;
                     @Override
                     public void onError(String message)
                     {
                         Log.d("ERROR", message);
-                        Log.d("BBB", b + "");
                     }
 
                     @Override
                     public void onResponse(Object response)
                     {
                         Log.d(TAG, response.toString());
-                        Scanner scan = new Scanner(response.toString());
                         int q = response.toString().indexOf("accessToken");
                         int r = response.toString().indexOf("tokenType");
                         Log.d(TAG, q + "");
                         Log.d(TAG, r + "");
                         token = response.toString().substring(q + 14,r - 3);
-                        bear = response.toString().substring(r + 12, response.toString().length()- 2);
+                        bearer = response.toString().substring(r + 12, response.toString().length()- 2);
                         Log.d(TAG, token);
-                        Log.d(TAG, bear);
-                        b = credentials(bear, token);
-                        Log.d(TAG, b + "");
+                        Log.d(TAG, bearer);
+                        credentials(token);
                         openHomePage();
-
                     }
                 });
             }
@@ -114,11 +98,10 @@ public class LoginActivity extends AppCompatActivity
 
     }
 
-    public static void makeJsonObjectRequest(String url, JSONObject jo, final VolleyResponseListener listener)
+    public static void makeJsonObjectRequest(String url, JSONObject jsonObject, final VolleyResponseListener listener)
     {
-        Log.d("B", "here");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (url, jo, new Response.Listener<JSONObject>()
+                (url, jsonObject, new Response.Listener<JSONObject>()
                 {
                     @Override
                     public void onResponse(JSONObject response)
@@ -155,16 +138,9 @@ public class LoginActivity extends AppCompatActivity
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
-    public boolean credentials(String s1, String s2)
+    public void credentials(String authorizationToken)
     {
-
-        boolean b = true;
-        if (s1.equals(s2))
-        {
-            b = false;
-        }
-        final String a1 = s1;
-        final String authToken = s2;
+        final String authToken = authorizationToken;
         String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/user/me";
         StringRequest getRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>()
@@ -193,7 +169,6 @@ public class LoginActivity extends AppCompatActivity
             }
         };
         AppController.getInstance().addToRequestQueue(getRequest, "bearer");
-        return b;
     }
 
     public void openHomePage()
@@ -212,6 +187,7 @@ public class LoginActivity extends AppCompatActivity
     {
         pass = s;
     }
+
     public String getPass()
     {
         return pass;
@@ -221,15 +197,9 @@ public class LoginActivity extends AppCompatActivity
     {
         user = s;
     }
+
     public String getUser()
     {
         return user;
     }
-//
-//        public void openHomePage(String user)
-//        {
-//            Intent intent = new Intent(this, Home.class);
-//            //intent.putExtra(NICKNAME, user);
-//            startActivity(intent);
-//        }
 }

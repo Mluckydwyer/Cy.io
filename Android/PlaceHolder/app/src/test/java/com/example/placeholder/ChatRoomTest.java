@@ -16,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ChatRoomTest
 {
     @Mock
-    ChatRoomActivity cr;
+    ChatRoomActivity chatRoomActivity;
 
     @Before
     public void init()
@@ -27,8 +27,6 @@ public class ChatRoomTest
     @Test
     public void sendTest()
     {
-
-
     }
 
 }

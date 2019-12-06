@@ -6,10 +6,7 @@ public class Message
 
     private String text;
 
-    public Message()
-    {
-
-    }
+    public Message() {}
 
     public Message(String name, String text)
     {

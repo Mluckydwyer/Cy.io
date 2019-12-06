@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class LeaderBoardTest
 {
     @Mock
-    LeaderBoardActivity l;
+    LeaderBoardActivity leaderBoardActivity;
 
     @Before
     public void init()
@@ -32,11 +32,11 @@ public class LeaderBoardTest
     {
         ArrayList<Player> arr = new ArrayList<>();
         arr.add(new Player("Wang", 420));
-        l.players = new ArrayList<>();
-        l.players.add(new Player("Wang", 420));
-        assertEquals(l.players.get(0).getName(), "Wang");
-        when(l.getPlayerName(0)).thenReturn("Wang");
-        assertEquals(l.getPlayerName(0), arr.get(0).getName());
+        leaderBoardActivity.players = new ArrayList<>();
+        leaderBoardActivity.players.add(new Player("Wang", 420));
+        assertEquals(leaderBoardActivity.players.get(0).getName(), "Wang");
+        when(leaderBoardActivity.getPlayerName(0)).thenReturn("Wang");
+        assertEquals(leaderBoardActivity.getPlayerName(0), arr.get(0).getName());
     }
 
     @Test
@@ -44,21 +44,21 @@ public class LeaderBoardTest
     {
         ArrayList<Player> arr = new ArrayList<>();
         arr.add(new Player("Wang", 420));
-        l.players = new ArrayList<>();
-        l.players.add(new Player("Wang", 420));
-        assertEquals(l.players.get(0).getScore(),420);
-        when(l.getPlayerScore(0)).thenReturn(420);
-        assertEquals(l.getPlayerScore(0), arr.get(0).getScore());
+        leaderBoardActivity.players = new ArrayList<>();
+        leaderBoardActivity.players.add(new Player("Wang", 420));
+        assertEquals(leaderBoardActivity.players.get(0).getScore(),420);
+        when(leaderBoardActivity.getPlayerScore(0)).thenReturn(420);
+        assertEquals(leaderBoardActivity.getPlayerScore(0), arr.get(0).getScore());
     }
 
     @Test
     public void seePlayersTest()
     {
-        l.players = new ArrayList<>();
-        l.players.add(new Player("Ben", 300));
+        leaderBoardActivity.players = new ArrayList<>();
+        leaderBoardActivity.players.add(new Player("Ben", 300));
         String s = "Ben, 300";
-        when(l.seePlayers()).thenReturn(s);
-        assertEquals(s, l.players.get(0).getName() + ", " + l.players.get(0).getScoreString());
+        when(leaderBoardActivity.seePlayers()).thenReturn(s);
+        assertEquals(s, leaderBoardActivity.players.get(0).getName() + ", " + leaderBoardActivity.players.get(0).getScoreString());
 
     }
 }
