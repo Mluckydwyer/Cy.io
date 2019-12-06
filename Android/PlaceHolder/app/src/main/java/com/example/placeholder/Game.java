@@ -16,7 +16,6 @@ public class Game
     private String about;
     private String gameID;
     private String creatorID;
-    //add thumbnail
 
     public Game()
     {

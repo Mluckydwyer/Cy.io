@@ -13,11 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LeaderBoard"></activity>
-        <activity android:name=".ChatRoom" />
-        <activity android:name=".Home" />
+        <activity android:name=".LeaderBoardActivity"></activity>
+        <activity android:name=".ChatRoomActivity" />
+        <activity android:name=".HomeActivity" />
         <activity android:name=".GameListActivity" />
-        <activity android:name=".login" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

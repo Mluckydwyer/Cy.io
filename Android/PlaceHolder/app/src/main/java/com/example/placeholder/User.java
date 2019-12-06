@@ -20,7 +20,7 @@ public class User {
     private int gamesOwned;
 
     public User() {
-        UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
+        UUID newID = UUID.randomUUID();
         this.userid = newID.toString();
         this.userName = newID.toString();
     }
