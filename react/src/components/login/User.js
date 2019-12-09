@@ -6,6 +6,7 @@ function User(){
     const { setAuthTokens } = useAuth();
     const loginCheck = localStorage.getItem("token");
     const [isLoggedIn, setLoggedIn] = useState(loginCheck);
+    const userInfo = JSON.parse(localStorage.getItem("info"));
     
     function logOut(){
         setAuthTokens();
@@ -20,8 +21,6 @@ function User(){
     }
     return (
         <div>
-            <div>User Page</div>
-            
             <button onClick={logOut}>Log out</button>
         </div>
     );
