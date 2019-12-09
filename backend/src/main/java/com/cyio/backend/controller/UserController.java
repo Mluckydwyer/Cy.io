@@ -71,4 +71,21 @@ public class UserController {
         }
         return "Success";
     }
+
+    /**
+     *  :8080/allusers
+     *  -Status: Testing
+     *  -Type: GET
+     *  -Usage: used for the admin user to retrieve all users currently registered in the database.
+     *  -Returns: a list of all users
+     * @param principal
+     * @return
+     */
+    @GetMapping("/allusers")
+    public @ResponseBody List<User> getAllUsers(@CurrentUser UserPrincipal principal){
+        if (principal==null || !principal.isAdmin())
+          return null;
+        else
+            return userRepository.findAll();
+    }
 }
