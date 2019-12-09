@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#32CD32"
+    tools:context=".Activities.MainActivity">
 
 
     <TextView
@@ -23,6 +24,7 @@
         android:layout_marginRight="124dp"
         android:text="CY.io"
         android:textSize="45dp"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -41,8 +43,9 @@
         android:layout_marginStart="54dp"
         android:layout_marginLeft="54dp"
         android:layout_marginTop="291dp"
+        android:textColor="#000000"
         android:text="Proceed to Login"
-        android:textSize="45dp" />
+        android:textSize="30dp" />
 
     <TextView
         android:id="@+id/CreatorsTextView"
@@ -51,6 +54,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="159dp"
+        android:textColor="#000000"
         android:text="Created by:\nMatt Dwyer\nCole Martin\nQuinn Sturm\nJidong (Tom) Sun" />
 
 </RelativeLayout>

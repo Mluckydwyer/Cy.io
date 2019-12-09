@@ -1,4 +1,4 @@
-package com.example.placeholder;
+package com.example.placeholder.Models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

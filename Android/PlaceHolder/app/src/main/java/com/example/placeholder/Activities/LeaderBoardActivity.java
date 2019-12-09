@@ -1,4 +1,4 @@
-package com.example.placeholder;
+package com.example.placeholder.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.drafts.Draft_6455;
+import com.example.placeholder.Models.Player;
+import com.example.placeholder.R;
+import com.example.placeholder.SupportingClasses.LeaderBoardSupport;
+import com.example.placeholder.SupportingClasses.WebSocketSupport;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,6 +30,7 @@ public class LeaderBoardActivity extends AppCompatActivity
 {
 
     private final String url = "ws://coms-309-nv-4.misc.iastate.edu:8080/leaderboard/websocket";
+    public LeaderBoardSupport leaderBoardSupport = new LeaderBoardSupport();
     TextView title;
     Button returnToHomeBtn;
     private StompClient mStompClient;
@@ -50,25 +54,8 @@ public class LeaderBoardActivity extends AppCompatActivity
         Log.d(TAG, "On Create");
         compositeDisposable = new CompositeDisposable();
         mStompClient = Stomp.over(Stomp.ConnectionProvider.JWS, url);
-        Disposable dispLifecycle = mStompClient.lifecycle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lifecycleEvent -> {
-                    switch (lifecycleEvent.getType()) {
-                        case OPENED:
-                            Log.d(TAG, "Stomp connection opened");
-                            break;
-                        case ERROR:
-                            Log.e(TAG, "Stomp connection error", lifecycleEvent.getException());
-                            break;
-                        case CLOSED:
-                            Log.d(TAG, "Stomp connection closed");
-                            break;
-                        case FAILED_SERVER_HEARTBEAT:
-                            Log.d(TAG, "Stomp failed server heartbeat");
-                            break;
-                    }
-                });
+        WebSocketSupport webSocketSupport = new WebSocketSupport();
+        Disposable dispLifecycle = webSocketSupport.lifeCycle(mStompClient);
         mStompClient.connect();
         Disposable dispTopic = mStompClient.topic("/topic/leaderboard").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(topicMessage ->
                 {
@@ -78,7 +65,7 @@ public class LeaderBoardActivity extends AppCompatActivity
                     for (int i = 0; i < leaders.size(); i++)
                     {
                         JSONObject leader = (JSONObject) jsonArray.get(i);
-                        String leaderText = "1. " + leader.getString("name") + " - " + leader.getString("score");
+                        String leaderText = (i + 1) + ". " + leader.getString("name") + " - " + leader.getString("score");
                         players.add(new Player(leader.getString("name"), leader.getInt("score")));
                         leaders.get(i).setText(leaderText);
                     }

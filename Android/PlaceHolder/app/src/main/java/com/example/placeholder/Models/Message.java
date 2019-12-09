@@ -1,4 +1,4 @@
-package com.example.placeholder;
+package com.example.placeholder.Models;
 
 public class Message
 {
