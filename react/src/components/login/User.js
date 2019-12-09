@@ -1,24 +1,22 @@
+import React from 'react';
+import {useAuth} from "../../routes/auth";
 
-export function userInfo(){
-        const API = 'http://coms-309-nv-4.misc.iastate.edu:8080/user/me';
-        fetch(API, {
-            method: 'get',
-            headers: {
-                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")).accessToken,
-            },
-            
-        }).then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            else {
-                throw new Error('Something went wrong...');
-            }
-        }).then(data => {
-            localStorage.setItem("info", JSON.stringify(data));
-            return data;
-        }).then(console.log);
-        
-        
+function User(){
+    const { setAuthTokens } = useAuth();
+    
+    function logOut(){
+        setAuthTokens();
+        localStorage.removeItem("token");
+        localStorage.removeItem("info");
     }
+    
+    return (
+        <div>
+            <div>User Page</div>
+            
+            <button onClick={logOut}>Log out</button>
+        </div>
+    );
+}
 
+export default User;

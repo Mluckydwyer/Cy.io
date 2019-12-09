@@ -2,14 +2,15 @@ import React, {useState} from 'react';
 import { useAuth } from "../../routes/auth";
 import '../../css/login/Login.css';
 import { Redirect } from "react-router-dom";
-import {userInfo} from "./User";
+import {userInfo} from "./userInfo";
 
 function Login(){
-    const [isLoggedIn, setLoggedIn] = useState(false);
+    const loginCheck = localStorage.getItem("token");
+    const [isLoggedIn, setLoggedIn] = useState(loginCheck);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     
-    const { setAuthTokens } = useAuth();
+    //const { setAuthTokens } = useAuth();
     //const referer = props.location.state.referer || '/';
     
     
@@ -52,7 +53,7 @@ function Login(){
     
     if(isLoggedIn) {
         userInfo();
-        return <Redirect to="/" />;
+        return <Redirect to="/user" />;
     }   
     
         return (

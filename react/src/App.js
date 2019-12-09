@@ -8,7 +8,7 @@ import BottomFooter from './components/base/BottomFooter';
 import Login from "./components/login/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthContext } from "./routes/auth";
-import Signup from "./components/login/Signup";
+import User from "./components/login/User";
 /*import NotificationCard from './components/home/NotificationCard';*/
 
 
@@ -35,10 +35,10 @@ function App(){
                         </Route>
                         <Route path="/login" component = {Login}/>
                         <PrivateRoute path="/user">
-                            <Signup/>
+                            <User/>
                         </PrivateRoute>
                         <Route path="/signup">
-                            <Signup />
+                            <User />
                         </Route>
                     </Switch>
                     <BottomFooter/>
