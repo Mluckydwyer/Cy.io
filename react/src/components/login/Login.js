@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import '../../css/login/Login.css';
-import { Redirect } from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {userInfo} from "./userInfo";
 
 function Login(){
@@ -58,7 +58,7 @@ function Login(){
         return (
             <div>
                 <form onSubmit={loginRequest}>
-                    <label>UserName
+                    <label>Username
                         <input type="text" name = "Username" value={userName} onChange={handleChangeUser}/>
                     </label>
                     <label>Password
@@ -68,7 +68,9 @@ function Login(){
                         <input type="submit" value="Submit" />
                     </label>
                 </form>
-               
+                <div>
+                    <Link to="/signup" className="btn my-2 btn-prim-cyio raised-btn" >Sign Up</Link>
+                </div>
             </div>
         )       
     }

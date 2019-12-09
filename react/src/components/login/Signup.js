@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 function Signup(){
     const signupCheck = localStorage.getItem("success");
