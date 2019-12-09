@@ -56,6 +56,9 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         cs = new ChatSocket();
 
         pds.fillEntities();
+        pds.registerObserver((EntityListObserver) this);
+        pds.registerObserver((EntityListObserver) this);
+        ls.registerObserver((LeaderboardObserver) this);
     }
 
 

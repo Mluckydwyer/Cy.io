@@ -56,14 +56,12 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
             switch (msg.getType()) {
                 case "JOIN":
                     String username = payload.getString("username");
-                    players.put(playerId, new Player(username, playerId));
-                    notifyPlayerListObservers();
+                    addPlayer(playerId, new Player(username, playerId));
                     HashMap<String, String> values = new HashMap<>();
                     sendToAll(new PlayerData("JOIN", playerId, new HashMap<String, String>()));
                     break;
                 case "LEAVE":
-                    players.remove(playerId);
-                    notifyPlayerListObservers();
+                    removePlayer((Player) players.get(playerId));
                     break;
                 case "PLAYER_MOVEMENT":
                     p = (Player) players.get(playerId);
@@ -123,6 +121,11 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
 
     public void addPlayer(Player player) {
         players.put(player.getUserId(), player);
+        notifyPlayerListObservers();
+    }
+
+    public void addPlayer(String playerId, Player player) {
+        players.put(playerId, player);
         notifyPlayerListObservers();
     }
 
