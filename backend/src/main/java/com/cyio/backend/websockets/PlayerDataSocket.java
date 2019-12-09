@@ -26,7 +26,7 @@ import java.util.Map;
 @Controller
 public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     private final Logger LOGGER = LoggerFactory.getLogger(PlayerDataSocket.class);
-    private final int UPDATE_INTERVAL = 15;
+    private final int UPDATE_INTERVAL = 5; // milliseconds
 
     @Autowired
     public SimpMessagingTemplate template;
@@ -99,10 +99,11 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
 
     @Scheduled(fixedRate = 1000)
     public void cullDeadConnections() {
+        // System.out.println("Culling Players");
         for (Object key : players.keySet()) {
             LocalDateTime playerDataRecency = ((Player) players.get(key)).getPayloadRecency();
             if (playerDataRecency.isBefore(LocalDateTime.now().minusSeconds(3))) {
-                players.remove(players.get(key));
+                players.remove(key);
             }
         }
     }
@@ -122,10 +123,12 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
 
     public void addPlayer(Player player) {
         players.put(player.getUserId(), player);
+        notifyPlayerListObservers();
     }
 
     public void removePlayer(Player player) {
         players.remove(player.getUserId());
+        notifyPlayerListObservers();
     }
 
     public ArrayList<Entity> getAllEntities() {

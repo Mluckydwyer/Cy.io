@@ -66,6 +66,7 @@ function onPlayClick() {
 
             setTimeout(function () {
                 setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
+                setInterval(sendPlayerData, 10); // Send player data to server in milliseconds between send
                 document.getElementById("leaderboard").classList.remove("hide");
                 controller.enable();
             }, 1000);
@@ -81,14 +82,17 @@ function pullAndWait() {
     });
 }
 
-function sendPlayerData() {
+async function sendPlayerData() {
     playerDataSocket.sendPlayerDataMessage("PLAYER_MOVEMENT", getClientPlayer());
 }
 
 function cullStalePlayers() {
     for (let i = 0; i < players.length; i++) {
         let player = players[i];
-        if (player.lastUpdate - new Date().getTime() >= 1000) players.remove(player);
+        if (new Date().getTime() - player.lastUpdate >= 1000) {
+            let index = players.indexOf(player);
+            players.splice(index, 1);
+        }
     }
 }
 
@@ -164,23 +168,22 @@ async function join(json) {
         await playerDataSocket.connect().then(function () {
             playerDataSocket.subscribe(json.playerDataSub, function (frame) {
                 let json = JSON.parse(frame.body);
-                console.log("Player Data: " + frame.body);
                 for (let i = 0; i < json.length; i++) {
                     let packet = json[i];
-
                     switch (packet.type) {
                         case "JOIN":
-                            if (packet.playerId === player.playerId) {
+                            if (packet.playerId === getClientPlayer().playerId) {
                                 console.log("Join handshake successful");
                             } else {
                                 addPlayer(packet.playerId);
                             }
                             break;
                         case "LEAVE":
-                            players.removePlayerById(playerId);
+                            removePlayerById(packet.playerId);
                             break;
                         case "PLAYER_MOVEMENT":
                             parsePlayerMovement(packet.playerId, packet.payload);
+                            //console.log("Player Data: " + frame.body);
                             break;
                         case "ENTITY":
                             if (i === 0) entities = []; // if json packet of entities first in list clear list to update
@@ -222,9 +225,7 @@ async function refreshConfig(json) {
 // Main function that handles all game logic and graphics (called FPS times per second)
 function run() {
     // checkCollisions();
-
     movePlayers();
-    sendPlayerData();
 
     draw();
 }

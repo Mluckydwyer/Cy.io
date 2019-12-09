@@ -28,7 +28,7 @@ public class LeaderboardSocket {
 
     @Scheduled(fixedRate = 1000)
     public void sendUpdate() {
-        leaderBoard.generateDummyData();
+        //leaderBoard.generateDummyData();
         sendToAll(leaderBoard.getLeaderList(5));
     }
 
