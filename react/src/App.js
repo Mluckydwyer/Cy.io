@@ -9,6 +9,7 @@ import Login from "./components/login/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthContext } from "./routes/auth";
 import User from "./components/login/User";
+import Signup from "./components/login/Signup";
 /*import NotificationCard from './components/home/NotificationCard';*/
 
 
@@ -38,7 +39,7 @@ function App(){
                             <User/>
                         </PrivateRoute>
                         <Route path="/signup">
-                            <User />
+                            <Signup />
                         </Route>
                     </Switch>
                     <BottomFooter/>

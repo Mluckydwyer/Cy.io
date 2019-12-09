@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { useAuth } from "../../routes/auth";
 import '../../css/login/Login.css';
 import { Redirect } from "react-router-dom";
 import {userInfo} from "./userInfo";
@@ -69,6 +68,7 @@ function Login(){
                         <input type="submit" value="Submit" />
                     </label>
                 </form>
+               
             </div>
         )       
     }

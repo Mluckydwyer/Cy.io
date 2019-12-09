@@ -13,11 +13,12 @@ function TopNavbar() {
             </div>
             <div className="navbar navbar-dark bg-dark shadow-sm nav-cyio">
                 <div className="container d-flex justify-content-between">
-                    <a href=" " className="navbar-brand d-flex align-items-center">
+                    <a href="/" className="navbar-brand d-flex align-items-center">
                         <i className="fas fa-chess" width="40" height="40" style={{paddingRight: "10px"}}/>
                         <strong>Cy.io</strong>
                     </a>
-                    <button className="navbar-toggler nav-arrow-cyio" type="button" data-toggle="collapse"
+                    <button 
+                            className="navbar-toggler nav-arrow-cyio" type="button" data-toggle="collapse"
                             data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false"
                             aria-label="Toggle navigation">
                         {/* <span class="navbar-toggler-icon"></span>*/}
