@@ -32,6 +32,10 @@ public class LeaderboardSocket {
         sendToAll(leaderBoard.getLeaderList(5));
     }
 
+    public void sendLeaderboard(LeaderBoard board){
+        sendToAll(board.getLeaderList(5));
+    }
+
 }
 
 /*
