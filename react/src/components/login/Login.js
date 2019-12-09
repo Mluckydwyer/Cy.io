@@ -15,7 +15,7 @@ function Login(){
     
     function handleChangeUser(event){
         setUserName(event.target.value);
-        console.log(userName);
+        console.log(event.target.value);
     }
     function handleChangePass(event){
         setPassword(event.target.value);
@@ -46,7 +46,7 @@ function Login(){
             setLoggedIn(true);
             return data;
         }).then(console.log);
-        console.log(localStorage.getItem("tokens"));
+        console.log(localStorage.getItem("token"));
     }
     
     
@@ -59,10 +59,10 @@ function Login(){
             <div>
                 <form onSubmit={loginRequest}>
                     <label>UserName
-                        <input type="text" name = "userName" value={userName} onChange={handleChangeUser}/>
+                        <input type="text" name = "Username" value={userName} onChange={handleChangeUser}/>
                     </label>
                     <label>Password
-                        <input type="password" name = "password" value={password} onChange={handleChangePass}/>
+                        <input type="password" name = "Password" value={password} onChange={handleChangePass}/>
                     </label>
                     <label>
                         <input type="submit" value="Submit" />
