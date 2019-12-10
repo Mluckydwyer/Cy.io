@@ -1,4 +1,4 @@
-import {toggleChat, sendChat} from "../game.mjs";
+import {toggleChat, sendChat, toggleMovementStyle} from "../game.mjs";
 export { Controller };
 
 function Controller() {

@@ -32,13 +32,15 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     @Autowired
     public SimpMessagingTemplate template;
 
-    @Autowired
+//    @Autowired
     public PlayerDataObjects pdos;
 
     public final String endPoint = "/playerdata";
     public final String listenPoint = "/topic" + endPoint;
 
-    public PlayerDataSocket() { }
+    public PlayerDataSocket() {
+        pdos = new PlayerDataObjects();
+    }
 
     @MessageMapping(endPoint)
     public void recieveUpdate(@Payload PlayerData data) {

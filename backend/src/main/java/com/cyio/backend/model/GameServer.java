@@ -24,7 +24,7 @@ import java.util.UUID;
 //@Entity
 
 //@Table(name = "Servers")
-@Controller
+//@Controller
 public class GameServer implements EntityListObserver, PlayerListObserver, LeaderboardObserver {
 
 //    @Id
@@ -35,7 +35,7 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
 
     private Game game;
 
-    @Autowired
+//    @Autowired
     public PlayerDataObjects pdos;
 
     HashMap<String, Player> players;
@@ -63,18 +63,18 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         this.game = game;
         this.gameId = this.game.getGameID();
 
-//        this.ls = new LeaderboardSocket();
-//        this.ns = new NotificationSocket();
-//        this.pds = new PlayerDataSocket();
-//        this.cs = new ChatSocket();
-//
-//        this.players = new HashMap<>();
-//        this.entities = new HashMap<>();
-//        this.leaderBoard = new LeaderBoard();
+        this.ls = new LeaderboardSocket();
+        this.ns = new NotificationSocket();
+        this.pds = new PlayerDataSocket();
+        this.cs = new ChatSocket();
 
-//        pds.registerObserver((PlayerListObserver) this);
-//        pds.registerObserver((EntityListObserver) this);
-//        ls.registerObserver((LeaderboardObserver) this);
+        this.players = new HashMap<>();
+        this.entities = new HashMap<>();
+        this.leaderBoard = new LeaderBoard();
+
+        pds.registerObserver((PlayerListObserver) this);
+        pds.registerObserver((EntityListObserver) this);
+        ls.registerObserver((LeaderboardObserver) this);
 //        pdos.getPlayerListObservers().add(this);
 //        pdos.getEntityListObservers().add(this);
     }
@@ -99,8 +99,8 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         this.entities = new HashMap<>();
         this.leaderBoard = new LeaderBoard();
 
-        pdos.getPlayerListObservers().add(this);
-        pdos.getEntityListObservers().add(this);
+//        pdos.getPlayerListObservers().add(this);
+//        pdos.getEntityListObservers().add(this);
     }
 
     public Map<String, String> getJoinData() {
