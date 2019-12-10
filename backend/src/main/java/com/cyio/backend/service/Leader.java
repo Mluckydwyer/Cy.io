@@ -1,4 +1,6 @@
-package com.cyio.backend.model;
+package com.cyio.backend.service;
+
+import com.cyio.backend.model.Player;
 
 public class Leader {
     private String name;

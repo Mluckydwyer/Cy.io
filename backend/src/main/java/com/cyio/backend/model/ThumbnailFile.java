@@ -2,12 +2,23 @@ package com.cyio.backend.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.UUID;
+
+@Entity
+
+@Table(name = "Thumbnails", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"})
+})
+
+
 
 public class ThumbnailFile {
+
     @Id
+    private int id;
+    
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String thumbnailID;
@@ -24,6 +35,11 @@ public class ThumbnailFile {
         this.thumbnailName = thumbnailName;
         this.data = data;
 
+    }
+
+    public ThumbnailFile(){
+        UUID newID = UUID.randomUUID(); //generate a random UUID for the new User
+        this.thumbnailID = newID.toString();
     }
 
 
