@@ -7,7 +7,7 @@ import getRequest from "./libs/requests.mjs";
 
 let canvas; // HTML canvas
 let g; // canvas graphics object
-const framerate = 60;
+const framerate = 40;
 
 const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
 // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
@@ -187,7 +187,7 @@ async function join(json) {
                             break;
                         case "ENTITY":
                             if (i === 0) entities = []; // if json packet of entities first in list clear list to update
-                            entities.push(new Entity(packet));
+                            entities.push(new Entity().init(packet));
                             break;
                     }
                 }
@@ -224,7 +224,7 @@ async function refreshConfig(json) {
 
 // Main function that handles all game logic and graphics (called FPS times per second)
 function run() {
-    // checkCollisions();
+    checkEntityCollisions();
     movePlayers();
 
     draw();
@@ -254,6 +254,15 @@ function movePlayers() {
         else players[i].mover.update();
     }
 
+}
+
+// Check for collisions
+function checkEntityCollisions() {
+    let player = getClientPlayer();
+    for (let index in entities) {
+        let entity = entities[index];
+        if (player.mover.isTouching(entity.xPos, entity.yPos)) ;
+    }
 }
 
 // Get the current player using the client
@@ -356,6 +365,10 @@ export function toggleChat() {
         document.getElementById("chat-box").focus();
     }
     controller.chatShown = !controller.chatShown;
+}
+
+export function toggleMovementStyle() {
+    getClientPlayer().mover.expMovement = !getClientPlayer().mover.expMovement;
 }
 
 export function incomingChat(message) {

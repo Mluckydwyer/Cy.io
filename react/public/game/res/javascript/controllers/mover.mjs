@@ -103,8 +103,8 @@ function Mover() {
         // TODO
     };
 
-    this.checkEntitityCollisions = function () {
-        // TODO
+    this.isTouching = function(xPos, yPos) {
+        return (xPos < this.xPos + this.size && xPos > this.xPos - this.size) && (xPos < this.xPos + this.size && xPos > this.xPos - this.size);
     };
 
     // Handles Keyboard input

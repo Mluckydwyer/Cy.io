@@ -1,12 +1,12 @@
 export { Entity };
 
 function Entity() {
-    let xPos;
-    let yPos;
-    let size;
-    let color;
-    let scoreValue;
-    let id;
+    this.xPos = 0;
+    this.yPos = 0;
+    this.size = 0;
+    this.color = "#000000";
+    this.scoreValue = 0;
+    this.id = "";
 
     this.init = function (entity) {
         this.xPos = entity.xPos;
@@ -15,6 +15,7 @@ function Entity() {
         this.color = entity.color;
         this.scoreValue = entity.scoreValue;
         this.id = entity.id;
+        return this;
     };
 
     this.draw = function (g) {

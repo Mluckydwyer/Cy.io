@@ -125,6 +125,9 @@ function Controller() {
                     break;
                 case 84: // 'T' Key
                     toggleChat();
+                case 77: // 'M' Key
+                    toggleMovementStyle();
+                    break;
             }
 
         } else if (this.chatShown) {
