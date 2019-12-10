@@ -1,24 +1,29 @@
+import React, {useState} from 'react';
+import {useAuth} from "../../routes/auth";
+import {Redirect} from "react-router-dom";
 
-export function userInfo(){
-        const API = 'http://coms-309-nv-4.misc.iastate.edu:8080/user/me';
-        fetch(API, {
-            method: 'get',
-            headers: {
-                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")).accessToken,
-            },
-            
-        }).then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            else {
-                throw new Error('Something went wrong...');
-            }
-        }).then(data => {
-            localStorage.setItem("info", JSON.stringify(data));
-            return data;
-        }).then(console.log);
-        
+function User(){
+    const { setAuthTokens } = useAuth();
+    const loginCheck = localStorage.getItem("token");
+    const [isLoggedIn, setLoggedIn] = useState(loginCheck);
+    const userInfo = JSON.parse(localStorage.getItem("info"));
+    
+    function logOut(){
+        setAuthTokens();
+        localStorage.removeItem("token");
+        localStorage.removeItem("info");
+        setLoggedIn(false);
         
     }
+    
+    if(!isLoggedIn){
+        return <Redirect to="/" />;
+    }
+    return (
+        <div>
+            <button onClick={logOut}>Log out</button>
+        </div>
+    );
+}
 
+export default User;

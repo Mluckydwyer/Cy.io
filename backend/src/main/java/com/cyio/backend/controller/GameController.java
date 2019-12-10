@@ -2,26 +2,24 @@ package com.cyio.backend.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import com.cyio.backend.model.Game;
-import com.cyio.backend.repository.GameRepository;
 import com.cyio.backend.security.CurrentUser;
 import com.cyio.backend.security.UserPrincipal;
-import com.cyio.backend.websockets.NotificationSocket;
-import org.apache.commons.lang3.StringUtils;
+import com.cyio.backend.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import com.cyio.backend.service.QueryType;
+
+import static com.cyio.backend.service.QueryType.*;
+
 
 @RestController
 public class GameController {
 
-    @Autowired
-	GameRepository gameRepository; //using autowire to create an instance of game Repository
-
 	@Autowired
-	public SimpMessagingTemplate template;
+	private GameService gameService;
+
 
 //  @CrossOrigin(origins = "http://localhost:3000")
 //	@RequestMapping("/restexample")
@@ -31,42 +29,48 @@ public class GameController {
 
     @CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/gamelist")
-	public List<Game> gameList(@RequestParam(value="limit", defaultValue = "10") int limit, @RequestParam(value="title", defaultValue = "Cy.io Game") String title){
-		return gameRepository.findAll();
+	public List<Game> gameList(){
+		return gameService.listAllGames();
 	}
 
 	@RequestMapping("/searchby")
 	public List<Game> searchBy(@RequestParam(value="searchtype", defaultValue = "all") String searchType, @RequestParam(value="query", defaultValue = "*") String query){
-		switch (searchType){
-			case "title": return gameRepository.findGameByTitleContaining(query);
-			case "blurb": return gameRepository.findGameByBlurbContaining(query);
-			case "about": return gameRepository.findGameByAboutContaining(query);
-			default: return gameRepository.findGameByTitleContainingOrBlurbContainingOrAboutContainingOrderByTitle(query,query,query);
-		}
+		QueryType type = TITLE;
+    	switch (searchType){
+			 case "title": type = TITLE; break;
+			case "blurb": type = BLURB; break;
+			case "about": type = ABOUT; break;
+			default: type = ALL; break;
+		 }
+
+		 return gameService.findGame(type, query);
 	}
 
+	/**
+	 * This endpoint allows all users to add a new game to the server
+	 * @param title
+	 * @param creatorid
+	 * @return
+	 * @throws IOException
+	 */
 	@PostMapping("/addgame")
 	public @ResponseBody String addGame(@RequestParam String title, @RequestParam String creatorid) throws IOException { //adds a new row in the games table
-		UUID newID = UUID.randomUUID(); //generate a random UUID for the new Game
-		Game game = new Game(title,newID.toString(),creatorid);
-		gameRepository.save(game); //Insert new game to the database
-		template.convertAndSend("/topic/notifications", "New Game " + game.getTitle() +" Added!");
-		return "Game \""+ title +"\" Added";
+		return gameService.addGame(title, creatorid);
 	}
 
+	/**
+	 * :8080/deletegame?game=TITLE
+	 * 	- Status: active
+	 * 	- Type: POST
+	 * 	- Usage: Only availabe to the game's creater and admin user. This method searches for the game specificed by "TITLE" where "TITLE" is the game title and deletes it
+	 * 	- Returns success message when operation was successful and error messages othersiwe
+	 *
+	 * @param titleOrId
+	 * @param userPrincipal
+	 * @return
+	 */
 	@PostMapping("/deletegame")
 	public @ResponseBody String deleteGame(@RequestParam (value="game") String titleOrId, @CurrentUser UserPrincipal userPrincipal){
-//    	int id = -1;
-//    	if (StringUtils.isNumeric(titleOrId))
-//    		id = Integer.parseInt(titleOrId);
-    	List<Game> resultList = gameRepository.findGameByTitleContaining(titleOrId);
-    	Game game = null;
-    	if (!resultList.isEmpty())
-    		 game = resultList.get(0);
-    	if (game != null && (userPrincipal.isAdmin() || game.getCreatorID().equals(userPrincipal.getId()))){
-    		gameRepository.deleteGameByTitle(titleOrId);
-    		return "Success";
-		}
-    	return "Game does not exist or not authorized";
+    	return gameService.deleteGames(titleOrId, userPrincipal);
 	}
 }

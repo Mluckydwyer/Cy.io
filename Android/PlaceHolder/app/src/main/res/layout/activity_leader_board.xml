@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LeaderBoard">
+    tools:context=".LeaderBoardActivity">
 
     <TextView
-        android:id="@+id/lb"
+        android:id="@+id/LeaderBoardTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -24,7 +24,7 @@
         tools:layout_editor_absoluteY="78dp" />
 
     <TextView
-        android:id="@+id/p1"
+        android:id="@+id/Player1TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -37,7 +37,7 @@
         android:text="1. " />
 
     <TextView
-        android:id="@+id/p2"
+        android:id="@+id/Player2TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -50,7 +50,7 @@
         android:text="2. " />
 
     <TextView
-        android:id="@+id/p3"
+        android:id="@+id/Player3TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -63,7 +63,7 @@
         android:text="3. " />
 
     <TextView
-        android:id="@+id/p4"
+        android:id="@+id/Player4TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -76,7 +76,7 @@
         android:text="4. " />
 
     <TextView
-        android:id="@+id/p5"
+        android:id="@+id/Player5TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -89,19 +89,7 @@
         android:text="5. " />
 
     <Button
-        android:id="@+id/refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="68dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginTop="448dp"
-        android:text="Refresh" />
-
-    <Button
-        android:id="@+id/gohome"
+        android:id="@+id/LeaderBoardReturnHomeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

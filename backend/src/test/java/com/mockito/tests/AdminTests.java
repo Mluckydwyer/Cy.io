@@ -1,12 +1,12 @@
 package com.mockito.tests;
 
-import com.cyio.backend.controller.GameController;
-import com.cyio.backend.controller.UserController;
 import com.cyio.backend.model.Game;
 import com.cyio.backend.model.User;
 import com.cyio.backend.repository.GameRepository;
 import com.cyio.backend.repository.UserRepository;
 import com.cyio.backend.security.UserPrincipal;
+import com.cyio.backend.service.GameService;
+import com.cyio.backend.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -25,10 +25,10 @@ import static org.mockito.Mockito.when;
 
 public class AdminTests {
     @InjectMocks
-    UserController userController;
+    UserService userService;
 
     @InjectMocks
-    GameController gameController;
+    GameService gameController;
 
     @Mock
     UserRepository userRepo;
@@ -53,7 +53,7 @@ public class AdminTests {
 
         when(userRepo.deleteUserByUserNameOrUserid("Tom", "Tom")).thenReturn(1);
 
-        String result = userController.deleteUser("Tom", UserPrincipal.create(users.get(0)));
+        String result = userService.deleteUser("Tom", UserPrincipal.create(users.get(0)));
         assertEquals(result, "unauthorized user");
     }
 
@@ -69,7 +69,7 @@ public class AdminTests {
 
         when(userRepo.deleteUserByUserNameOrUserid("Tom", "Tom")).thenReturn(1);
 
-        String result = userController.deleteUser("Tom", UserPrincipal.create(users.get(2)));
+        String result = userService.deleteUser("Tom", UserPrincipal.create(users.get(2)));
         assertEquals(result, "Tom deleted");
     }
 
@@ -86,7 +86,7 @@ public class AdminTests {
         List<User> single = loadUsers().subList(0,1);
         when(userRepo.findUserByUserNameOrUserid("Tom", "Tom")).thenReturn(single);
 
-        String result = userController.toggleAdmin("Tom", UserPrincipal.create(users.get(2)));
+        String result = userService.toggleAdmin("Tom", UserPrincipal.create(users.get(2)));
         assertEquals(result, "Success");
     }
 
@@ -103,7 +103,7 @@ public class AdminTests {
         List<User> single = loadUsers().subList(0,1);
         when(userRepo.findUserByUserNameOrUserid("Tom", "Tom")).thenReturn(single);
 
-        String result = userController.toggleAdmin("Tom", UserPrincipal.create(users.get(0)));
+        String result = userService.toggleAdmin("Tom", UserPrincipal.create(users.get(0)));
         assertEquals(result, "unauthorized user");
     }
 
@@ -117,7 +117,7 @@ public class AdminTests {
 
        when(gameRepo.deleteGameByTitle("invader")).thenReturn(1);
 
-       String result = gameController.deleteGame("invader", UserPrincipal.create(users.get(0)));
+       String result = gameController.deleteGames("invader", UserPrincipal.create(users.get(0)));
        assertEquals("Game does not exist or not authorized", result);
    }
 

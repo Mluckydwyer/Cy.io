@@ -10,12 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.java_websocket.client.WebSocketClient;
 import org.json.JSONObject;
 
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -24,13 +20,8 @@ import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
-//import ua.naiksoftware.stomp.Stomp;
-//import ua.naiksoftware.stomp.StompClient;
-
-public class ChatRoom extends AppCompatActivity
+public class ChatRoomActivity extends AppCompatActivity
 {
-    private WebSocketClient socket;
-    private String name;
     private String url = "ws://coms-309-nv-4.misc.iastate.edu:8080/chat/websocket";
     private StompClient mStompClient;
     private CompositeDisposable compositeDisposable;
@@ -40,12 +31,13 @@ public class ChatRoom extends AppCompatActivity
     LinearLayout chatHistoryParent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
-        sendBtn = (Button) findViewById(R.id.sendbtn);
-        userMessageTextBox = (EditText) findViewById(R.id.messagetxt);
-        chatHistoryParent = (LinearLayout) findViewById(R.id.llcr);
+        sendBtn = findViewById(R.id.MessageSendButton);
+        userMessageTextBox = findViewById(R.id.MessageTextBox);
+        chatHistoryParent = findViewById(R.id.LinearLayoutChatRoom);
 
 
         compositeDisposable = new CompositeDisposable();
@@ -53,8 +45,10 @@ public class ChatRoom extends AppCompatActivity
         Disposable dispLifecycle = mStompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lifecycleEvent -> {
-                    switch (lifecycleEvent.getType()) {
+                .subscribe(lifecycleEvent ->
+                {
+                    switch (lifecycleEvent.getType())
+                    {
                         case OPENED:
                             Log.d(TAG, "Stomp connection opened");
                             break;
@@ -78,7 +72,6 @@ public class ChatRoom extends AppCompatActivity
 
             TextView newChat = new TextView(getApplicationContext());
             newChat.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            //newChat.setTextSize(15);
             newChat.setText(chatLog);
             chatHistoryParent.addView(newChat);
         }, throwable ->
@@ -88,15 +81,19 @@ public class ChatRoom extends AppCompatActivity
         compositeDisposable.add(dispTopic);
         Log.d(TAG, dispTopic.toString());
 
-        sendBtn.setOnClickListener(new View.OnClickListener() {
+        sendBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 if (userMessageTextBox.getText().toString().equals("")) return;
                 Log.d(TAG, "Send Message: " + userMessageTextBox.getText().toString());
-                String payload = JSONObject.quote("[" + login.user + "] " + userMessageTextBox.getText().toString());
-                Disposable disposable = mStompClient.send("/app/chat", payload).subscribe(new Action() {
+                String payload = JSONObject.quote("[" + LoginActivity.user + "] " + userMessageTextBox.getText().toString());
+                Disposable disposable = mStompClient.send("/app/chat", payload).subscribe(new Action()
+                {
                     @Override
-                    public void run() throws Exception {
+                    public void run() throws Exception
+                    {
                         userMessageTextBox.setText("");
                     }
                 });
