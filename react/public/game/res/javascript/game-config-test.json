@@ -17,9 +17,13 @@
     },
     "movement": {
       "playerSpeed": 5,
-      "movementStyle": "linear",
+      "movementStyle": "exponential",
       "allowKeyboard": true,
       "allowMouse": true
     }
+  },
+  "gameplay": {
+    "width": 1000,
+    "height": 1000
   }
 }

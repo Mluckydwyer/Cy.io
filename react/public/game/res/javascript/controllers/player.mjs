@@ -9,30 +9,35 @@ export function Player() {
     let name = "";
     let playerId = "";
     let color = "";
+    let isClientPlayer = false;
+    let lastUpdate;
 
-    this.init = function (config, loadConfig) {
+    this.init = function (config, loadConfig, isClientPlayer=false) {
         this.mover = new Mover().init();
         this.name = "You";
         this.playerId = this.generateUUID();
         this.color = this.generateRandomColor();
+        this.isClientPlayer = isClientPlayer;
+        lastUpdate = new Date().getTime();
         if (loadConfig) this.config(config);
         return this;
     };
 
     this.config = function (config) {
         this.mover.config(config);
+        this.color = this.generateRandomColor(); // overwrite config color
         return this;
     };
 
     // Draw the player TODO allow more than circles
     this.draw = function(g) {
-        // console.log("X: " + this.mover.xPos + " Y: " + this.mover.yPos + " R: " + this.mover.size);
+        // console.log("Name: " + this.name + " X: " + this.mover.xPos + " Y: " + this.mover.yPos + " R: " + this.mover.size);
         g.beginPath(); // Draw a path that is an unfilled circle
         g.arc(this.mover.xPos, this.mover.yPos, this.mover.size, 0, 2 * Math.PI, false);
-        g.fillStyle = '#' + this.color; // Fill it with color
+        g.fillStyle = this.color; // Fill it with color
         g.fill();
-        g.lineWidth = 5;
-        g.strokeStyle = '#003300'; // Have an outline of dark green
+        g.lineWidth = 1;
+        g.strokeStyle = '#333'; // Have an outline of dark green
         g.stroke();
     };
 

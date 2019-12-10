@@ -1,20 +1,19 @@
-let canvas; // HTML canvas
-let g; // canvas graphics object
-
+import {Entity} from "./controllers/entity.mjs";
 import { Config } from './controllers/config.mjs';
 import { Socket } from './controllers/socket.mjs';
 import { Player } from './controllers/player.mjs';
 import { Controller } from './controllers/controller.mjs';
 import getRequest from "./libs/requests.mjs";
 
-
-const framerate = 60;
+let canvas; // HTML canvas
+let g; // canvas graphics object
+const framerate = 40;
 
 const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
 // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
 
-export let player;
-let players;
+//export let clientPlayer;
+let players, entities;
 let controller, config;
 let chatSocket, leaderboardSocket, notificationSocket, playerDataSocket;
 let gameId;
@@ -41,8 +40,14 @@ async function setup() {
     // Game Elements
     config = await new Config().init();
     controller = new Controller().init(config, canvas, false);
-    player = new Player().init(config, true); // Create main player
+
+    // Setup Client Player
     players = []; // create player list
+    entities = [];
+    let clientPlayer = new Player().init(config, true, true); // Create main player
+    players.push(clientPlayer);
+
+    // Load config file and parse it once loaded
     await refreshConfig('res/javascript/game-config-test.json');
     document.getElementById("submit-un").addEventListener("click", onPlayClick);
 }
@@ -51,15 +56,18 @@ function onPlayClick() {
     getUsername();
     join(jsonGameData).then(function () {
         setTimeout(function () {
-            document.getElementById("leaderboard").classList.remove("hide");
             document.getElementById("loader").classList.remove("show");
             document.getElementById("loader").classList.add("hide");
             document.getElementById("backdrop").classList.remove("show");
             document.getElementById("backdrop").classList.add("hide");
             document.getElementById("submit-un").removeEventListener("click", onPlayClick);
 
+            setInterval(cullStalePlayers, 1000);
+
             setTimeout(function () {
                 setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
+                setInterval(sendPlayerData, 10); // Send player data to server in milliseconds between send
+                document.getElementById("leaderboard").classList.remove("hide");
                 controller.enable();
             }, 1000);
         }, 1000);
@@ -74,28 +82,38 @@ function pullAndWait() {
     });
 }
 
-function sendPlayerData() {
-    playerDataSocket.sendPlayerDataMessage("PLAYER_MOVEMENT", player);
+async function sendPlayerData() {
+    playerDataSocket.sendPlayerDataMessage("PLAYER_MOVEMENT", getClientPlayer());
+}
+
+function cullStalePlayers() {
+    for (let i = 0; i < players.length; i++) {
+        let player = players[i];
+        if (new Date().getTime() - player.lastUpdate >= 1000) {
+            let index = players.indexOf(player);
+            players.splice(index, 1);
+        }
+    }
 }
 
 function parsePlayerMovement(playerId, payload) {
-    console.log(payload);
-    for (let person in payload) {
-        if (player.playerId === playerId) {
-            let otherPlayer = new Player().init(null, false);
-            otherPlayer.mover.xPos = payload.xPos;
-            otherPlayer.mover.yPos = payload.yPos;
-            otherPlayer.mover.xTarget = payload.xTarget;
-            otherPlayer.mover.yTarget = payload.yTarget;
-            otherPlayer.mover.speed = payload.speed;
-            otherPlayer.mover.size = payload.size;
-            otherPlayer.color = payload.color;
-            otherPlayer.name = payload.username;
-
-            players.push(otherPlayer);
+    if (getClientPlayer().playerId !== playerId) {
+        let otherPlayer = getPlayerById(playerId);
+        if (otherPlayer == null) {
+            addPlayer(playerId);
+            otherPlayer = getPlayerById(playerId);
         }
+
+        otherPlayer.mover.xPos = parseFloat(payload.xPos);
+        otherPlayer.mover.yPos = parseFloat(payload.yPos);
+        otherPlayer.mover.targetX = parseFloat(payload.targetX);
+        otherPlayer.mover.targetY = parseFloat(payload.targetY);
+        otherPlayer.mover.speed = parseInt(payload.speed);
+        otherPlayer.mover.size = parseInt(payload.size);
+        otherPlayer.color = payload.color;
+        otherPlayer.name = payload.name;
+        otherPlayer.lastUpdate = new Date().getTime();
     }
-    console.log(players);
 }
 
 /*
@@ -126,7 +144,7 @@ async function join(json) {
         await leaderboardSocket.connect().then(function () {
             leaderboardSocket.subscribe(json.leaderboardSub, function (frame) {
                 updateLeaderboard(frame.body);
-                console.log("Leaderboard update received");
+                // console.log("Leaderboard update received");
             });
         }).catch(function () {
             console.log("Leaderboard websocket Failed to connect");
@@ -137,7 +155,7 @@ async function join(json) {
         notificationSocket.init(json.notificationWs);
         await notificationSocket.connect().then(function () {
             notificationSocket.subscribe(json.notificationSub, function (frame) {
-                console.log("Notification received");
+                // console.log("Notification received");
                 showSnackbar(frame.body);
             });
         }).catch(function () {
@@ -150,43 +168,65 @@ async function join(json) {
         await playerDataSocket.connect().then(function () {
             playerDataSocket.subscribe(json.playerDataSub, function (frame) {
                 let json = JSON.parse(frame.body);
-
-                switch (json.type) {
-                    case "JOIN":
-                        if (json.playerId === player.playerId) {
-                            console.log("Join handshake successful");
-                            setInterval(sendPlayerData, 200);
-                        }
-                        break;
-                    case "PLAYER_MOVEMENT":
-                            parsePlayerMovement(json.playerId, json.payload);
-                        break;
-                    case "ENTITIES":
-
-                        break;
+                for (let i = 0; i < json.length; i++) {
+                    let packet = json[i];
+                    switch (packet.type) {
+                        case "JOIN":
+                            if (packet.playerId === getClientPlayer().playerId) {
+                                console.log("Join handshake successful");
+                            } else {
+                                addPlayer(packet.playerId);
+                            }
+                            break;
+                        case "LEAVE":
+                            removePlayerById(packet.playerId);
+                            break;
+                        case "PLAYER_MOVEMENT":
+                            parsePlayerMovement(packet.playerId, packet.payload);
+                            //console.log("Player Data: " + frame.body);
+                            break;
+                        case "ENTITY":
+                            if (i === 0) entities = []; // if json packet of entities first in list clear list to update
+                            entities.push(new Entity().init(packet));
+                            break;
+                    }
                 }
             });
         }).catch(function () {
             console.log("Player Data websocket Failed to connect");
         });
 
-        playerDataSocket.sendPlayerDataMessage("JOIN", player);
+        playerDataSocket.sendPlayerDataMessage("JOIN", getClientPlayer());
     }
 }
 
 // When done loading, run the setup function
 window.onload = setup;
 
+// On page leave (refresh or close
+window.onunload = leave;
+
+function leave() {
+    playerDataSocket.sendPlayerDataMessage("LEAVE", getClientPlayer());
+    playerDataSocket.disconnect();
+    chatSocket.disconnect();
+    notificationSocket.disconnect();
+    leaderboardSocket.disconnect();
+}
+
 // Refresh teh game config file
 async function refreshConfig(json) {
     await config.load(json);
     controller.config(config);
-    player.config(config);
+    let clientPlayer = getClientPlayer();
+    clientPlayer.config(config);
 }
 
 // Main function that handles all game logic and graphics (called FPS times per second)
 function run() {
-    player.mover.update(controller);
+    checkEntityCollisions();
+    movePlayers();
+
     draw();
 }
 
@@ -195,8 +235,68 @@ function draw() {
     // Clear screen
     g.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw player
-    player.draw(g);
+    // Draw entities
+    for (let i = 0; i < entities.length; i++) {
+        entities[i].draw(g);
+    }
+
+    // Draw players
+    for (let i = 0; i < players.length; i++) {
+        players[i].draw(g);
+    }
+}
+
+// Update al lplayers positions
+function movePlayers() {
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].playerId === getClientPlayer().playerId) players[i].mover.update(controller);
+            //if (controller.mouseOnScreen) players[i].mover.update(controller);
+        else players[i].mover.update();
+    }
+
+}
+
+// Check for collisions
+function checkEntityCollisions() {
+    let player = getClientPlayer();
+    for (let index in entities) {
+        let entity = entities[index];
+        if (player.mover.isTouching(entity.xPos, entity.yPos)) ;
+    }
+}
+
+// Get the current player using the client
+function getClientPlayer() {
+    for (let index in players) {
+        let player = players[index];
+        if (player.isClientPlayer) return player;
+    }
+}
+
+// Get a player by their player id
+function getPlayerById(playerId) {
+    for (let index in players) {
+        let player = players[index];
+        if (playerId === player.playerId) return player;
+    }
+}
+
+// Add a player
+function addPlayer(playerId) {
+    let newPlayer = new Player().init(null, false);
+    newPlayer.playerId = playerId;
+    players.unshift(newPlayer);
+}
+
+// Remove a player by their player id
+function removePlayerById(playerId) {
+    for (let index in players) {
+        let player = players[index];
+        if (playerId === player.playerId) {
+            players.remove(player);
+            return;
+        }
+    }
 }
 
 // On Window Size Change
@@ -262,8 +362,13 @@ export function toggleChat() {
     else {
         chat.classList.add("show");
         setFocusFixed(document.getElementById("chat-box"));
+        document.getElementById("chat-box").focus();
     }
     controller.chatShown = !controller.chatShown;
+}
+
+export function toggleMovementStyle() {
+    getClientPlayer().mover.expMovement = !getClientPlayer().mover.expMovement;
 }
 
 export function incomingChat(message) {
@@ -282,7 +387,7 @@ export function incomingChat(message) {
 
 export function sendChat() {
     let chatbox = document.getElementById("chat-box");
-    chatSocket.sendChatMessage(chatbox.value);
+    chatSocket.sendChatMessage(getClientPlayer().name, chatbox.value);
     chatbox.value = "";
 }
 
@@ -294,7 +399,7 @@ function getUsername() {
 
 
     if (document.getElementById("username-input").value !== "") {
-        player.name = document.getElementById("username-input").value;
+        getClientPlayer().name = document.getElementById("username-input").value;
     }
 }
 

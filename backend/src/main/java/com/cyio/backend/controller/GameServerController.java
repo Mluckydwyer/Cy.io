@@ -35,7 +35,7 @@ public class GameServerController {
     private void generateDummyServer() {
         String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
         String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
-        Game dummyGame = new Game("Game 1", dummyGameId, dummyCreatorId);
+        Game dummyGame = new Game("Cygar.io", dummyGameId, dummyCreatorId);
         GameServer dummyGameServer = new GameServer(dummyGame);
         this.gs = dummyGameServer;
 
