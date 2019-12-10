@@ -32,7 +32,7 @@ public class NotificationSocket {
 //        template = new SimpMessagingTemplate(new M);
 //    }
 
-    @Scheduled(fixedRate = 10000)
+    //@Scheduled(fixedRate = 10000)
     public void testNotifications() {
         sendToAll("This is a test 123...");
     }

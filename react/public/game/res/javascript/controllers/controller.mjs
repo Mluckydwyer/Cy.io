@@ -1,4 +1,4 @@
-import {toggleChat, sendChat} from "../game.mjs";
+import {toggleChat, sendChat, toggleMovementStyle} from "../game.mjs";
 export { Controller };
 
 function Controller() {
@@ -125,6 +125,9 @@ function Controller() {
                     break;
                 case 84: // 'T' Key
                     toggleChat();
+                case 77: // 'M' Key
+                    toggleMovementStyle();
+                    break;
             }
 
         } else if (this.chatShown) {

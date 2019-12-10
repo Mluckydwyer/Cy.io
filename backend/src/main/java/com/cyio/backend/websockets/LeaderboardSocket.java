@@ -1,6 +1,9 @@
 package com.cyio.backend.websockets;
 
 import com.cyio.backend.model.LeaderBoard;
+import com.cyio.backend.observerpatterns.LeaderboardObserver;
+import com.cyio.backend.observerpatterns.LeaderboardSubject;
+import com.cyio.backend.observerpatterns.PlayerListObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +12,19 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
+
 @EnableScheduling
 @Controller
-public class LeaderboardSocket {
+public class LeaderboardSocket implements LeaderboardSubject {
 
     private static final Logger log = LoggerFactory.getLogger(LeaderboardSocket.class);
     public LeaderBoard leaderBoard = new LeaderBoard();
 
     @Autowired
     public SimpMessagingTemplate template;
+
+    private ArrayList<LeaderboardObserver> leaderboardObservers = new ArrayList<>();
 
     public final String endPoint = "/leaderboard";
     public final String listenPoint = "/topic" + endPoint;
@@ -28,8 +35,29 @@ public class LeaderboardSocket {
 
     @Scheduled(fixedRate = 1000)
     public void sendUpdate() {
-        leaderBoard.generateDummyData();
+        //leaderBoard.generateDummyData();
         sendToAll(leaderBoard.getLeaderList(5));
+    }
+
+    @Override
+    public void registerObserver(LeaderboardObserver observer) {
+        leaderboardObservers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(LeaderboardObserver observer) {
+        leaderboardObservers.remove(observer);
+    }
+
+    @Override
+    public void notifyLeaderBoardObservers() {
+        for (LeaderboardObserver leaderboardObserver : leaderboardObservers) {
+            leaderboardObserver.updateLeaderBoard(leaderBoard);
+        }
+    }
+
+    public void sendLeaderboard(LeaderBoard board){
+        sendToAll(board.getLeaderList(5));
     }
 
 }

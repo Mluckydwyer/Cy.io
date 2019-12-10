@@ -1,5 +1,6 @@
 package com.cyio.backend.model;
 
+import com.cyio.backend.observerpatterns.LeaderboardObserver;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -174,7 +175,5 @@ public class LeaderBoard {
 
         return null;
     }
-
-
 }
 

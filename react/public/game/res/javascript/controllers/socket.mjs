@@ -1,6 +1,3 @@
-// import SockJS from "../libs/";
-import {player} from "../game.mjs";
-
 export function Socket() {
 
     const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
@@ -79,12 +76,12 @@ export function Socket() {
                 msg.payload = {
                     xPos: player.mover.xPos,
                     yPos: player.mover.yPos,
-                    xTarget: player.mover.xTarget,
-                    yTarget: player.mover.yTarget,
+                    targetX: player.mover.targetX,
+                    targetY: player.mover.targetY,
                     speed: player.mover.speed,
                     size: player.mover.size,
                     color: player.color,
-                    username: player.username
+                    name: player.name
                 };
                 break;
             case "ENTITIES":
@@ -96,8 +93,8 @@ export function Socket() {
         this.sendMessage(msg);
     };
 
-    this.sendChatMessage = function (message) {
-        this.sendMessage("[" + player.name + "]: " + message);
+    this.sendChatMessage = function (playerName, message) {
+        this.sendMessage("[" + playerName + "]: " + message);
     };
 
     this.sendDisconnectMessage = function () {
@@ -109,7 +106,7 @@ export function Socket() {
     };
 
     this.sendMessage = function (message, endpoint=this.sendEndpoint) {
-        console.log("Sending to endpoint: " + endpoint + "\nMessage: " + JSON.stringify(message));
+        // console.log("Sending to endpoint: " + endpoint + "\nMessage: " + JSON.stringify(message));
         this.socket.send(endpoint, {}, JSON.stringify(message));
     }
     
