@@ -24,6 +24,13 @@ spring:
             scope:
               - email
               - profile
+  servlet:
+    multipart:
+      enabled: true
+      #maximum file size before it is stored on disk
+      file-size-threshold: 2KB
+      max-file-size: 20MB
+      max-request-size: 25MB
 app:
   auth:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
