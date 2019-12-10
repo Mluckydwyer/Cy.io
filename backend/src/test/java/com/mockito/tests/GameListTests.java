@@ -1,8 +1,9 @@
 package com.mockito.tests;
 
-import com.cyio.backend.controller.GameController;
 import com.cyio.backend.model.Game;
 import com.cyio.backend.repository.GameRepository;
+import com.cyio.backend.service.GameService;
+import com.cyio.backend.service.QueryType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 public class GameListTests {
     @InjectMocks
-    GameController controller;
+    GameService service;
 
     @Mock
     GameRepository gameRepo;
@@ -33,7 +34,7 @@ public class GameListTests {
         answer.add(new Game("The Good Game", "gameid", "Jasan Bern"));
         when(gameRepo.findGameByTitleContaining("goodgame")).thenReturn( answer);
 
-        List<Game> retList=  controller.searchBy("title","goodgame");
+        List<Game> retList=  service.findGame(QueryType.TITLE,"goodgame");
         assertEquals(retList.size(), 1);
 
         Game result = retList.get(0);
@@ -52,7 +53,7 @@ public class GameListTests {
         answer.add(g1);
         when(gameRepo.findGameByAboutContaining("key")).thenReturn( answer);
 
-        List<Game> retList=  controller.searchBy("about","key");
+        List<Game> retList=  service.findGame(QueryType.ABOUT,"key");
         assertEquals(retList.size(), 1);
 
         Game result = retList.get(0);
@@ -71,7 +72,7 @@ public class GameListTests {
         answer.add(g1);
         when(gameRepo.findGameByBlurbContaining("key")).thenReturn( answer);
 
-        List<Game> retList=  controller.searchBy("blurb","key");
+        List<Game> retList=  service.findGame(QueryType.BLURB,"key");
         assertEquals(retList.size(), 1);
 
         Game result = retList.get(0);

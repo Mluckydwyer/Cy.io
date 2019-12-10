@@ -1,11 +1,11 @@
 package com.mockito.tests;
 
-import com.cyio.backend.controller.AuthController;
 import com.cyio.backend.exception.BadRequestException;
 import com.cyio.backend.model.User;
 import com.cyio.backend.payload.LoginRequest;
 import com.cyio.backend.payload.SignUpRequest;
 import com.cyio.backend.repository.UserRepository;
+import com.cyio.backend.service.AuthService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -16,14 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
 public class AuthTests {
     @InjectMocks
-    AuthController controller;
+    AuthService service;
 
     @Mock
     UserRepository userRepo;
@@ -77,7 +76,7 @@ public class AuthTests {
         when(userRepo.existsByEmail("u1@cy.io")).thenReturn(false);
         when(encoder.encode("password")).thenReturn("password");
 
-        ResponseEntity response = controller.registerUser(request);
+        ResponseEntity response = service.registerUser(request);
     }
 
 
@@ -96,6 +95,6 @@ public class AuthTests {
        when(userRepo.save(new User())).thenReturn(u1);
        when(userRepo.existsByEmail("u1@cy.io")).thenReturn(true);
 
-       ResponseEntity response = controller.registerUser(request);
+       ResponseEntity response = service.registerUser(request);
    }
 }

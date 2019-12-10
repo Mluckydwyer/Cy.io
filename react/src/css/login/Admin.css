@@ -1,0 +1,22 @@
+.show {
+    visibility: visible !important;
+    animation: all 0.5s 2.5s;
+}
+
+#snackbar {
+    animation: all 0.5s 2.5s;
+    visibility: hidden;
+    background-color: #333;
+    left: 50%;
+    width: 40vw;
+    font-family: 'DejaVu Sans Mono', monospace;
+    margin-left: -20vw;
+    text-align: center;
+    color: #17C923;
+    position: fixed;
+    border-radius: 5px;
+    bottom: 5vh;
+    padding: 1vw;
+    opacity: 70%;
+    z-index: 1;
+}

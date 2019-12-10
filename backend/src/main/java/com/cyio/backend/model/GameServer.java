@@ -177,6 +177,7 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
             ns.newLeader(players.get(leaderBoard.getLeader().getPlayerId()));
         }
         this.leaderBoard = leaderBoard; // update local leader list
+        ls.sendLeaderboard(leaderBoard);
     }
 
     @Override

@@ -56,6 +56,10 @@ public class LeaderboardSocket implements LeaderboardSubject {
         }
     }
 
+    public void sendLeaderboard(LeaderBoard board){
+        sendToAll(board.getLeaderList(5));
+    }
+
 }
 
 /*
