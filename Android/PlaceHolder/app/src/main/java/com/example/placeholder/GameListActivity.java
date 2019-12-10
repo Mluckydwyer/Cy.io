@@ -25,60 +25,61 @@ import java.util.List;
 
 public class GameListActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    //TextView text = new TextView(this);
-    public ArrayList<Game> gameList;
-    JSONArray arr = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
-        Button ba = (Button) findViewById(R.id.back);
-        ba.setOnClickListener(new View.OnClickListener() {
+        Button backBtn = findViewById(R.id.BackButtonGameList);
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goHome();
             }
         });
-        //TextView vt = (TextView) findViewById(R.id.scrolledText);
-        try {
-
+        try
+        {
             arrResponse();
-
-
-        } catch (JSONException e) {
+        } catch (JSONException e)
+        {
             System.out.println(e.getMessage());
         }
     }
-
-    public void goHome() {
-        Intent it = new Intent(this, Home.class);
-        startActivity(it);
+    public void goHome()
+    {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
+    public LinkedGameList linkedGameList;
     protected void arrResponse() throws JSONException {
         String tag_json_arry = "json_array_req";
         String url = "http://coms-309-nv-4.misc.iastate.edu:8080/gamelist";
-        // ArrayList<String> biglist = new ArrayList<String>();
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
-                    public ArrayList<Game> midlist = new ArrayList<>();
+                    public ArrayList<Game> gameArrayList = new ArrayList<>();
+
+                    public LinkedGameList linkedGameList1 = linkedGameList;
+                    public void updateLinkedGameList(LinkedGameList updateList)
+                    {
+                        linkedGameList = updateList;
+                    }
 
                     @Override
                     public void onResponse(JSONArray response) {
                         for (int i = 0; i < response.length(); i++) {
-                            JSONArray st;
+                            JSONArray responseNames;
                             try {
-                                JSONObject jj = response.getJSONObject(i);
-                                st = jj.names();
+                                JSONObject responseJSONObject = response.getJSONObject(i);
+                                responseNames = responseJSONObject.names();
 
                                 Game game = new Game();
-                                game.setTitle(jj.getString(st.get(0).toString()));
-                                game.setBlurb(jj.getString(st.get(1).toString()));
-                                game.setAbout(jj.getString(st.get(2).toString()));
-                                game.setGameID(jj.getString(st.get(3).toString()));
-                                game.setCreatorID(jj.getString(st.get(4).toString()));
-                                midlist.add(game);
+                                game.setTitle(responseJSONObject.getString(responseNames.get(0).toString()));
+                                game.setBlurb(responseJSONObject.getString(responseNames.get(1).toString()));
+                                game.setAbout(responseJSONObject.getString(responseNames.get(2).toString()));
+                                game.setGameID(responseJSONObject.getString(responseNames.get(3).toString()));
+                                game.setCreatorID(responseJSONObject.getString(responseNames.get(4).toString()));
+                                gameArrayList.add(game);
 
                                 /*
                                 0=Title
@@ -88,12 +89,14 @@ public class GameListActivity extends AppCompatActivity {
                                 4=Creator ID
                                 5=thumbnail
                                  */
-                            } catch (JSONException e) {
+                            } catch (JSONException e)
+                            {
                                 System.out.println(e.getMessage());
                             }
                         }
-
-                        displayGames(midlist);
+                        linkedGameList1 = createLinkedList(gameArrayList);
+                        updateLinkedGameList(linkedGameList1);
+                        displayGames(gameArrayList);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -104,65 +107,59 @@ public class GameListActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req, tag_json_arry);
     }
 
+    public LinkedGameList createLinkedList(ArrayList<Game> gameArrayList)
+    {
+        LinkedGameList lgl = new LinkedGameList();
+        for (int i = 0; i < gameArrayList.size(); i++)
+        {
+            lgl.AddToList(gameArrayList.get(i));
+        }
+        return lgl;
+    }
+
+
+    public LinkedGameList getList()
+    {
+        return linkedGameList;
+    }
 
     private void displayGames(List<Game> gameList) {
         for (Game game : gameList) {
-            LinearLayout ll = (LinearLayout) findViewById(R.id.llMain);
-            TextView Title = new TextView(getApplicationContext());
-            Title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.LinearLayoutGameList);
+            TextView titleTextView = new TextView(getApplicationContext());
+            titleTextView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             String title = game.getTitle();
-            Title.setText(title + "\n");
-            Title.setTextSize(20);
-            ll.addView(Title);
+            titleTextView.setText(title + "\n");
+            titleTextView.setTextSize(20);
+            linearLayout.addView(titleTextView);
 
-            TextView blurb = new TextView(getApplicationContext());
-            blurb.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            String bl = game.getBlurb();
-            blurb.setText(bl);
-            blurb.setTextSize(15);
-            ll.addView(blurb);
+            TextView blurbTextView = new TextView(getApplicationContext());
+            blurbTextView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            String blurb = game.getBlurb();
+            blurbTextView.setText(blurb);
+            blurbTextView.setTextSize(15);
+            linearLayout.addView(blurbTextView);
 
-            TextView about = new TextView(getApplicationContext());
-            about.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            String ab = game.getAbout();
-            about.setText("Description:" + ab);
-            about.setTextSize(15);
-            ll.addView(about);
+            TextView aboutTextView = new TextView(getApplicationContext());
+            aboutTextView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            String about = game.getAbout();
+            aboutTextView.setText("Description:" + about);
+            aboutTextView.setTextSize(15);
+            linearLayout.addView(aboutTextView);
 
-            TextView gameID = new TextView(getApplicationContext());
-            gameID.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            String ga = game.getGameID();
-            gameID.setText("Game ID:" + ga);
-            gameID.setTextSize(15);
-            ll.addView(gameID);
+            TextView gameIDTextView = new TextView(getApplicationContext());
+            gameIDTextView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            String gameID = game.getGameID();
+            gameIDTextView.setText("Game ID:" + gameID);
+            gameIDTextView.setTextSize(15);
+            linearLayout.addView(gameIDTextView);
 
-            TextView creatorID = new TextView(getApplicationContext());
-            creatorID.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            String cr = game.getCreatorID();
-            creatorID.setText("Created by:" + cr + "\n");
-            creatorID.setTextSize(15);
-            ll.addView(creatorID);
+            TextView creatorIDTextView = new TextView(getApplicationContext());
+            creatorIDTextView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            String creatorID = game.getCreatorID();
+            creatorIDTextView.setText("Created by:" + creatorID + "\n");
+            creatorIDTextView.setTextSize(15);
+            linearLayout.addView(creatorIDTextView);
         }
     }
-
-    public List<Game> parseGameList() {
-        if (gameList == null) {
-            return null;
-        }
-        ArrayList<Game> listofgames = new ArrayList<Game>();
-//        for (int parser = 0; parser < gametitles.size(); parser++)
-//        {
-//            listofgames.add(gameList.get(parser));
-//        }
-        return listofgames;
-    }
-
-    public ArrayList<Game> getGameList() {
-        return gameList;
-    }
-
-    public void addToList(Game g) {
-
-    }
-
 }

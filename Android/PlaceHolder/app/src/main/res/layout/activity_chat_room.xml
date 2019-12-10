@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatRoom">
+    tools:context=".ChatRoomActivity">
 
     <ScrollView
         android:layout_width="402dp"
@@ -18,14 +18,14 @@
         android:layout_marginBottom="106dp">
 
         <LinearLayout
-            android:id="@+id/llcr"
+            android:id="@+id/LinearLayoutChatRoom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
 
     <Button
-        android:id="@+id/sendbtn"
+        android:id="@+id/MessageSendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -35,7 +35,7 @@
         android:text="Send" />
 
     <EditText
-        android:id="@+id/messagetxt"
+        android:id="@+id/MessageTextBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

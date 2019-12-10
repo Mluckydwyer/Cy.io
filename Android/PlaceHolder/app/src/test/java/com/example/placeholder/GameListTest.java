@@ -21,7 +21,7 @@ import java.util.List;
 public class GameListTest
 {
     @Mock
-    GameList g;
+    GameListActivity g;
 
     @Before
     public void init()
@@ -72,8 +72,8 @@ public class GameListTest
     public  void getList_test()
     {
         LinkedGameList lgl = new LinkedGameList();
-        g.lgll = lgl;
+        g.linkedGameList = lgl;
         when(g.getList()). thenReturn(lgl);
-        assertEquals(g.lgll, lgl);
+        assertEquals(g.linkedGameList, lgl);
     }
 }

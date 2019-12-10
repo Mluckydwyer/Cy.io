@@ -1,21 +1,21 @@
 import React, {useState} from 'react';
-import { useAuth } from "../../routes/auth";
 import '../../css/login/Login.css';
-import { Redirect } from "react-router-dom";
-import {userInfo} from "./User";
+import {Link, Redirect} from "react-router-dom";
+import {userInfo} from "./userInfo";
 
 function Login(){
-    const [isLoggedIn, setLoggedIn] = useState(false);
+    const loginCheck = localStorage.getItem("token");
+    const [isLoggedIn, setLoggedIn] = useState(loginCheck);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     
-    const { setAuthTokens } = useAuth();
+    //const { setAuthTokens } = useAuth();
     //const referer = props.location.state.referer || '/';
     
     
     function handleChangeUser(event){
         setUserName(event.target.value);
-        console.log(userName);
+        console.log(event.target.value);
     }
     function handleChangePass(event){
         setPassword(event.target.value);
@@ -46,28 +46,32 @@ function Login(){
             setLoggedIn(true);
             return data;
         }).then(console.log);
-        console.log(localStorage.getItem("tokens"));
+        console.log(localStorage.getItem("token"));
     }
     
     
     if(isLoggedIn) {
         userInfo();
-        return <Redirect to="/" />;
+        return <Redirect to="/user" />;
     }   
     
         return (
             <div>
-                <form onSubmit={loginRequest}>
-                    <label>UserName
-                        <input type="text" name = "userName" value={userName} onChange={handleChangeUser}/>
+                {/*<form onSubmit={loginRequest}>*/}
+                    <label>Username
+                        <input type="text" name = "Username" value={userName} onChange={handleChangeUser}/>
                     </label>
                     <label>Password
-                        <input type="password" name = "password" value={password} onChange={handleChangePass}/>
+                        <input type="password" name = "Password" value={password} onChange={handleChangePass}/>
                     </label>
                     <label>
-                        <input type="submit" value="Submit" />
+                        {/*<input type="submit" value="Submit" />*/}
+                        <a onClick={loginRequest} style={{marginLeft: "2vw"}} className="btn my-2 btn-prim-cyio raised-btn">Login</a>
                     </label>
-                </form>
+                {/*</form>*/}
+                <div>
+                    <Link to="/signup" className="btn my-2 btn-prim-cyio raised-btn" >Sign Up</Link>
+                </div>
             </div>
         )       
     }

@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home">
+    tools:context=".HomeActivity">
 
     <TextView
-        android:id="@+id/cyio"
+        android:id="@+id/CYIOTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
         android:textSize="40dp" />
 
     <Button
-        android:id="@+id/gamelist"
+        android:id="@+id/ButtonForGameList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -31,7 +31,7 @@
         android:text="Game List" />
 
     <Button
-        android:id="@+id/chat"
+        android:id="@+id/ButtonForChatRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -40,7 +40,7 @@
         android:text="Chat" />
 
     <Button
-        android:id="@+id/leaderboard"
+        android:id="@+id/ButtonForLeaderboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
