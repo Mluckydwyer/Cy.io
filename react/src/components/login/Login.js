@@ -57,7 +57,7 @@ function Login(){
     
         return (
             <div>
-                <form onSubmit={loginRequest}>
+                {/*<form onSubmit={loginRequest}>*/}
                     <label>Username
                         <input type="text" name = "Username" value={userName} onChange={handleChangeUser}/>
                     </label>
@@ -65,9 +65,10 @@ function Login(){
                         <input type="password" name = "Password" value={password} onChange={handleChangePass}/>
                     </label>
                     <label>
-                        <input type="submit" value="Submit" />
+                        {/*<input type="submit" value="Submit" />*/}
+                        <a onClick={loginRequest} style={{marginLeft: "2vw"}} className="btn my-2 btn-prim-cyio raised-btn">Login</a>
                     </label>
-                </form>
+                {/*</form>*/}
                 <div>
                     <Link to="/signup" className="btn my-2 btn-prim-cyio raised-btn" >Sign Up</Link>
                 </div>
