@@ -14,6 +14,7 @@ import Signup from "./components/login/Signup";
 
 
 function App(){
+    const userInfo = JSON.parse(localStorage.getItem("info"));
     
     const [authTokens, setAuthTokens] = useState();
     
@@ -36,7 +37,7 @@ function App(){
                         </Route>
                         <Route path="/login" component = {Login}/>
                         <PrivateRoute path="/user">
-                            <User/>
+                            <User userInfo = {userInfo}/>
                         </PrivateRoute>
                         <Route path="/signup">
                             <Signup />
