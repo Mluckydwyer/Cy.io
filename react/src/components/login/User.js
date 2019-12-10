@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {useAuth} from "../../routes/auth";
 import {Redirect} from "react-router-dom";
 
-function User(){
+function User(props){
     const { setAuthTokens } = useAuth();
     const loginCheck = localStorage.getItem("token");
     const [isLoggedIn, setLoggedIn] = useState(loginCheck);
-    const userInfo = JSON.parse(localStorage.getItem("info"));
+    
     
     function logOut(){
         setAuthTokens();
@@ -21,6 +21,8 @@ function User(){
     }
     return (
         <div>
+            <h1>Welcome {props.userInfo.userName}</h1>
+            <h3>Games owned: {props.userInfo.gamesOwned}</h3>
             <button onClick={logOut}>Log out</button>
         </div>
     );
