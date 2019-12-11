@@ -1,31 +1,31 @@
-import React, {useState} from 'react';
-import {useAuth} from "../../routes/auth";
+import React, {useContext} from 'react';
 import {Redirect} from "react-router-dom";
+import {AuthContext} from "../../routes/auth.js";
 
-function User(props){
-    const { setAuthTokens } = useAuth();
-    const loginCheck = localStorage.getItem("token");
-    const [isLoggedIn, setLoggedIn] = useState(loginCheck);
-    
+function User(){
+    const info = useContext(AuthContext);
     
     function logOut(){
-        setAuthTokens();
         localStorage.removeItem("token");
         localStorage.removeItem("info");
-        setLoggedIn(false);
+        info.setUserInfo({userName:"", gamesOwned:""});
+        info.setLogin(false);
         
     }
     
-    if(!isLoggedIn){
-        return <Redirect to="/" />;
+    if (!info.state.isLoggedIn) {
+        return <Redirect to="/"/>;
     }
-    return (
-        <div>
-            <h1>Welcome {props.userInfo.userName}</h1>
-            <h3>Games owned: {props.userInfo.gamesOwned}</h3>
-            <button onClick={logOut}>Log out</button>
-        </div>
-    );
+    else if (info.state.userInfo !== null) {
+        return (
+            <div>
+                <h1>Welcome {info.state.user.userName}</h1>
+                <h3>Games owned: {info.state.user.gamesOwned}</h3>
+                <button onClick={logOut}>Log out</button>
+            </div>
+        );
+    }
+    else return null;
 }
 
 export default User;

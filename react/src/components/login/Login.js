@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import '../../css/login/Login.css';
 import {Link, Redirect} from "react-router-dom";
-import {userInfo} from "./userInfo";
+import {AuthContext} from "../../routes/auth.js";
 
-function Login(){
-    const loginCheck = localStorage.getItem("token");
-    const [isLoggedIn, setLoggedIn] = useState(loginCheck);
+function Login(props){
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    
+    const info = useContext(AuthContext);
     
     //const { setAuthTokens } = useAuth();
     //const referer = props.location.state.referer || '/';
@@ -43,15 +43,16 @@ function Login(){
             }
         }).then(data => {
             localStorage.setItem("token",JSON.stringify(data));
-            setLoggedIn(true);
+            console.log(info.state);
+            info.setLogin(true);
             return data;
-        }).then(console.log);
+        });
         console.log(localStorage.getItem("token"));
+      
     }
     
-    
-    if(isLoggedIn) {
-        userInfo();
+    if(info.state.isLoggedIn) {
+        info.userInfo();
         return <Redirect to="/user" />;
     }   
     
@@ -75,4 +76,6 @@ function Login(){
             </div>
         )       
     }
+
+
 export default Login;
