@@ -6,12 +6,18 @@ export function useAuth() {
     return useContext(AuthContext);
 }
 
+function loginCheck() {
+    if(localStorage.getItem("token")!==null){
+        return true;
+    }
+    else return false;
+}
 class InfoProvider extends Component {
     constructor(props){
         super(props);
         this.state = {
-            user : {userName:"", gamesOwned:""},
-            isLoggedIn: false,
+            user : JSON.parse(localStorage.getItem("info")),
+            isLoggedIn: loginCheck(),
         };
         this.setTokens = this.setTokens.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
