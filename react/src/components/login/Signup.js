@@ -8,6 +8,7 @@ function Signup(){
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     
+    
     function handleChangeUser(event){
         setUserName(event.target.value);
         console.log(event.target.value);
@@ -20,8 +21,9 @@ function Signup(){
         console.log(event.target.value);
     }
     
-    function signupRequest() {
+    function signupRequest(event) {
         const API = 'http://coms-309-nv-4.misc.iastate.edu:8080/auth/signup';
+        event.preventDefault();
         fetch(API, {
             method: 'post',
             headers: {
@@ -50,7 +52,6 @@ function Signup(){
     }
     
     if(signup){
-        localStorage.removeItem("success");
         return <Redirect to="/" />;
     }
     return (
@@ -73,4 +74,5 @@ function Signup(){
         </div>
     )
 }
+
 export default Signup;

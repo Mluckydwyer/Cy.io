@@ -1,4 +1,7 @@
+
+
 export function userInfo(){
+        
         const API = 'http://coms-309-nv-4.misc.iastate.edu:8080/user/me';
         fetch(API, {
             method: 'get',
