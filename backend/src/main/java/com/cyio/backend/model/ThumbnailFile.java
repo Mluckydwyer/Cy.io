@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 
-@Table(name = "Thumbnails", uniqueConstraints = {
+@Table(name = "thumbnails", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"id"})
 })
 
@@ -17,16 +17,21 @@ import java.util.UUID;
 public class ThumbnailFile {
 
     @Id
+    @Column(name = "id")
     private int id;
     
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "thumbnailID")
     private String thumbnailID;
 
+    @Column(name = "thumbnailName")
     private String thumbnailName;
 
+    @Column(name = "fileType")
     private String fileType;
 
+    @Column (name = "data")
     @Lob
     private byte[] data;
 
