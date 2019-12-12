@@ -2,6 +2,7 @@ package com.example.placeholder;
 
 import com.example.placeholder.Activities.GameListActivity;
 import com.example.placeholder.Models.Game;
+import com.example.placeholder.SupportingClasses.GameListSupport;
 import com.example.placeholder.SupportingClasses.LinkedGameList;
 
 import org.junit.Test;
@@ -24,6 +25,9 @@ public class GameListTest
     @Mock
     GameListActivity g;
 
+    @Mock
+    GameListSupport gameListSupport;
+
     @Before
     public void init()
     {
@@ -34,7 +38,7 @@ public class GameListTest
     public void Null_CreateLinkedList()
     {
         LinkedGameList lgl = new LinkedGameList();
-        when(g.gameListSupport.createLinkedList(null)).thenReturn(lgl);
+        when(gameListSupport.createLinkedList(null)).thenReturn(lgl);
         assertEquals(lgl.getGame(lgl.head), null);
     }
 
@@ -46,7 +50,7 @@ public class GameListTest
         lgl.AddToList(g1);
         ArrayList<Game> list = new ArrayList<>();
         list.add(g1);
-        when(g.gameListSupport.createLinkedList(list)).thenReturn(lgl);
+        when(gameListSupport.createLinkedList(list)).thenReturn(lgl);
         assertEquals(lgl.getGame(lgl.head), g1);
     }
 
@@ -61,7 +65,7 @@ public class GameListTest
         ArrayList<Game> list = new ArrayList<>();
         list.add(g1);
         list.add(g2);
-        when(g.gameListSupport.createLinkedList(list)).thenReturn(lgl);
+        when(gameListSupport.createLinkedList(list)).thenReturn(lgl);
         assertEquals(lgl.getGame(lgl.head), g1);
         assertEquals(lgl.getGame(lgl.head.next), g1);
         assertEquals(lgl.getGame(lgl.head.next.next), g2);
@@ -74,7 +78,7 @@ public class GameListTest
     {
         LinkedGameList lgl = new LinkedGameList();
         g.linkedGameList = lgl;
-        when(g.getList()). thenReturn(lgl);
+        when(gameListSupport.getList()). thenReturn(lgl);
         assertEquals(g.linkedGameList, lgl);
     }
 }
