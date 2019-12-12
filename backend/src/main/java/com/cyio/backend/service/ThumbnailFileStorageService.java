@@ -1,4 +1,4 @@
-package com.cyio.backend.security;
+package com.cyio.backend.service;
 
 import com.cyio.backend.model.ThumbnailFile;
 import com.cyio.backend.repository.ThumbnailRepository;
@@ -19,21 +19,30 @@ public class ThumbnailFileStorageService {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try{
-            //vaildate file name
-            if (fileName.contains((".."))){
-                throw new IllegalArgumentException("File name invalid");
-            }
+            ThumbnailFile tbFile;
 
-            ThumbnailFile tbFile = new ThumbnailFile(fileName, file.getContentType(), file.getBytes());
+            if (validateFileName(fileName)){
+            tbFile = new ThumbnailFile(fileName, file.getContentType(), file.getBytes());
+            return thumbRepository.save(tbFile);}
 
-            return thumbRepository.save(tbFile);
         }catch (IOException e) {
             throw new IllegalArgumentException("could not store file");
         }
+        return null;
     }
 
     public ThumbnailFile getFile(String thumbnailID){
         return thumbRepository.findById(thumbnailID)
                 .orElseThrow(() -> new IllegalArgumentException("file not found"));
+    }
+
+    public boolean validateFileName(String fileName){
+        //vaildate file name
+        if (fileName.contains((".."))){
+            throw new IllegalArgumentException("File name invalid");
+        }
+        else
+            return true;
+
     }
 }

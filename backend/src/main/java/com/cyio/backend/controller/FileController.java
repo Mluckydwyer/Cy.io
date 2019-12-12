@@ -2,7 +2,7 @@ package com.cyio.backend.controller;
 
 import com.cyio.backend.model.ThumbnailFile;
 import com.cyio.backend.payload.UploadFileResponse;
-import com.cyio.backend.security.ThumbnailFileStorageService;
+import com.cyio.backend.service.ThumbnailFileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
