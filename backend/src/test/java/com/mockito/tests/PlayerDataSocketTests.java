@@ -33,8 +33,7 @@ public class PlayerDataSocketTests {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void fillEntitiesTest() {
+    private void setupTest() {
         String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
         String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
         Game dummyGame = new Game("Cygar.io", dummyGameId, dummyCreatorId);
@@ -43,14 +42,18 @@ public class PlayerDataSocketTests {
         gameServer.setLeaderboardSocket(new LeaderboardSocket());
         gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
         gameServer.init();
+    }
 
+    @Test
+    public void fillEntitiesTest() {
+        setupTest();
         assert(gameServer.getPlayerDataSocket().getPlayerDataObjects().getEntities().isEmpty());
         gameServer.getPlayerDataSocket().fillEntities();
         assert(gameServer.getPlayerDataSocket().getAllEntities().size() == 100);
         for (Entity e1 : gameServer.getPlayerDataSocket().getAllEntities()) {
             for (Entity e2 : gameServer.getPlayerDataSocket().getAllEntities()) {
                 if (e1.getId().equals(e2.getId())) continue;
-                assert(e1.getxPos() != e2.getxPos() || e1.getxPos() != e2.getxPos() || e1.getColor() != e2.getColor() || e1.getScoreValue() != e2.getScoreValue() || e1.getSize() != e2.getSize());
+                assert(e1.getxPos() != e2.getxPos() || e1.getxPos() != e2.getxPos() || !e1.getColor().equals(e2.getColor()) || e1.getScoreValue() != e2.getScoreValue() || e1.getSize() != e2.getSize());
             }
         }
 
@@ -58,15 +61,7 @@ public class PlayerDataSocketTests {
 
     @Test
     public void updatePlayerListTest() {
-        String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
-        String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
-        Game dummyGame = new Game("Cygar.io", dummyGameId, dummyCreatorId);
-        gameServer = new GameServer(dummyGame, null, null, null, null);
-        gameServer.setPlayerDataSocket(new PlayerDataSocket());
-        gameServer.setLeaderboardSocket(new LeaderboardSocket());
-        gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
-        gameServer.init();
-
+        setupTest();
         HashMap<String, Player> testData = new HashMap<>();
         for (int i = 0; i < 1000; i++)
             testData.put(UUID.randomUUID().toString(), new Player(UUID.randomUUID().toString()));
@@ -81,15 +76,7 @@ public class PlayerDataSocketTests {
 
     @Test
     public void updateLeaderboardTest() {
-        String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
-        String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
-        Game dummyGame = new Game("Cygar.io", dummyGameId, dummyCreatorId);
-        gameServer = new GameServer(dummyGame, null, null, null, null);
-        gameServer.setPlayerDataSocket(new PlayerDataSocket());
-        gameServer.setLeaderboardSocket(new LeaderboardSocket());
-        gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
-        gameServer.init();
-
+        setupTest();
         LeaderBoard testLeaderBoard = new LeaderBoard();
         testLeaderBoard.generateDummyData();
 
@@ -102,15 +89,7 @@ public class PlayerDataSocketTests {
 
     @Test
     public void updateEntityListTest() {
-        String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
-        String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
-        Game dummyGame = new Game("Cygar.io", dummyGameId, dummyCreatorId);
-        gameServer = new GameServer(dummyGame, null, null, null, null);
-        gameServer.setPlayerDataSocket(new PlayerDataSocket());
-        gameServer.setLeaderboardSocket(new LeaderboardSocket());
-        gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
-        gameServer.init();
-
+        setupTest();
         HashMap<String, Entity> testData = new HashMap<>();
         for (int i = 0; i < 1000; i++)
             testData.put(UUID.randomUUID().toString(), new Entity());
