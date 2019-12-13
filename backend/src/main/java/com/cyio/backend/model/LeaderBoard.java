@@ -44,9 +44,15 @@ public class LeaderBoard {
      * Sorts the list by score - higher the score -> higher on the list
      * @return
      */
-    public boolean sortBoard(){
-        leaderList.sort(new Player.PlayerComparater());
-        return true;
+    public boolean sortBoard() {
+
+        try {
+            leaderList.sort(new Player.PlayerComparater());
+            return true;
+        } catch (Exception e) {
+           // e.printStackTrace();
+        }
+        return false;
     }
 
     /**
