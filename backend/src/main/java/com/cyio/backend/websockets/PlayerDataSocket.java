@@ -116,12 +116,16 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
 
     @Scheduled(fixedRate = 4000)
     public void refreshEntities() {
-        for (Object key : playerDataObjects.getEntities().keySet()) {
-            if (Math.random() > 0.5) {
-                playerDataObjects.getEntities().remove(key);
+        try {
+            for (Object key : playerDataObjects.getEntities().keySet()) {
+                if (Math.random() > 0.2) {
+                    playerDataObjects.getEntities().remove(key);
+                }
             }
+            fillEntities();
+        } catch (Exception e) {
+            // e.printStackTrace();
         }
-        fillEntities();
     }
 
     public ArrayList<PlayerData> getAllPlayerData() {
@@ -153,11 +157,16 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     public ArrayList<Entity> getAllEntities() {
         ArrayList<Entity> data = new ArrayList<Entity>();
 
-        for (Object key : playerDataObjects.getEntities().keySet()) {
-            data.add((Entity) playerDataObjects.getEntities().get(key));
+        try {
+            for (Object key : playerDataObjects.getEntities().keySet()) {
+                data.add((Entity) playerDataObjects.getEntities().get(key));
+            }
+
+        } catch (Exception e) {
+            //e.printStackTrace();
         }
 
-        return data;
+        return null;
     }
 
     @Override
