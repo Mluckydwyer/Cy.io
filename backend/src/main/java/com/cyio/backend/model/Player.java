@@ -16,6 +16,10 @@ public class Player {
     private PlayerData playerData;
     private LocalDateTime payloadRecency;
 
+    public Player(String id) {
+        this.userId = id;
+    }
+
     public Player(String userName, String playerId){
         this(playerId);
         setUserName(userName);
@@ -63,10 +67,6 @@ public class Player {
 
     public void setPayloadRecency(LocalDateTime payloadRecency) {
         this.payloadRecency = payloadRecency;
-    }
-
-    public Player(String id) {
-        this.userId = id;
     }
 
     public void setUserId(String userId) {
