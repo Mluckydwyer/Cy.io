@@ -1,5 +1,7 @@
 package com.example.placeholder;
 
+import com.example.placeholder.Activities.LoginActivity;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

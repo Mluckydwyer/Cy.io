@@ -1,4 +1,4 @@
-package com.example.placeholder;
+package com.example.placeholder.Models;
 
 import java.security.AuthProvider;
 import java.util.UUID;

@@ -1,6 +1,7 @@
-package com.example.placeholder;
+package com.example.placeholder.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -14,6 +15,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.placeholder.Models.Game;
+import com.example.placeholder.SupportingClasses.GameListSupport;
+import com.example.placeholder.SupportingClasses.LinkedGameList;
+import com.example.placeholder.R;
 import com.example.placeholder.app.AppController;
 
 import org.json.JSONArray;
@@ -23,24 +28,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameListActivity extends AppCompatActivity {
+public class GameListActivity extends AppCompatActivity
+{
     private static final String TAG = "MainActivity";
+    public GameListSupport gameListSupport = new GameListSupport();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
         Button backBtn = findViewById(R.id.BackButtonGameList);
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        backBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 goHome();
             }
         });
         try
         {
-            arrResponse();
-        } catch (JSONException e)
+            arrResponse(gameListSupport);
+        }
+        catch (JSONException e)
         {
             System.out.println(e.getMessage());
         }
@@ -52,13 +63,12 @@ public class GameListActivity extends AppCompatActivity {
     }
 
     public LinkedGameList linkedGameList;
-    protected void arrResponse() throws JSONException {
+    protected void arrResponse(GameListSupport gameListSupport) throws JSONException {
         String tag_json_arry = "json_array_req";
         String url = "http://coms-309-nv-4.misc.iastate.edu:8080/gamelist";
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     public ArrayList<Game> gameArrayList = new ArrayList<>();
-
                     public LinkedGameList linkedGameList1 = linkedGameList;
                     public void updateLinkedGameList(LinkedGameList updateList)
                     {
@@ -66,10 +76,13 @@ public class GameListActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
+                    public void onResponse(JSONArray response)
+                    {
+                        for (int i = 0; i < response.length(); i++)
+                        {
                             JSONArray responseNames;
-                            try {
+                            try
+                            {
                                 JSONObject responseJSONObject = response.getJSONObject(i);
                                 responseNames = responseJSONObject.names();
 
@@ -80,21 +93,14 @@ public class GameListActivity extends AppCompatActivity {
                                 game.setGameID(responseJSONObject.getString(responseNames.get(3).toString()));
                                 game.setCreatorID(responseJSONObject.getString(responseNames.get(4).toString()));
                                 gameArrayList.add(game);
-
-                                /*
-                                0=Title
-                                1=blurb
-                                2=about
-                                3=gameID
-                                4=Creator ID
-                                5=thumbnail
-                                 */
-                            } catch (JSONException e)
+                            }
+                            catch (JSONException e)
                             {
                                 System.out.println(e.getMessage());
                             }
                         }
-                        linkedGameList1 = createLinkedList(gameArrayList);
+
+                        linkedGameList1 = gameListSupport.createLinkedList(gameArrayList);
                         updateLinkedGameList(linkedGameList1);
                         displayGames(gameArrayList);
                     }
@@ -106,17 +112,6 @@ public class GameListActivity extends AppCompatActivity {
         });
         AppController.getInstance().addToRequestQueue(req, tag_json_arry);
     }
-
-    public LinkedGameList createLinkedList(ArrayList<Game> gameArrayList)
-    {
-        LinkedGameList lgl = new LinkedGameList();
-        for (int i = 0; i < gameArrayList.size(); i++)
-        {
-            lgl.AddToList(gameArrayList.get(i));
-        }
-        return lgl;
-    }
-
 
     public LinkedGameList getList()
     {
@@ -131,6 +126,7 @@ public class GameListActivity extends AppCompatActivity {
             String title = game.getTitle();
             titleTextView.setText(title + "\n");
             titleTextView.setTextSize(20);
+            titleTextView.setTextColor(Color.BLACK);
             linearLayout.addView(titleTextView);
 
             TextView blurbTextView = new TextView(getApplicationContext());
@@ -138,6 +134,7 @@ public class GameListActivity extends AppCompatActivity {
             String blurb = game.getBlurb();
             blurbTextView.setText(blurb);
             blurbTextView.setTextSize(15);
+            blurbTextView.setTextColor(Color.BLACK);
             linearLayout.addView(blurbTextView);
 
             TextView aboutTextView = new TextView(getApplicationContext());
@@ -145,6 +142,7 @@ public class GameListActivity extends AppCompatActivity {
             String about = game.getAbout();
             aboutTextView.setText("Description:" + about);
             aboutTextView.setTextSize(15);
+            aboutTextView.setTextColor(Color.BLACK);
             linearLayout.addView(aboutTextView);
 
             TextView gameIDTextView = new TextView(getApplicationContext());
@@ -152,6 +150,7 @@ public class GameListActivity extends AppCompatActivity {
             String gameID = game.getGameID();
             gameIDTextView.setText("Game ID:" + gameID);
             gameIDTextView.setTextSize(15);
+            gameIDTextView.setTextColor(Color.BLACK);
             linearLayout.addView(gameIDTextView);
 
             TextView creatorIDTextView = new TextView(getApplicationContext());
@@ -159,6 +158,7 @@ public class GameListActivity extends AppCompatActivity {
             String creatorID = game.getCreatorID();
             creatorIDTextView.setText("Created by:" + creatorID + "\n");
             creatorIDTextView.setTextSize(15);
+            creatorIDTextView.setTextColor(Color.BLACK);
             linearLayout.addView(creatorIDTextView);
         }
     }

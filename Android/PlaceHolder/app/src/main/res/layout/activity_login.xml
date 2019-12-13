@@ -5,12 +5,14 @@
     android:id="@+id/relativeLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.placeholder.LoginActivity">
+    android:background="#32CD32"
+    tools:context="com.example.placeholder.Activities.LoginActivity">
 
     <TextView
         android:id="@+id/LoginTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#000000"
         android:layout_marginBottom="30dp"
         android:text="@string/logintext"
         android:textSize="30sp"
@@ -23,6 +25,7 @@
         android:id="@+id/LoginUsernameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#000000"
         android:layout_marginBottom="200dp"
         android:text="@string/username"
         android:textSize="25sp"
@@ -37,6 +40,7 @@
         android:layout_width="195dp"
         android:layout_height="wrap_content"
         android:text="@string/login"
+        android:textColor="#000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LoginPasswordTextBox" />
@@ -47,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/password"
+        android:textColor="#000000"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -59,6 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:ems="10"
+        android:textColor="#000000"
         android:inputType="textPersonName"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,6 +75,7 @@
         android:id="@+id/LoginPasswordTextBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#000000"
         android:ems="10"
         android:inputType="textPassword"
         android:text=""

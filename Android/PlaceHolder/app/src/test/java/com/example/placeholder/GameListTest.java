@@ -1,6 +1,9 @@
 package com.example.placeholder;
 
-import org.json.JSONException;
+import com.example.placeholder.Activities.GameListActivity;
+import com.example.placeholder.Models.Game;
+import com.example.placeholder.SupportingClasses.LinkedGameList;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,14 +11,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameListTest
@@ -33,7 +34,7 @@ public class GameListTest
     public void Null_CreateLinkedList()
     {
         LinkedGameList lgl = new LinkedGameList();
-        when(g.createLinkedList(null)).thenReturn(lgl);
+        when(g.gameListSupport.createLinkedList(null)).thenReturn(lgl);
         assertEquals(lgl.getGame(lgl.head), null);
     }
 
@@ -45,7 +46,7 @@ public class GameListTest
         lgl.AddToList(g1);
         ArrayList<Game> list = new ArrayList<>();
         list.add(g1);
-        when(g.createLinkedList(list)).thenReturn(lgl);
+        when(g.gameListSupport.createLinkedList(list)).thenReturn(lgl);
         assertEquals(lgl.getGame(lgl.head), g1);
     }
 
@@ -60,7 +61,7 @@ public class GameListTest
         ArrayList<Game> list = new ArrayList<>();
         list.add(g1);
         list.add(g2);
-        when(g.createLinkedList(list)).thenReturn(lgl);
+        when(g.gameListSupport.createLinkedList(list)).thenReturn(lgl);
         assertEquals(lgl.getGame(lgl.head), g1);
         assertEquals(lgl.getGame(lgl.head.next), g1);
         assertEquals(lgl.getGame(lgl.head.next.next), g2);

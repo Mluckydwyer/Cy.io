@@ -1,4 +1,6 @@
-package com.example.placeholder;
+package com.example.placeholder.SupportingClasses;
+
+import com.example.placeholder.Models.Game;
 
 public class LinkedGameList
 {
