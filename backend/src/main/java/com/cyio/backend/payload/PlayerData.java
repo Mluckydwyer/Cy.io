@@ -1,7 +1,5 @@
 package com.cyio.backend.payload;
 
-
-
 import java.util.Map;
 
 public class PlayerData {

@@ -5,10 +5,8 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Player {
     private String userName;
@@ -16,24 +14,17 @@ public class Player {
     private int score;
     private SockJsClient socket;
     private PlayerData playerData;
+    private LocalDateTime payloadRecency;
 
-    public void setUserId(String userId) {
-        setUserId(userId);
+    public Player(String id) {
+        this.userId = id;
     }
-
-    public PlayerData getPlayerData() {
-        return playerData;
-    }
-
-    public void setPlayerData(PlayerData playerData) {
-        setPlayerData(playerData);
-    }
-
 
     public Player(String userName, String playerId){
         this(playerId);
         setUserName(userName);
         setScore(0);
+        setPayloadRecency(LocalDateTime.now());
     }
 
     public Player(String userName, int score){
@@ -47,8 +38,55 @@ public class Player {
         this.socket = socket;
     }
 
-    public Player(String id) {
-        this.userId = id;
+    public void updatePlayerData(HashMap<String, String> payloadMap) {
+        setPlayerData(new PlayerData("PLAYER_MOVEMENT", getUserId(), payloadMap));
+        setPayloadRecency(LocalDateTime.now());
+    }
+
+    public void updatePlayerData(JSONObject data) throws JSONException {
+        HashMap<String, String> payloadMap = new HashMap<>();
+        Iterator it = data.keys();
+        while (it.hasNext()) {
+            String key = (String) it.next();
+            payloadMap.put(key, data.getString(key));
+        }
+        updatePlayerData(payloadMap);
+    }
+
+    public void incrementScore(int scoreValue) {
+        setScore(getScore() + scoreValue);
+    }
+
+    public void decrementScore(int scoreValue) {
+        setScore(getScore() - scoreValue);
+    }
+
+    static class PlayerComparater implements Comparator<Player> {
+        public int compare(Player p1, Player p2){
+            int score1 = p1.getScore();
+            int score2 = p2.getScore();
+            return score2 - score1;
+        }
+    }
+
+    public LocalDateTime getPayloadRecency() {
+        return payloadRecency;
+    }
+
+    public void setPayloadRecency(LocalDateTime payloadRecency) {
+        this.payloadRecency = payloadRecency;
+    }
+
+    public void setUserId(String userId) {
+        setUserId(userId);
+    }
+
+    public PlayerData getPlayerData() {
+        return playerData;
+    }
+
+    public void setPlayerData(PlayerData playerData) {
+        this.playerData = playerData;
     }
 
     public String getUserName() {
@@ -70,29 +108,8 @@ public class Player {
     public void setScore(int score) {
         this.score = score;
     }
+
     public SockJsClient getSocket() {
         return socket;
-    }
-
-    public void updatePlayerData(HashMap<String, String> payloadMap) {
-        playerData = new PlayerData("PLAYER_MOVEMENT", getUserId(), payloadMap);
-    }
-
-    public void updatePlayerData(JSONObject data) throws JSONException {
-        HashMap<String, String> payloadMap = new HashMap<>();
-        Iterator it = data.keys();
-        while (it.hasNext()) {
-            String key = (String) it.next();
-            payloadMap.put(key, data.getString(key));
-        }
-        updatePlayerData(payloadMap);
-    }
-
-    static class PlayerComparater implements Comparator<Player> {
-        public int compare(Player p1, Player p2){
-            int score1 = p1.getScore();
-            int score2 = p2.getScore();
-            return score2 - score1;
-        }
     }
 }

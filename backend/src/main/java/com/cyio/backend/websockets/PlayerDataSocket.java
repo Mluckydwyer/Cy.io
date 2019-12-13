@@ -1,7 +1,10 @@
 package com.cyio.backend.websockets;
 
+// How to better handle websockets: https://stackoverflow.com/questions/48319866/websocket-server-based-on-spring-boot-becomes-unresponsive-after-a-malformed-pac
+
 import com.cyio.backend.model.Entity;
 import com.cyio.backend.model.Player;
+import com.cyio.backend.model.PlayerDataObjects;
 import com.cyio.backend.observerpatterns.*;
 import com.cyio.backend.payload.PlayerData;
 import org.slf4j.Logger;
@@ -14,31 +17,31 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @EnableScheduling
 @Controller
 public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
-    private final Logger logger = LoggerFactory.getLogger(PlayerDataSocket.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(PlayerDataSocket.class);
+    private final int UPDATE_INTERVAL = 12; // milliseconds
+    private final int NUM_ENTITES = 300;
 
     @Autowired
-    public SimpMessagingTemplate template;
+    private SimpMessagingTemplate template;
 
-    private HashMap players = new HashMap<String, Player>();
-    private HashMap entities = new HashMap<String, Entity>();
+    @Autowired
+    private PlayerDataObjects playerDataObjects;
 
-    private ArrayList<PlayerListObserver> playerListObservers = new ArrayList<>();
-    private ArrayList<EntityListObserver> entityListObservers = new ArrayList<>();
+    private final String endPoint = "/playerdata";
+    private final String listenPoint = "/topic" + endPoint;
 
-    public final String endPoint = "/playerdata";
-    public final String listenPoint = "/topic" + endPoint;
+    public PlayerDataSocket() {
 
-    public PlayerDataSocket() { }
+    }
 
     @MessageMapping(endPoint)
     public void recieveUpdate(@Payload PlayerData data) {
@@ -49,29 +52,32 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
         try {
             JSONObject payload = new JSONObject(msg.getPayload());
             String playerId = msg.getPlayerId();
-            Player p;
+            Player player;
+            Entity entity;
 
             switch (msg.getType()) {
                 case "JOIN":
+                    System.out.println(payload);
                     String username = payload.getString("username");
-                    players.put(playerId, new Player(username, playerId));
-                    notifyPlayerListObservers();
-                    HashMap<String, String> values = new HashMap<>();
+                    addPlayer(new Player(username, playerId));
                     sendToAll(new PlayerData("JOIN", playerId, new HashMap<String, String>()));
                     break;
                 case "LEAVE":
-                    players.remove(playerId);
-                    notifyPlayerListObservers();
+                    removePlayer((Player) playerDataObjects.getPlayers().get(playerId));
                     break;
                 case "PLAYER_MOVEMENT":
-                    p = (Player) players.get(playerId);
-                    p.updatePlayerData(payload);
+                    player = (Player) playerDataObjects.getPlayers().get(playerId);
+                    if (payload == null || player == null) return;
+                    player.updatePlayerData(payload);
                     break;
                 case "ENTITIES":
-                    p = (Player) players.get(playerId);
-
+                    player = (Player) playerDataObjects.getPlayers().get(playerId);
+                    entity = (Entity) getPlayerDataObjects().getEntities().get(payload.getString("id"));
+                    getPlayerDataObjects().getEntities().remove(entity.getId());
+                    player.incrementScore(entity.getScoreValue());
+                    getPlayerDataObjects().getScoreChange().put(playerId, player);
+                    notifyPlayerListObservers();
                     fillEntities();
-                    // TODO ???
                     break;
             }
         } catch (JSONException e) {
@@ -83,22 +89,45 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
         template.convertAndSend(listenPoint, message);
     }
 
-    @Scheduled(fixedRate = 200)
+    @Scheduled(fixedRate = UPDATE_INTERVAL)
     public void sendPlayerUpdate() {
         ArrayList<PlayerData> playerData = getAllPlayerData();
         sendToAll(playerData);
     }
 
-    @Scheduled(fixedRate = 200)
+    @Scheduled(fixedRate = UPDATE_INTERVAL)
     public void sendEntityUpdate() {
+        fillEntities();
         sendToAll(getAllEntities());
+    }
+
+    @Scheduled(fixedRate = 1000)
+    public void cullDeadConnections() {
+        for (Object key : playerDataObjects.getPlayers().keySet()) {
+            Player player = (Player) playerDataObjects.getPlayers().get(key);
+            LocalDateTime playerDataRecency = player.getPayloadRecency();
+            if (playerDataRecency.isBefore(LocalDateTime.now().minusSeconds(30))) {
+                System.out.println("Culling player: " + player.getUserName() + "\tId: " + player.getUserId());
+                removePlayer(player);
+            }
+        }
+    }
+
+    @Scheduled(fixedRate = 4000)
+    public void refreshEntities() {
+        for (Object key : playerDataObjects.getEntities().keySet()) {
+            if (Math.random() > 0.5) {
+                playerDataObjects.getEntities().remove(key);
+            }
+        }
+        fillEntities();
     }
 
     public ArrayList<PlayerData> getAllPlayerData() {
         ArrayList<PlayerData> data = new ArrayList<PlayerData>();
 
-        for (Object key : players.keySet()) {
-            PlayerData pd = ((Player) players.get(key)).getPlayerData();
+        for (Object key : playerDataObjects.getPlayers().keySet()) {
+            PlayerData pd = ((Player) playerDataObjects.getPlayers().get(key)).getPlayerData();
             if (pd != null) {
                 data.add(pd);
             }
@@ -108,18 +137,23 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     }
 
     public void addPlayer(Player player) {
-        players.put(player.getUserId(), player);
+        playerDataObjects.getPlayers().put(player.getUserId(), player);
+        playerDataObjects.getJustJoined().put(player.getUserId(), player);
+        notifyPlayerListObservers();
     }
 
     public void removePlayer(Player player) {
-        players.remove(player.getUserId());
+        System.out.println("Removing player: " + player.getUserName() + "\tId: " + player.getUserId());
+        playerDataObjects.getPlayers().remove(player.getUserId());
+        playerDataObjects.getJustLeft().put(player.getUserId(), player);
+        notifyPlayerListObservers();
     }
 
     public ArrayList<Entity> getAllEntities() {
         ArrayList<Entity> data = new ArrayList<Entity>();
 
-        for (Object key : entities.keySet()) {
-            data.add((Entity) entities.get(key));
+        for (Object key : playerDataObjects.getEntities().keySet()) {
+            data.add((Entity) playerDataObjects.getEntities().get(key));
         }
 
         return data;
@@ -127,43 +161,59 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
 
     @Override
     public void registerObserver(PlayerListObserver playerListObserver) {
-        playerListObservers.add(playerListObserver);
+        playerDataObjects.getPlayerListObservers().add(playerListObserver);
     }
 
     @Override
     public void removeObserver(PlayerListObserver playerListObserver) {
-        playerListObservers.remove(playerListObserver);
+        playerDataObjects.getPlayerListObservers().remove(playerListObserver);
     }
 
     @Override
     public void registerObserver(EntityListObserver observer) {
-        entityListObservers.add(observer);
+        playerDataObjects.getEntityListObservers().add(observer);
     }
 
     @Override
     public void removeObserver(EntityListObserver observer) {
-        entityListObservers.remove(observer);
+        playerDataObjects.getEntityListObservers().remove(observer);
     }
 
     @Override
     public void notifyEntityListObservers() {
-        for (EntityListObserver entityListObserver : entityListObservers) {
-            entityListObserver.updateEntityList(entities);
+        for (EntityListObserver entityListObserver : playerDataObjects.getEntityListObservers()) {
+            entityListObserver.updateEntityList(playerDataObjects.getEntities());
         }
     }
 
     @Override
     public void notifyPlayerListObservers() {
-        for (PlayerListObserver playerListObserver : playerListObservers) {
-            playerListObserver.updatePlayerList(players);
+        for (PlayerListObserver playerListObserver : playerDataObjects.getPlayerListObservers()) {
+            playerListObserver.updatePlayerList(playerDataObjects.getPlayers());
         }
     }
 
     public void fillEntities() {
-        int numToAdd = 100 - entities.size();
+        int numToAdd = NUM_ENTITES - playerDataObjects.getEntities().size();
         for (int i = 0; i < numToAdd; i++) {
             Entity e = new Entity();
-            entities.put(e.getId(), e);
+            playerDataObjects.getEntities().put(e.getId(), e);
         }
+    }
+
+    public PlayerDataObjects getPlayerDataObjects() {
+        return playerDataObjects;
+    }
+
+    public void setPlayerDataObjects(PlayerDataObjects playerDataObjects) {
+        this.playerDataObjects = playerDataObjects;
+    }
+
+    public String getEndPoint() {
+        return endPoint;
+    }
+
+    public String getListenPoint() {
+        return listenPoint;
     }
 }

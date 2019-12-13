@@ -1,6 +1,6 @@
 package com.cyio.backend.model;
 
-import com.cyio.backend.service.Leader;
+import com.cyio.backend.observerpatterns.LeaderboardObserver;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,11 +51,11 @@ public class LeaderBoard {
 
     /**
      * updates the player's score and sort the leader board
-     * @param playerName the username for the player to be updated
+     * @param playerId the id for the player to be updated
      * @param newScore new score
      */
-    public void updatePlayerScore(String playerName, int newScore){
-        Player p = searchByUsername(playerName);
+    public void updatePlayerScore(String playerId, int newScore){
+        Player p = searchById(playerId);
         if(p != null){
             p.setScore(newScore);
         }
@@ -72,6 +72,20 @@ public class LeaderBoard {
     private Player searchByUsername(String playerName){
         for(Player p : leaderList){
             if (p.getUserName().equalsIgnoreCase(playerName)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * private helper method used to retrieve a player by searching its id
+     * @param playerId
+     * @return
+     */
+    private Player searchById(String playerId){
+        for(Player p : leaderList){
+            if (p.getUserId().equals(playerId)) {
                 return p;
             }
         }
@@ -175,7 +189,5 @@ public class LeaderBoard {
 
         return null;
     }
-
-
 }
 

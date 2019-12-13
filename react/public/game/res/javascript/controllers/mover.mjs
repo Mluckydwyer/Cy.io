@@ -1,6 +1,8 @@
 export { Mover };
 
 function Mover() {
+    this.width = 0; // TODO implement fixed game size independent of canvas size
+    this.height = 0; // TODO implement fixed game size independent of canvas size
     this.xPos = 0;
     this.yPos = 0;
     this.targetX = 0;
@@ -8,7 +10,9 @@ function Mover() {
     this.mag = 0;
     this.speed = 5;
     this.size = 0;
+    this.radiusOffset = 0;
     this.keys = [];
+    this.collisions = [];
 
     this.mouseDeadzone = 5;
     this.expMovement = false; // TODO Make enum
@@ -20,7 +24,10 @@ function Mover() {
     this.config = function (config) {
         this.size = config.players.shape.playerSize;
         this.speed = config.players.movement.playerSpeed;
-        this.expMovement = config.players.movement.movementStyle === 'exponential';
+        this.expMovement = (config.players.movement.movementStyle === 'exponential');
+        this.width = config.gameplay.width;
+        this.height = config.gameplay.height;
+
         this.centerPos();
         return this;
     };
@@ -64,19 +71,24 @@ function Mover() {
     };
 
     // Update movement based on current input
-    this.update = function (controller) {
-        if (!controller.mouseOnScreen) return; // If mouse has left hte screen don't update position
-        this.setCoords(controller.mouseX, controller.mouseY); // Set new mouse coords
-        this.setKeys(controller.keys);
+    this.update = function (controller=null) {
+        if (controller !== null) {
+            if (!controller.mouseOnScreen) { // If mouse has left the screen don't update position
+                this.setCoords(0, 0); // Set new mouse coords
+                return;
+            }
+            this.setCoords(controller.mouseX, controller.mouseY); // Set new mouse coords
+            this.setKeys(controller.keys);
 
-        // Use the current input source to get current movement data
-        switch (controller.inputSource) {
-            case 'keyboard':
-                this.checkKeys(); // Keyboard input
-                break;
-            case 'mouse':
-                this.checkMouse(); // Mouse input data
-                break;
+            // Use the current input source to get current movement data
+            switch (controller.inputSource) {
+                case 'keyboard':
+                    this.checkKeys(); // Keyboard input
+                    break;
+                case 'mouse':
+                    this.checkMouse(); // Mouse input data
+                    break;
+            }
         }
 
         this.move(); // Execute calculated move
@@ -88,12 +100,21 @@ function Mover() {
         this.yPos += this.targetY * this.speed;
     };
 
-    this.checkPlayerCollisions = function () {
-        // TODO
+    this.checkPlayerCollisions = function (entities, players) {
+        for (let i = 0; i < entities.length; i++) {
+            let entity = entities[i];
+            if (this.isColliding(this.xPos, this.yPos, this.size, entity.xPos, entity.yPos, entity.size, this.radiusOffset)) this.collisions.push(entity);
+        }
+        // TODO ADD PLAYER COLLISION DETECTION
     };
 
-    this.checkEntitityCollisions = function () {
-        // TODO
+    this.isTouching = function(xPos, yPos) {
+        //return (xPos < this.xPos + this.size && xPos > this.xPos - this.size) && (xPos < this.xPos + this.size && xPos > this.xPos - this.size);
+        return this.isColliding(xPos, yPos, 0, this.xPos, this.yPos, this.size);
+    };
+
+    this.isColliding = function (xPos1, yPos1, size1, xPos2, yPos2, size2, sizeOffset=0) {
+        return Math.sqrt(Math.pow(xPos1 - xPos2, 2) + Math.pow(yPos1 - yPos2, 2)) <= size1 + size2 + sizeOffset;
     };
 
     // Handles Keyboard input

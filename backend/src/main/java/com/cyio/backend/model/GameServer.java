@@ -7,72 +7,96 @@ import com.cyio.backend.websockets.ChatSocket;
 import com.cyio.backend.websockets.LeaderboardSocket;
 import com.cyio.backend.websockets.NotificationSocket;
 import com.cyio.backend.websockets.PlayerDataSocket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 //@Entity
 
 //@Table(name = "Servers")
+//@Controller
+@Component
 public class GameServer implements EntityListObserver, PlayerListObserver, LeaderboardObserver {
 
-//    @Id
     private String serverId;
-
-//    @Column(name = "gameId")
     private String gameId;
 
+    public HashMap<String, Player> players;
+    public HashMap<String, Entity> entities;
+    public LeaderBoard leaderBoard;
     private Game game;
 
-    HashMap<String, Player> players;
-    HashMap<String, Entity> entities;
-    LeaderBoard leaderBoard;
-
     // Game Leaderboard
-    LeaderboardSocket ls;
+    @Autowired
+    private LeaderboardSocket leaderboardSocket;
 
     // Game notifications
-    NotificationSocket ns;
+    @Autowired
+    private NotificationSocket notificationSocket;
 
     // Game Chat
-    ChatSocket cs;
+    @Autowired
+    private ChatSocket chatSocket;
 
-    // Player Data
-    PlayerDataSocket pds;
+    // Player Data Socket
+    @Autowired
+    private PlayerDataSocket playerDataSocket;
 
-    public GameServer() {
-
-    }
-
-    public GameServer(Game game) {
+    @Autowired
+    public GameServer(Game game, LeaderboardSocket leaderboardSocket, NotificationSocket notificationSocket, PlayerDataSocket playerDataSocket, ChatSocket chatSocket) {
         this.serverId = UUID.randomUUID().toString();
-        this.game = game;
-        this.gameId = this.game.getGameID();
+        setGame(game);
 
-        ls = new LeaderboardSocket();
-        ns = new NotificationSocket();
-        pds = new PlayerDataSocket();
-        cs = new ChatSocket();
+        this.leaderboardSocket = leaderboardSocket;
+        this.notificationSocket = notificationSocket;
+        this.playerDataSocket = playerDataSocket;
+        this.chatSocket = chatSocket;
 
-        pds.fillEntities();
+        this.players = new HashMap<>();
+        this.entities = new HashMap<>();
+        this.leaderBoard = new LeaderBoard();
     }
 
+    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
+    public void init() {
+//        pds.registerObserver((PlayerListObserver) this);
+//        pds.registerObserver((EntityListObserver) this);
+//        ls.registerObserver((LeaderboardObserver) this);
+//        this.leaderboardSocket = new LeaderboardSocket();
+//        this.notificationSocket = new NotificationSocket();
+//        this.playerDataSocket = new PlayerDataSocket();
+//        this.chatSocket = new ChatSocket();
+
+        this.players = new HashMap<>();
+        this.entities = new HashMap<>();
+        this.leaderBoard = new LeaderBoard();
+        this.playerDataSocket.registerObserver((PlayerListObserver) this);
+        this.playerDataSocket.registerObserver((EntityListObserver) this);
+        this.leaderboardSocket.registerObserver((LeaderboardObserver) this);
+    }
 
     public Map<String, String> getJoinData() {
-        Map<String, String> joinData = new HashMap();
+        Map<String, String> joinData = new HashMap<>();
         joinData.put("gameTitle", game.getTitle());
         joinData.put("gameId", gameId);
         joinData.put("serverId", serverId);
         joinData.put("url", "");
-        joinData.put("chatWs", cs.endPoint);
-        joinData.put("chatSub", cs.listenPoint);
-        joinData.put("notificationWs", ns.endPoint);
-        joinData.put("notificationSub", ns.listenPoint);
-        joinData.put("leaderboardWs", ls.endPoint);
-        joinData.put("leaderboardSub", ls.listenPoint);
-        joinData.put("playerDataWs", pds.endPoint);
-        joinData.put("playerDataSub", pds.listenPoint);
+        joinData.put("chatWs", chatSocket.endPoint);
+        joinData.put("chatSub", chatSocket.listenPoint);
+        joinData.put("notificationWs", notificationSocket.endPoint);
+        joinData.put("notificationSub", notificationSocket.listenPoint);
+        joinData.put("leaderboardWs", leaderboardSocket.endPoint);
+        joinData.put("leaderboardSub", leaderboardSocket.listenPoint);
+        joinData.put("playerDataWs", playerDataSocket.getEndPoint());
+        joinData.put("playerDataSub", playerDataSocket.getListenPoint());
 
         return joinData;
     }
@@ -95,39 +119,93 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
 
     @Override
     public void updatePlayerList(HashMap<String, Player> players) {
-        // Find new players that might have joined
-        for (String playerId : players.keySet()) {
-            if (!this.players.containsKey(playerId)) {
-                ns.playerJoined(players.get(playerId));
-                ls.leaderBoard.addPlayer(players.get(playerId));
-            }
-        }
-
-        // Find old players that might have left
-        for (String playerId : this.players.keySet()) {
-            if (!players.containsKey(playerId)) {
-                ns.playerLeft(this.players.get(playerId));
-                ls.leaderBoard.removePlayer(this.players.get(playerId));
-            }
-        }
-
         this.players = players; // update local player list
+
+        for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getJustJoined().keySet()) {
+            Player player = (Player) playerDataSocket.getPlayerDataObjects().getJustJoined().get(playerId);
+            notificationSocket.playerJoined(player);
+            leaderboardSocket.leaderBoard.addPlayer(player);
+        }
+        playerDataSocket.getPlayerDataObjects().getJustJoined().clear();
+
+        for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getJustLeft().keySet()) {
+            Player player = (Player) playerDataSocket.getPlayerDataObjects().getJustLeft().get(playerId);
+            notificationSocket.playerLeft(player);
+            leaderboardSocket.leaderBoard.removePlayer(player);
+        }
+        playerDataSocket.getPlayerDataObjects().getJustLeft().clear();
+
+        for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getScoreChange().keySet()) {
+            Player player = (Player) playerDataSocket.getPlayerDataObjects().getScoreChange().get(playerId);
+            leaderboardSocket.leaderBoard.updatePlayerScore(playerId, player.getScore());
+        }
+        playerDataSocket.getPlayerDataObjects().getScoreChange().clear();
     }
 
     @Override
     public void updateLeaderBoard(LeaderBoard leaderBoard) {
-        if (this.leaderBoard.getLeader().getPlayerId() != leaderBoard.getLeader().getPlayerId()) {
-            ns.newLeader(players.get(leaderBoard.getLeader().getPlayerId()));
-        }
+//        if (this.leaderBoard.getLeader().getPlayerId() != leaderBoard.getLeader().getPlayerId()) {
+//            ns.newLeader(players.get(leaderBoard.getLeader().getPlayerId()));
+//        }
         this.leaderBoard = leaderBoard; // update local leader list
-        ls.sendLeaderboard(leaderBoard);
+//        ls.sendLeaderboard(leaderBoard);
     }
 
     @Override
     public void updateEntityList(HashMap<String, Entity> entities) {
-        if (!this.entities.equals(entities)) {
-            pds.fillEntities();
-        }
+//        if (!this.entities.equals(entities)) {
+//            pds.fillEntities();
+//        }
         this.entities = entities;
     }
+
+    public String getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
+
+    public LeaderboardSocket getLeaderboardSocket() {
+        return leaderboardSocket;
+    }
+
+    public void setLeaderboardSocket(LeaderboardSocket leaderboardSocket) {
+        this.leaderboardSocket = leaderboardSocket;
+    }
+
+    public NotificationSocket getNotificationSocket() {
+        return notificationSocket;
+    }
+
+    public void setNotificationSocket(NotificationSocket notificationSocket) {
+        this.notificationSocket = notificationSocket;
+    }
+
+    public ChatSocket getChatSocket() {
+        return chatSocket;
+    }
+
+    public void setChatSocket(ChatSocket chatSocket) {
+        this.chatSocket = chatSocket;
+    }
+
+    public PlayerDataSocket getPlayerDataSocket() {
+        return playerDataSocket;
+    }
+
+    public void setPlayerDataSocket(PlayerDataSocket playerDataSocket) {
+        this.playerDataSocket = playerDataSocket;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+        this.gameId = this.game.getGameID();
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
 }

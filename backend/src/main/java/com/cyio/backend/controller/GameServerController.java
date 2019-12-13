@@ -25,26 +25,26 @@ public class GameServerController {
     @Autowired
     GameRepository gameRepository; //using autowire to create an instance of game repository
 
-    GameServer gs;
+    @Autowired
+    GameServer gameServer;
 
     @PostConstruct
     public void init() {
-        generateDummyServer();
+        //generateDummyServer();
+        Game game = new Game();
+        gameServer.getGame().setTitle("Cygar.io");
     }
 
     private void generateDummyServer() {
         String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
         String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
-        Game dummyGame = new Game("Game 1", dummyGameId, dummyCreatorId);
-        GameServer dummyGameServer = new GameServer(dummyGame);
-        this.gs = dummyGameServer;
-
-        //serverRepository.save(dummyGame);
+        Game dummyGame = new Game("Cygar.io", dummyGameId, dummyCreatorId);
+        gameServer.setGame(dummyGame);
     }
 
     public Map<String, String> join(String serverId) {
-        GameServer server = gs; //serverRepository.findGameServerByServerId(serverId);//.orElseThrow(() -> new ResourceNotFoundException("GameServer", "id", serverId));
-        Map<String, String> joinData = server.getJoinData();
+        //GameServer server = gameServer; //serverRepository.findGameServerByServerId(serverId);//.orElseThrow(() -> new ResourceNotFoundException("GameServer", "id", serverId));
+        Map<String, String> joinData = gameServer.getJoinData();
         return joinData;
     }
 
@@ -61,6 +61,6 @@ public class GameServerController {
 //            serverRepository.save(server);
 //        }
 //        return join(serverId);
-        return new JSONResponse(true, join(gs.getServerID()));
+        return new JSONResponse(true, join(gameServer.getServerID()));
     }
 }

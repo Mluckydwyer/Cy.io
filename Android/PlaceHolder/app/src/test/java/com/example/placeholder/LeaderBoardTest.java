@@ -1,5 +1,8 @@
 package com.example.placeholder;
 
+import com.example.placeholder.Activities.LeaderBoardActivity;
+import com.example.placeholder.Models.Player;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

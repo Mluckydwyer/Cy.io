@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 function Signup(){
     const signupCheck = localStorage.getItem("success");
@@ -7,6 +7,8 @@ function Signup(){
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState("");
     
     function handleChangeUser(event){
         setUserName(event.target.value);
@@ -20,8 +22,9 @@ function Signup(){
         console.log(event.target.value);
     }
     
-    function signupRequest() {
+    function signupRequest(event) {
         const API = 'http://coms-309-nv-4.misc.iastate.edu:8080/auth/signup';
+        event.preventDefault();
         fetch(API, {
             method: 'post',
             headers: {
@@ -45,7 +48,8 @@ function Signup(){
             localStorage.setItem("success",JSON.stringify(data));
             setSignup(true);
             return data;
-        }).then(console.log);
+        })
+            .catch(error => setError(error));
         console.log(localStorage.getItem("success"));
     }
     
@@ -53,8 +57,12 @@ function Signup(){
         localStorage.removeItem("success");
         return <Redirect to="/" />;
     }
+    if(error && !message){
+        setMessage("That email already has associated account");
+    }
     return (
         <div>
+            <h2>{message}</h2>
             <form onSubmit={signupRequest}>
                 <label>E-mail
                     <input type="email" name="Email" value={email} onChange={handleChangeEmail} />
@@ -73,4 +81,5 @@ function Signup(){
         </div>
     )
 }
+
 export default Signup;

@@ -21,5 +21,9 @@
       "allowKeyboard": true,
       "allowMouse": true
     }
+  },
+  "gameplay": {
+    "height": 1000,
+    "width": 1000
   }
 }
