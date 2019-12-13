@@ -28,6 +28,7 @@ import java.util.HashMap;
 public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     private final Logger LOGGER = LoggerFactory.getLogger(PlayerDataSocket.class);
     private final int UPDATE_INTERVAL = 12; // milliseconds
+
     private final int NUM_ENTITES = 300;
 
     @Autowired
@@ -215,5 +216,9 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
 
     public String getListenPoint() {
         return listenPoint;
+    }
+
+    public int getNUM_ENTITES() {
+        return NUM_ENTITES;
     }
 }

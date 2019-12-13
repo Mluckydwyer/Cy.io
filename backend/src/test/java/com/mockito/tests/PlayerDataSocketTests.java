@@ -49,7 +49,7 @@ public class PlayerDataSocketTests {
         setupTest();
         assert(gameServer.getPlayerDataSocket().getPlayerDataObjects().getEntities().isEmpty());
         gameServer.getPlayerDataSocket().fillEntities();
-        assert(gameServer.getPlayerDataSocket().getAllEntities().size() == 100);
+        assert(gameServer.getPlayerDataSocket().getAllEntities().size() == gameServer.getPlayerDataSocket().getNUM_ENTITES());
         for (Entity e1 : gameServer.getPlayerDataSocket().getAllEntities()) {
             for (Entity e2 : gameServer.getPlayerDataSocket().getAllEntities()) {
                 if (e1.getId().equals(e2.getId())) continue;
