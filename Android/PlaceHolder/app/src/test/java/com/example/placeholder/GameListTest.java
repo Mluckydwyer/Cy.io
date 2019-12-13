@@ -81,4 +81,27 @@ public class GameListTest
         when(gameListSupport.getList()). thenReturn(lgl);
         assertEquals(g.linkedGameList, lgl);
     }
+
+    @Test
+    public void lgltoarr_null_test()
+    {
+        LinkedGameList lgl = new LinkedGameList();
+        ArrayList<Game> arr = null;
+        when(gameListSupport.lgltoarr(lgl)).thenReturn(arr);
+        assertEquals(arr, null);
+    }
+
+    @Test
+    public void lgltoarr_test()
+    {
+        LinkedGameList lgl = new LinkedGameList();
+        ArrayList<Game> arr = new ArrayList<>();
+        Game f = new Game("Cookie Clicker", "S", "t", "u", "v");
+        lgl.AddToList(f);
+        arr.add(f);
+        when(gameListSupport.lgltoarr(lgl)).thenReturn(arr);
+        assertEquals(arr.get(0), f);
+        assertEquals(lgl.getGame(lgl.head), f);
+        assertEquals(lgl.getGame(lgl.head), arr.get(0));
+    }
 }

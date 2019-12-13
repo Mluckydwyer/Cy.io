@@ -1,6 +1,7 @@
 package com.example.placeholder;
 
 import com.example.placeholder.Activities.LoginActivity;
+import com.example.placeholder.Models.Message;
 
 import org.junit.Test;
 
@@ -40,4 +41,5 @@ public class LoginTest
         loginActivity.setUser(null);
         assertEquals(null, loginActivity.getUser());
     }
+
 }

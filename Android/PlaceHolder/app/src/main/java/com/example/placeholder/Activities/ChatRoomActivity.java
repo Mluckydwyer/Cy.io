@@ -41,8 +41,6 @@ public class ChatRoomActivity extends AppCompatActivity
         sendBtn = findViewById(R.id.MessageSendButton);
         userMessageTextBox = findViewById(R.id.MessageTextBox);
         chatHistoryParent = findViewById(R.id.LinearLayoutChatRoom);
-
-
         compositeDisposable = new CompositeDisposable();
         mStompClient = Stomp.over(Stomp.ConnectionProvider.JWS, url);
         WebSocketSupport webSocketSupport = new WebSocketSupport();
@@ -52,7 +50,6 @@ public class ChatRoomActivity extends AppCompatActivity
         {
             Log.d(TAG, "MESSAGE: " + topicMessage.getPayload());
             String chatLog = new JSONObject(topicMessage.getPayload()).getString("text");
-
             TextView newChat = new TextView(getApplicationContext());
             newChat.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             newChat.setText(chatLog);
@@ -63,7 +60,6 @@ public class ChatRoomActivity extends AppCompatActivity
         });
         compositeDisposable.add(dispTopic);
         Log.d(TAG, dispTopic.toString());
-
         sendBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
