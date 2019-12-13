@@ -7,7 +7,7 @@ import getRequest from "./libs/requests.mjs";
 
 let canvas; // HTML canvas
 let g; // canvas graphics object
-const framerate = 40;
+const framerate = 50;
 
 let serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
 // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
