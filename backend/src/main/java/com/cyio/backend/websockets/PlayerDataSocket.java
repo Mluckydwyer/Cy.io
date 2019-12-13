@@ -161,7 +161,7 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
             for (Object key : playerDataObjects.getEntities().keySet()) {
                 data.add((Entity) playerDataObjects.getEntities().get(key));
             }
-
+            return data;
         } catch (Exception e) {
             //e.printStackTrace();
         }
