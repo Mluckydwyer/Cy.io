@@ -113,7 +113,7 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
         }
     }
 
-    @Scheduled(fixedRate = 40b00)
+    @Scheduled(fixedRate = 4000)
     public void refreshEntities() {
         for (Object key : playerDataObjects.getEntities().keySet()) {
             if (Math.random() > 0.5) {
