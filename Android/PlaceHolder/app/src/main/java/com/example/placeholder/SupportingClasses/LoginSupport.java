@@ -1,16 +1,19 @@
 package com.example.placeholder.SupportingClasses;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.placeholder.VolleyResponseListener;
 import com.example.placeholder.app.AppController;
 
@@ -23,6 +26,7 @@ import java.util.Map;
 
 public class LoginSupport
 {
+    private static final String TAG = "LoginSupport";
     public void credentials(String authorizationToken)
     {
         final String authToken = authorizationToken;
@@ -96,6 +100,50 @@ public class LoginSupport
         };
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
     }
+    private static LoginSupport instance = null;
+    public RequestQueue requestQueue;
+    private LoginSupport(Context context)
+    {
+        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+    }
 
+    public static synchronized LoginSupport getInstance(Context context)
+    {
+        if (null == instance)
+        {
+            instance = new LoginSupport(context);
+        }
+        return instance;
+    }
 
+    public static synchronized LoginSupport getInstance()
+    {
+        if (null == instance)
+        {
+            throw new IllegalStateException(GameListSupport.class.getSimpleName() + "is not initialized, call getInstance(...) first");
+        }
+        return instance;
+    }
+
+    public static String user;
+    public String pass;
+    public void setPass(String s)
+    {
+        pass = s;
+    }
+
+    public String getPass()
+    {
+        return pass;
+    }
+
+    public void setUser(String s)
+    {
+        user = s;
+    }
+
+    public String getUser()
+    {
+        return user;
+    }
 }

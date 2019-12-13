@@ -1,5 +1,6 @@
 package com.example.placeholder.SupportingClasses;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -8,13 +9,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.placeholder.Activities.GameListActivity;
 import com.example.placeholder.Models.Game;
 import com.example.placeholder.R;
+import com.example.placeholder.SimpleListener;
 import com.example.placeholder.SupportingClasses.LinkedGameList;
 import com.example.placeholder.app.AppController;
 
@@ -29,14 +34,7 @@ public class GameListSupport extends AppCompatActivity
 {
     public LinkedGameList linkedGameList = new LinkedGameList();
     public  ArrayList<Game> gameArrayList;
-    private static final String TAG = "MainActivity";
-
-//    public GameListSupport(LinkedGameList linkedGameList)
-//    {
-//        this.linkedGameList = linkedGameList;
-//    }
-
-
+    private static final String TAG = "GameListSupport";
 
     public LinkedGameList createLinkedList(ArrayList<Game> gameArrayList)
     {
@@ -76,75 +74,69 @@ public class GameListSupport extends AppCompatActivity
         return gameArrayList;
     }
 
-    public void arrResponse() throws JSONException
+    private static GameListSupport instance = null;
+    private static final String URL = "http://coms-309-nv-4.misc.iastate.edu:8080/gamelist";
+    public RequestQueue requestQueue;
+    private GameListSupport(Context context)
     {
-        String tag_json_arry = "json_array_req";
-        String url = "http://coms-309-nv-4.misc.iastate.edu:8080/gamelist";
-        JsonArrayRequest req = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>()
-                {
-                    public ArrayList<Game> gameArrayList = new ArrayList<>();
-                    public LinkedGameList linkedGameList1 = new LinkedGameList();
-                    public void updateLinkedGameList(LinkedGameList updateList)
-                    {
-                        linkedGameList.head = updateList.head;
-                        linkedGameList.head.next = updateList.head.next;
-                        LinkedGameList.Node iter1 = linkedGameList.head;
-                        LinkedGameList.Node iter2 = updateList.head;
-                        while(iter2.next.game!= null)
-                        {
-                            iter1.next = iter2.next;
-                            iter1 = iter1.next;
-                            iter2 = iter2.next;
-                        }
+        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+    }
 
-                    }
-
-                    @Override
-                    public void onResponse(JSONArray response)
-                    {
-                        for (int i = 0; i < response.length(); i++)
-                        {
-                            JSONArray responseNames;
-                            try
-                            {
-                                JSONObject responseJSONObject = response.getJSONObject(i);
-                                responseNames = responseJSONObject.names();
-
-                                Game game = new Game();
-                                game.setTitle(responseJSONObject.getString(responseNames.get(0).toString()));
-                                game.setBlurb(responseJSONObject.getString(responseNames.get(1).toString()));
-                                game.setAbout(responseJSONObject.getString(responseNames.get(2).toString()));
-                                game.setGameID(responseJSONObject.getString(responseNames.get(3).toString()));
-                                game.setCreatorID(responseJSONObject.getString(responseNames.get(4).toString()));
-                                gameArrayList.add(game);
-                            }
-                            catch (JSONException e)
-                            {
-                                System.out.println(e.getMessage());
-                            }
-                        }
-
-//                        linkedGameList1 = gameListSupport.createLinkedList(gameArrayList);
-//                        updateLinkedGameList(linkedGameList1);
-                        ArrayList<Game> g = setGameArrayList(gameArrayList);
-                        Log.d("DDDD", g.get(0).getTitle());
-                        g = getGameArrayList();
-                        Log.d("DDDD", g.get(0).getTitle());
-                        GameListActivity d = new GameListActivity();
-                        d.displayGames(gameArrayList);
-                    }
-                }, new Response.ErrorListener()
+    public static synchronized GameListSupport getInstance(Context context)
+    {
+        if (null == instance)
         {
+            instance = new GameListSupport(context);
+        }
+        return instance;
+    }
+
+    public static synchronized GameListSupport getInstance()
+    {
+        if (null == instance)
+        {
+            throw new IllegalStateException(GameListSupport.class.getSimpleName() + "is not initialized, call getInstance(...) first");
+        }
+        return instance;
+    }
+
+    public void JSONRequest(final SimpleListener<ArrayList<Game>> listener)
+    {
+        String url = URL;
+        ArrayList<Game> gameArrayList = new ArrayList<>();
+        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
-            public void onErrorResponse(VolleyError error)
+            public void onResponse(JSONArray response)
             {
+                for (int i = 0; i < response.length(); i++)
+                {
+                    JSONArray responseNames;
+                    try
+                    {
+                        JSONObject responseJSONObject = response.getJSONObject(i);
+                        responseNames = responseJSONObject.names();
+
+                        Game game = new Game();
+                        game.setTitle(responseJSONObject.getString(responseNames.get(0).toString()));
+                        game.setBlurb(responseJSONObject.getString(responseNames.get(1).toString()));
+                        game.setAbout(responseJSONObject.getString(responseNames.get(2).toString()));
+                        game.setGameID(responseJSONObject.getString(responseNames.get(3).toString()));
+                        game.setCreatorID(responseJSONObject.getString(responseNames.get(4).toString()));
+                        gameArrayList.add(game);
+                    }
+                    catch (JSONException e)
+                    {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                listener.getResult(gameArrayList);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
             }
         });
-        AppController.getInstance().addToRequestQueue(req, tag_json_arry);
+        requestQueue.add(request);
     }
-
-
-
 }

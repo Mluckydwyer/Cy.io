@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.placeholder.Activities.LoginActivity;
 import com.example.placeholder.R;
 
 public class MainActivity extends AppCompatActivity

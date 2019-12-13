@@ -2,6 +2,7 @@ package com.example.placeholder;
 
 import com.example.placeholder.Activities.LoginActivity;
 import com.example.placeholder.Models.Message;
+import com.example.placeholder.SupportingClasses.LoginSupport;
 
 import org.junit.Test;
 
@@ -9,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -20,6 +22,9 @@ public class LoginTest
 {
     @Mock
     LoginActivity loginActivity;
+
+    @Mock
+    LoginSupport loginSupport;
 
     @Before
     public void init()
@@ -38,8 +43,23 @@ public class LoginTest
     @Test
     public void null_UserTest()
     {
-        loginActivity.setUser(null);
-        assertEquals(null, loginActivity.getUser());
+        loginSupport.setUser(null);
+        assertEquals(null, loginSupport.getUser());
     }
 
+    @Test
+    public void null_PasswordTest()
+    {
+        loginSupport.setPass(null);
+        assertEquals(null, loginSupport.getPass());
+    }
+
+    @Test
+    public void passwordTest()
+    {
+        loginSupport.setPass("password");
+        String pass = "password";
+        when(loginSupport.getPass()).thenReturn(pass);
+        assertEquals(loginSupport.getPass(), "password");
+    }
 }

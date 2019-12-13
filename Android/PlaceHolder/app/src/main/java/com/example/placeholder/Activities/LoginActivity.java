@@ -23,12 +23,9 @@ public class LoginActivity extends AppCompatActivity
 {
     Button loginBtn;
     EditText username, password;
-    public static final String NICKNAME = "username";
-    public String bearer;
-    public String token;
+    public String bearer = "";
+    public String token = "";
     public static String user;
-    public String pass;
-    boolean next = false;
     public static final String TAG = "Login-Page";
 
     @Override
@@ -40,26 +37,24 @@ public class LoginActivity extends AppCompatActivity
         username = findViewById(R.id.LoginUsernameTextBox);
         password = findViewById(R.id.LoginPasswordTextBox);
 
+        LoginSupport.getInstance(this);
         loginBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                setUser(username.getText().toString());
-                setPass(password.getText().toString());
+                user = username.getText().toString();
                 JSONObject obj = new JSONObject();
                 try
                 {
-                    obj.put("userName", getUser());
-                    obj.put("password", getPass());
+                    obj.put("userName", username.getText().toString());
+                    obj.put("password", password.getText().toString());
                 }
                 catch (JSONException e)
                 {
                     System.out.println(e.getMessage());
                 }
                 String URL = "http://coms-309-nv-4.misc.iastate.edu:8081/auth/login";
-                bearer = " ";
-                token = " ";
                 makeJsonObjectRequest(URL, obj, new VolleyResponseListener()
                 {
                     @Override
@@ -72,43 +67,21 @@ public class LoginActivity extends AppCompatActivity
                     public void onResponse(Object response)
                     {
                         Log.d(TAG, response.toString());
-                        int q = response.toString().indexOf("accessToken");
-                        int r = response.toString().indexOf("tokenType");
-                        token = response.toString().substring(q + 14,r - 3);
-                        bearer = response.toString().substring(r + 12, response.toString().length()- 2);
-                        LoginSupport loginSupport = new LoginSupport();
-                        loginSupport.credentials(token);
+                        int accessToken = response.toString().indexOf("accessToken");
+                        int tokenType = response.toString().indexOf("tokenType");
+                        token = response.toString().substring(accessToken + 14,tokenType - 3);
+                        bearer = response.toString().substring(tokenType + 12, response.toString().length()- 2);
+                        LoginSupport.getInstance().credentials(token);
                         openHomePage();
                     }
                 });
             }
         });
-
     }
 
     public void openHomePage()
     {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
-    }
-
-    public void setPass(String s)
-    {
-        pass = s;
-    }
-
-    public String getPass()
-    {
-        return pass;
-    }
-
-    public void setUser(String s)
-    {
-        user = s;
-    }
-
-    public String getUser()
-    {
-        return user;
     }
 }
