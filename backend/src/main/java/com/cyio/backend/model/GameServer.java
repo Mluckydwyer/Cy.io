@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 //@Entity
@@ -83,7 +84,7 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
     }
 
     public Map<String, String> getJoinData() {
-        Map<String, String> joinData = new HashMap();
+        Map<String, String> joinData = new HashMap<>();
         joinData.put("gameTitle", game.getTitle());
         joinData.put("gameId", gameId);
         joinData.put("serverId", serverId);
@@ -94,8 +95,8 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         joinData.put("notificationSub", notificationSocket.listenPoint);
         joinData.put("leaderboardWs", leaderboardSocket.endPoint);
         joinData.put("leaderboardSub", leaderboardSocket.listenPoint);
-        joinData.put("playerDataWs", playerDataSocket.endPoint);
-        joinData.put("playerDataSub", playerDataSocket.listenPoint);
+        joinData.put("playerDataWs", playerDataSocket.getEndPoint());
+        joinData.put("playerDataSub", playerDataSocket.getListenPoint());
 
         return joinData;
     }
@@ -118,36 +119,19 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
 
     @Override
     public void updatePlayerList(HashMap<String, Player> players) {
-
-//        // Find new players that might have joined
-////        for (String playerId : players.keySet()) {
-////            if (!this.players.containsKey(playerId)) {
-////                ns.playerJoined(players.get(playerId));
-////                ls.leaderBoard.addPlayer(players.get(playerId));
-////            }
-////        }
-////
-////        // Find old players that might have left
-////        for (String playerId : this.players.keySet()) {
-////            if (!players.containsKey(playerId)) {
-////                ns.playerLeft(this.players.get(playerId));
-////                ls.leaderBoard.removePlayer(this.players.get(playerId));
-////            }
-////        }
-////
         this.players = players; // update local player list
 
-//        for (String playerId : (Set<String>) pdos.getJustJoined().keySet()) {
-//            ns.playerJoined(players.get(playerId));
-//            ls.leaderBoard.addPlayer(players.get(playerId));
-//        }
-//        pdos.getJustJoined().clear();
-//
-//        for (String playerId : (Set<String>) pdos.getJustLeft().keySet()) {
-//            ns.playerLeft(players.get(playerId));
-//            ls.leaderBoard.removePlayer(players.get(playerId));
-//        }
-//        pdos.getJustLeft().clear();
+        for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getJustJoined().keySet()) {
+            notificationSocket.playerJoined(players.get(playerId));
+            leaderboardSocket.leaderBoard.addPlayer(players.get(playerId));
+        }
+        playerDataSocket.getPlayerDataObjects().getJustJoined().clear();
+
+        for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getJustLeft().keySet()) {
+            notificationSocket.playerLeft(players.get(playerId));
+            leaderboardSocket.leaderBoard.removePlayer(players.get(playerId));
+        }
+        playerDataSocket.getPlayerDataObjects().getJustLeft().clear();
     }
 
     @Override

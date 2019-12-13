@@ -41,10 +41,10 @@ public class PlayerDataSocketTests {
         gameServer = new GameServer(dummyGame, null, null, null, null);
         gameServer.setPlayerDataSocket(new PlayerDataSocket());
         gameServer.setLeaderboardSocket(new LeaderboardSocket());
-        gameServer.getPlayerDataSocket().pdos = new PlayerDataObjects();
+        gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
         gameServer.init();
 
-        assert(gameServer.getPlayerDataSocket().pdos.getEntities().isEmpty());
+        assert(gameServer.getPlayerDataSocket().getPlayerDataObjects().getEntities().isEmpty());
         gameServer.getPlayerDataSocket().fillEntities();
         assert(gameServer.getPlayerDataSocket().getAllEntities().size() == 100);
         for (Entity e1 : gameServer.getPlayerDataSocket().getAllEntities()) {
@@ -65,7 +65,7 @@ public class PlayerDataSocketTests {
         gameServer = new GameServer(dummyGame, null, null, null, null);
         gameServer.setPlayerDataSocket(new PlayerDataSocket());
         gameServer.setLeaderboardSocket(new LeaderboardSocket());
-        gameServer.getPlayerDataSocket().pdos = new PlayerDataObjects();
+        gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
         gameServer.init();
 
         HashMap<String, Player> testData = new HashMap<>();
@@ -88,7 +88,7 @@ public class PlayerDataSocketTests {
         gameServer = new GameServer(dummyGame, null, null, null, null);
         gameServer.setPlayerDataSocket(new PlayerDataSocket());
         gameServer.setLeaderboardSocket(new LeaderboardSocket());
-        gameServer.getPlayerDataSocket().pdos = new PlayerDataObjects();
+        gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
         gameServer.init();
 
         LeaderBoard testLeaderBoard = new LeaderBoard();
@@ -109,7 +109,7 @@ public class PlayerDataSocketTests {
         gameServer = new GameServer(dummyGame, null, null, null, null);
         gameServer.setPlayerDataSocket(new PlayerDataSocket());
         gameServer.setLeaderboardSocket(new LeaderboardSocket());
-        gameServer.getPlayerDataSocket().pdos = new PlayerDataObjects();
+        gameServer.getPlayerDataSocket().setPlayerDataObjects(new PlayerDataObjects());
         gameServer.init();
 
         HashMap<String, Entity> testData = new HashMap<>();

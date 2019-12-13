@@ -12,7 +12,7 @@ export function Player() {
     let isClientPlayer = false;
     let lastUpdate;
 
-    this.init = function (config, loadConfig, isClientPlayer=false) {
+    this.init = function (config=null, loadConfig=false, isClientPlayer=false) {
         this.mover = new Mover().init();
         this.name = "You";
         this.playerId = this.generateUUID();

@@ -183,7 +183,7 @@ input {
     width: 180px;
     height: 110px;
     float: left;
-    /*background: transparent url("/domains/mluckydwyer.com/first/Resourcesrces/Images/Logo.png") center top no-repeat;*/
+    background: transparent url("/game/res/Assets/Images/MLogoFace.png") center top no-repeat;
     background-size: contain;
     transition: all .5s ease;
     display: block;
@@ -195,14 +195,14 @@ input {
     width: 100px;
     height: 73.3px;
     float: left;
-    /*background: transparent url("/domains/mluckydwyer.com/first/Resourcesrces/Images/Logo.png") center top no-repeat;*/
+    background: transparent url("/game/res/Assets/Images/MLogoFace.png") center top no-repeat;
     background-size: contain;
     transition: all .5s ease;
     display: block;
 }
 
 #loader-logo:hover, #loader-logo:active, #overlay-logo:hover, #overlay-logo:active {
-    /*background: transparent url("/domains/mluckydwyer.com/first/Resourcesrces/Images/Logo Face.png") center top no-repeat;*/
+    background: transparent url("/game/res/Assets/Images/MLogoFace.png") center top no-repeat;
     background-size: contain;
     transform: rotate3d(240, 200, 0, 30deg);
 }

@@ -234,6 +234,10 @@ function run() {
 function draw() {
     // Clear screen
     g.clearRect(0, 0, canvas.width, canvas.height);
+    if (controller.darkmode) {
+        g.fillStyle = "#333";
+        g.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     // Draw entities
     for (let i = 0; i < entities.length; i++) {
@@ -246,7 +250,7 @@ function draw() {
     }
 }
 
-// Update al lplayers positions
+// Update all players positions
 function movePlayers() {
     for (let i = 0; i < players.length; i++) {
         if (players[i].playerId === getClientPlayer().playerId) players[i].mover.update(controller);
@@ -365,6 +369,11 @@ export function toggleChat() {
         document.getElementById("chat-box").focus();
     }
     controller.chatShown = !controller.chatShown;
+}
+
+export function toggleDarkMode() {
+
+    controller.darkmode = !controller.darkmode;
 }
 
 export function toggleMovementStyle() {
