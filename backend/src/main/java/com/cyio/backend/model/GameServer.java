@@ -52,7 +52,7 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
     @Autowired
     public GameServer(Game game, LeaderboardSocket leaderboardSocket, NotificationSocket notificationSocket, PlayerDataSocket playerDataSocket, ChatSocket chatSocket) {
         this.serverId = UUID.randomUUID().toString();
-        changeGame(game);
+        setGame(game);
 
         this.leaderboardSocket = leaderboardSocket;
         this.notificationSocket = notificationSocket;
@@ -122,16 +122,24 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         this.players = players; // update local player list
 
         for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getJustJoined().keySet()) {
-            notificationSocket.playerJoined(players.get(playerId));
-            leaderboardSocket.leaderBoard.addPlayer(players.get(playerId));
+            Player player = (Player) playerDataSocket.getPlayerDataObjects().getJustJoined().get(playerId);
+            notificationSocket.playerJoined(player);
+            leaderboardSocket.leaderBoard.addPlayer(player);
         }
         playerDataSocket.getPlayerDataObjects().getJustJoined().clear();
 
         for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getJustLeft().keySet()) {
-            notificationSocket.playerLeft(players.get(playerId));
-            leaderboardSocket.leaderBoard.removePlayer(players.get(playerId));
+            Player player = (Player) playerDataSocket.getPlayerDataObjects().getJustLeft().get(playerId);
+            notificationSocket.playerLeft(player);
+            leaderboardSocket.leaderBoard.removePlayer(player);
         }
         playerDataSocket.getPlayerDataObjects().getJustLeft().clear();
+
+        for (String playerId : (Set<String>) playerDataSocket.getPlayerDataObjects().getScoreChange().keySet()) {
+            Player player = (Player) playerDataSocket.getPlayerDataObjects().getScoreChange().get(playerId);
+            leaderboardSocket.leaderBoard.updatePlayerScore(playerId, player.getScore());
+        }
+        playerDataSocket.getPlayerDataObjects().getScoreChange().clear();
     }
 
     @Override
@@ -191,8 +199,13 @@ public class GameServer implements EntityListObserver, PlayerListObserver, Leade
         this.playerDataSocket = playerDataSocket;
     }
 
-    public void changeGame(Game game) {
+    public void setGame(Game game) {
         this.game = game;
         this.gameId = this.game.getGameID();
     }
+
+    public Game getGame() {
+        return game;
+    }
+
 }

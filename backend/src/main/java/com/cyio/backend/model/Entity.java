@@ -14,10 +14,13 @@ public class Entity {
     private String type;
 
     public Entity() {
-        setSize((int) Math.round(Math.random() * 15) + 7);
-        setxPos((int) Math.round(Math.random() * 1000));
-        setyPos((int) Math.round(Math.random() * 1000));
-        setScoreValue((int) Math.round(Math.random() * 200));
+        setSize((int) Math.round(Math.random() * 23) + 7);
+        setxPos((int) Math.round(Math.random() * 1400 - Math.random() * 400));
+        setyPos((int) Math.round(Math.random() * 1000 - Math.random() * 200));
+        if (getxPos() + getSize() < 0) setxPos(0);
+        if (getyPos() + getSize() < 0) setyPos(0);
+
+        setScoreValue((int) Math.round(Math.random() * 250));
         setColor(getRandomColor());
         setId(UUID.randomUUID().toString());
         setType("ENTITY");

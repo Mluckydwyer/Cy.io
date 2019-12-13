@@ -1,5 +1,7 @@
 package com.cyio.backend.websockets;
 
+// How to better handle websockets: https://stackoverflow.com/questions/48319866/websocket-server-based-on-spring-boot-becomes-unresponsive-after-a-malformed-pac
+
 import com.cyio.backend.model.Entity;
 import com.cyio.backend.model.Player;
 import com.cyio.backend.model.PlayerDataObjects;
@@ -25,7 +27,8 @@ import java.util.HashMap;
 @Controller
 public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     private final Logger LOGGER = LoggerFactory.getLogger(PlayerDataSocket.class);
-    private final int UPDATE_INTERVAL = 4; // milliseconds
+    private final int UPDATE_INTERVAL = 12; // milliseconds
+    private final int NUM_ENTITES = 300;
 
     @Autowired
     private SimpMessagingTemplate template;
@@ -49,7 +52,8 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
         try {
             JSONObject payload = new JSONObject(msg.getPayload());
             String playerId = msg.getPlayerId();
-            Player p;
+            Player player;
+            Entity entity;
 
             switch (msg.getType()) {
                 case "JOIN":
@@ -62,15 +66,18 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
                     removePlayer((Player) playerDataObjects.getPlayers().get(playerId));
                     break;
                 case "PLAYER_MOVEMENT":
-                    if (payload == null) return;
-                    p = (Player) playerDataObjects.getPlayers().get(playerId);
-                    p.updatePlayerData(payload);
+                    player = (Player) playerDataObjects.getPlayers().get(playerId);
+                    if (payload == null || player == null) return;
+                    player.updatePlayerData(payload);
                     break;
                 case "ENTITIES":
-                    p = (Player) playerDataObjects.getPlayers().get(playerId);
-
+                    player = (Player) playerDataObjects.getPlayers().get(playerId);
+                    entity = (Entity) getPlayerDataObjects().getEntities().get(payload.getString("id"));
+                    getPlayerDataObjects().getEntities().remove(entity.getId());
+                    player.incrementScore(entity.getScoreValue());
+                    getPlayerDataObjects().getScoreChange().put(playerId, player);
+                    notifyPlayerListObservers();
                     fillEntities();
-                    // TODO ???
                     break;
             }
         } catch (JSONException e) {
@@ -99,11 +106,21 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
         for (Object key : playerDataObjects.getPlayers().keySet()) {
             Player player = (Player) playerDataObjects.getPlayers().get(key);
             LocalDateTime playerDataRecency = player.getPayloadRecency();
-            if (playerDataRecency.isBefore(LocalDateTime.now().minusSeconds(3))) {
+            if (playerDataRecency.isBefore(LocalDateTime.now().minusSeconds(30))) {
                 System.out.println("Culling player: " + player.getUserName() + "\tId: " + player.getUserId());
                 removePlayer(player);
             }
         }
+    }
+
+    @Scheduled(fixedRate = 40b00)
+    public void refreshEntities() {
+        for (Object key : playerDataObjects.getEntities().keySet()) {
+            if (Math.random() > 0.5) {
+                playerDataObjects.getEntities().remove(key);
+            }
+        }
+        fillEntities();
     }
 
     public ArrayList<PlayerData> getAllPlayerData() {
@@ -177,7 +194,7 @@ public class PlayerDataSocket implements PlayerListSubject, EntityListSubject {
     }
 
     public void fillEntities() {
-        int numToAdd = 100 - playerDataObjects.getEntities().size();
+        int numToAdd = NUM_ENTITES - playerDataObjects.getEntities().size();
         for (int i = 0; i < numToAdd; i++) {
             Entity e = new Entity();
             playerDataObjects.getEntities().put(e.getId(), e);

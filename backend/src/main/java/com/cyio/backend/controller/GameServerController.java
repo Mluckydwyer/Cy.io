@@ -31,13 +31,15 @@ public class GameServerController {
     @PostConstruct
     public void init() {
         //generateDummyServer();
+        Game game = new Game();
+        gameServer.getGame().setTitle("Cygar.io");
     }
 
     private void generateDummyServer() {
         String dummyGameId = "123e4567-e89b-12d3-a456-426655440000";
         String dummyCreatorId = "999e4567-e89b-12d3-a456-426655440000";
         Game dummyGame = new Game("Cygar.io", dummyGameId, dummyCreatorId);
-        gameServer.changeGame(dummyGame);
+        gameServer.setGame(dummyGame);
     }
 
     public Map<String, String> join(String serverId) {

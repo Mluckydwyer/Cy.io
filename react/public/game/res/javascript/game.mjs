@@ -9,7 +9,7 @@ let canvas; // HTML canvas
 let g; // canvas graphics object
 const framerate = 40;
 
-const serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
+let serverUrl = window.location.protocol + "//" + window.location.hostname + ":8080";
 // const serverUrl = "http://coms-309-nv-4.misc.iastate.edu:8081"; // Dev server for testing
 
 //export let clientPlayer;
@@ -66,7 +66,7 @@ function onPlayClick() {
 
             setTimeout(function () {
                 setInterval(run, 1000 / framerate); // Set game clock tick for logic and drawing
-                setInterval(sendPlayerData, 10); // Send player data to server in milliseconds between send
+                setInterval(sendPlayerData, 1000 / framerate); // Send player data to server in milliseconds between send
                 document.getElementById("leaderboard").classList.remove("hide");
                 controller.enable();
             }, 1000);
@@ -110,6 +110,7 @@ function parsePlayerMovement(playerId, payload) {
         otherPlayer.mover.targetY = parseFloat(payload.targetY);
         otherPlayer.mover.speed = parseInt(payload.speed);
         otherPlayer.mover.size = parseInt(payload.size);
+        otherPlayer.score = parseInt(payload.score);
         otherPlayer.color = payload.color;
         otherPlayer.name = payload.name;
         otherPlayer.lastUpdate = new Date().getTime();
@@ -241,7 +242,8 @@ function draw() {
 
     // Draw entities
     for (let i = 0; i < entities.length; i++) {
-        entities[i].draw(g);
+        let e = entities[i];
+        if (e.xPos - e.size < canvas.width && e.yPos - e.size < canvas.height) e.draw(g);
     }
 
     // Draw players
@@ -263,9 +265,10 @@ function movePlayers() {
 // Check for collisions
 function checkEntityCollisions() {
     let player = getClientPlayer();
-    for (let index in entities) {
-        let entity = entities[index];
-        if (player.mover.isTouching(entity.xPos, entity.yPos)) ;
+    player.mover.checkPlayerCollisions(entities, players);
+    for (let index in player.mover.collisions) {
+        let object = player.mover.collisions[index];
+        if (!player.perviousInteractions.includes(object.id)) sendEntityUpdate(object);
     }
 }
 
@@ -311,6 +314,7 @@ function resizeCanvas() {
 
 export function updateLeaderboard(leaders) {
     let json = JSON.parse(leaders); // parse leaderboard message
+    let formatter = new Intl.NumberFormat();
 
     // Clear leaderboard
     let lb = document.getElementById("lb-list");
@@ -339,7 +343,7 @@ export function updateLeaderboard(leaders) {
 
         let leaderScore = document.createElement("span");
         leaderScore.classList.add("l-score");
-        leaderScore.innerText = leader.score;
+        leaderScore.innerText = formatter.format(parseInt(leader.score));
         leaderDiv.appendChild(leaderScore);
     }
 }
@@ -372,7 +376,6 @@ export function toggleChat() {
 }
 
 export function toggleDarkMode() {
-
     controller.darkmode = !controller.darkmode;
 }
 
@@ -398,6 +401,13 @@ export function sendChat() {
     let chatbox = document.getElementById("chat-box");
     chatSocket.sendChatMessage(getClientPlayer().name, chatbox.value);
     chatbox.value = "";
+}
+
+function sendEntityUpdate(entity) {
+    let clientPlayer = getClientPlayer();
+    playerDataSocket.sendPlayerDataMessage("ENTITIES", clientPlayer, entity);
+    clientPlayer.perviousInteractions.push(entity.id);
+    clientPlayer.score += entity.scoreValue;
 }
 
 function getUsername() {

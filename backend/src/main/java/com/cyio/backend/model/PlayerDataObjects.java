@@ -12,6 +12,19 @@ public class PlayerDataObjects {
     private HashMap<String, Player> players = new HashMap<String, Player>();
     private HashMap<String, Player> justJoined = new HashMap<String, Player>();
     private HashMap<String, Player> justLeft = new HashMap<String, Player>();
+    private HashMap<String, Player> scoreChange = new HashMap<String, Player>();
+
+    private ArrayList<PlayerListObserver> playerListObservers = new ArrayList<>();
+    private ArrayList<EntityListObserver> entityListObservers = new ArrayList<>();
+
+    public HashMap<String, Player> getScoreChange() {
+        return scoreChange;
+    }
+
+    public void setScoreChange(HashMap<String, Player> scoreChange) {
+        this.scoreChange = scoreChange;
+    }
+
     private HashMap<String, Entity> entities = new HashMap<String, Entity>();
 
     public HashMap getJustJoined() {
@@ -61,8 +74,4 @@ public class PlayerDataObjects {
     public void setEntityListObservers(ArrayList<EntityListObserver> entityListObservers) {
         this.entityListObservers = entityListObservers;
     }
-
-    private ArrayList<PlayerListObserver> playerListObservers = new ArrayList<>();
-    private ArrayList<EntityListObserver> entityListObservers = new ArrayList<>();
-
 }

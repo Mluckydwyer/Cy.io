@@ -9,8 +9,10 @@ export function Player() {
     let name = "";
     let playerId = "";
     let color = "";
+    let score = 0;
     let isClientPlayer = false;
     let lastUpdate;
+    let perviousInterations = [];
 
     this.init = function (config=null, loadConfig=false, isClientPlayer=false) {
         this.mover = new Mover().init();
@@ -19,6 +21,8 @@ export function Player() {
         this.color = this.generateRandomColor();
         this.isClientPlayer = isClientPlayer;
         lastUpdate = new Date().getTime();
+        this.perviousInteractions = [];
+        this.score = 0;
         if (loadConfig) this.config(config);
         return this;
     };
@@ -32,13 +36,20 @@ export function Player() {
     // Draw the player TODO allow more than circles
     this.draw = function(g) {
         // console.log("Name: " + this.name + " X: " + this.mover.xPos + " Y: " + this.mover.yPos + " R: " + this.mover.size);
+        this.mover.radiusOffset = this.mover.size + 3 * Math.log(this.score + 1);
         g.beginPath(); // Draw a path that is an unfilled circle
-        g.arc(this.mover.xPos, this.mover.yPos, this.mover.size, 0, 2 * Math.PI, false);
+        g.arc(this.mover.xPos, this.mover.yPos, this.mover.radiusOffset + this.mover.size, 0, 2 * Math.PI, false);
         g.fillStyle = this.color; // Fill it with color
         g.fill();
         g.lineWidth = 1;
-        g.strokeStyle = '#333'; // Have an outline of dark green
+        g.strokeStyle = '#333'; // Have an outline of dark grey
         g.stroke();
+        g.font = "22px Lucida Console";
+        // g.font = "35px DejaVu Sans Mono";
+        g.textAlign = "center";
+        g.fillStyle = "#4bcb2b";
+        g.fillText(this.name, this.mover.xPos, this.mover.yPos + 5);
+        // g.fillText(this.name, this.mover.xPos, this.mover.yPos - this.mover.size - 15);
     };
 
     // Generate a unique UUID for the playerId

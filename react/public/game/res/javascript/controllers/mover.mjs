@@ -10,7 +10,9 @@ function Mover() {
     this.mag = 0;
     this.speed = 5;
     this.size = 0;
+    this.radiusOffset = 0;
     this.keys = [];
+    this.collisions = [];
 
     this.mouseDeadzone = 5;
     this.expMovement = false; // TODO Make enum
@@ -96,15 +98,23 @@ function Mover() {
     this.move = function () {
         this.xPos += this.targetX * this.speed;
         this.yPos += this.targetY * this.speed;
-
     };
 
-    this.checkPlayerCollisions = function () {
-        // TODO
+    this.checkPlayerCollisions = function (entities, players) {
+        for (let i = 0; i < entities.length; i++) {
+            let entity = entities[i];
+            if (this.isColliding(this.xPos, this.yPos, this.size, entity.xPos, entity.yPos, entity.size, this.radiusOffset)) this.collisions.push(entity);
+        }
+        // TODO ADD PLAYER COLLISION DETECTION
     };
 
     this.isTouching = function(xPos, yPos) {
-        return (xPos < this.xPos + this.size && xPos > this.xPos - this.size) && (xPos < this.xPos + this.size && xPos > this.xPos - this.size);
+        //return (xPos < this.xPos + this.size && xPos > this.xPos - this.size) && (xPos < this.xPos + this.size && xPos > this.xPos - this.size);
+        return this.isColliding(xPos, yPos, 0, this.xPos, this.yPos, this.size);
+    };
+
+    this.isColliding = function (xPos1, yPos1, size1, xPos2, yPos2, size2, sizeOffset=0) {
+        return Math.sqrt(Math.pow(xPos1 - xPos2, 2) + Math.pow(yPos1 - yPos2, 2)) <= size1 + size2 + sizeOffset;
     };
 
     // Handles Keyboard input
