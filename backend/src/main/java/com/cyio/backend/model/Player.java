@@ -16,6 +16,10 @@ public class Player {
     private PlayerData playerData;
     private LocalDateTime payloadRecency;
 
+    public Player(String id) {
+        this.userId = id;
+    }
+
     public Player(String userName, String playerId){
         this(playerId);
         setUserName(userName);
@@ -49,6 +53,14 @@ public class Player {
         updatePlayerData(payloadMap);
     }
 
+    public void incrementScore(int scoreValue) {
+        setScore(getScore() + scoreValue);
+    }
+
+    public void decrementScore(int scoreValue) {
+        setScore(getScore() - scoreValue);
+    }
+
     static class PlayerComparater implements Comparator<Player> {
         public int compare(Player p1, Player p2){
             int score1 = p1.getScore();
@@ -63,10 +75,6 @@ public class Player {
 
     public void setPayloadRecency(LocalDateTime payloadRecency) {
         this.payloadRecency = payloadRecency;
-    }
-
-    public Player(String id) {
-        this.userId = id;
     }
 
     public void setUserId(String userId) {

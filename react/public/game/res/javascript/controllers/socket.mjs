@@ -58,7 +58,7 @@ export function Socket() {
         this.subscriptions.push(this.socket.subscribe(endpoint, onMessage, {}));
     };
 
-    this.sendPlayerDataMessage = function (type, player) {
+    this.sendPlayerDataMessage = function (type, player, entity=null) {
         let msg = {
             type: type,
             playerId: player.playerId,
@@ -85,8 +85,7 @@ export function Socket() {
                 };
                 break;
             case "ENTITIES":
-                msg.payload = {username: player.name};
-                // TODO ???
+                msg.payload = {id: entity.id};
                 break;
         }
 

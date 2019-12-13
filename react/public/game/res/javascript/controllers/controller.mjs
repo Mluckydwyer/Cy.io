@@ -1,4 +1,4 @@
-import {toggleChat, sendChat, toggleMovementStyle} from "../game.mjs";
+import {toggleChat, sendChat, toggleMovementStyle, toggleDarkMode} from "../game.mjs";
 export { Controller };
 
 function Controller() {
@@ -19,6 +19,7 @@ function Controller() {
     this.mouseEnabled = false;
     this.keyboardEnabled = false;
     this.chatShown = false;
+    this.darkmode = false;
 
     this.init = function (config, canvas, enable) {
         this.config(config);
@@ -125,8 +126,12 @@ function Controller() {
                     break;
                 case 84: // 'T' Key
                     toggleChat();
+                    break;
                 case 77: // 'M' Key
                     toggleMovementStyle();
+                    break;
+                case 66: // 'B' Key
+                    toggleDarkMode();
                     break;
             }
 

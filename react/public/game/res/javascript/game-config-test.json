@@ -7,7 +7,7 @@
   "players": {
     "shape": {
       "playerShape": "circle",
-      "playerSize": 30,
+      "playerSize": 35,
       "playerColor": "blue",
       "playerOutline": "#003300",
       "enemyShape": "circle",
