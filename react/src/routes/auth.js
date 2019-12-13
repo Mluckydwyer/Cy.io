@@ -12,11 +12,17 @@ function loginCheck() {
     }
     else return false;
 }
+function userCheck(){
+    if(localStorage.getItem("info")===null) {
+        return {userName:"", gamesOwned:""};
+    }
+    else return localStorage.getItem("info");
+}
 class InfoProvider extends Component {
     constructor(props){
         super(props);
         this.state = {
-            user : JSON.parse(localStorage.getItem("info")),
+            user : userCheck(),
             isLoggedIn: loginCheck(),
         };
         this.setTokens = this.setTokens.bind(this);

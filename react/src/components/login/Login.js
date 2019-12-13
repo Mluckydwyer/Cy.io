@@ -6,6 +6,8 @@ import {AuthContext} from "../../routes/auth.js";
 function Login(props){
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState("");
     
     const info = useContext(AuthContext);
     
@@ -46,7 +48,8 @@ function Login(props){
             console.log(info.state);
             info.setLogin(true);
             return data;
-        });
+        })
+            .catch(error => setError(error));
         console.log(localStorage.getItem("token"));
       
     }
@@ -55,10 +58,13 @@ function Login(props){
         info.userInfo();
         return <Redirect to="/user" />;
     }   
-    
+    if(error && !message){
+        setMessage("Incorrect username or password");
+    }
         return (
             <div>
                 {/*<form onSubmit={loginRequest}>*/}
+                <h2>{message}</h2>
                     <label>Username
                         <input type="text" name = "Username" value={userName} onChange={handleChangeUser}/>
                     </label>

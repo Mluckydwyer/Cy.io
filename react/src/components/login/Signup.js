@@ -7,7 +7,8 @@ function Signup(){
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState("");
     
     function handleChangeUser(event){
         setUserName(event.target.value);
@@ -47,15 +48,21 @@ function Signup(){
             localStorage.setItem("success",JSON.stringify(data));
             setSignup(true);
             return data;
-        }).then(console.log);
+        })
+            .catch(error => setError(error));
         console.log(localStorage.getItem("success"));
     }
     
     if(signup){
+        localStorage.removeItem("success");
         return <Redirect to="/" />;
+    }
+    if(error && !message){
+        setMessage("That email already has associated account");
     }
     return (
         <div>
+            <h2>{message}</h2>
             <form onSubmit={signupRequest}>
                 <label>E-mail
                     <input type="email" name="Email" value={email} onChange={handleChangeEmail} />
