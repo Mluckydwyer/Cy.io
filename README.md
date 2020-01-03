@@ -4,12 +4,6 @@
 
 ### Personal Contributions (Matthew Dwyer)
   My personal (Matthew Dwyer) responsibilities were on the frontend game engine written in JavaScript and the backend server hosting capabilities written in Java using the Spring Boot framework. The entirety of the frontend game engine was my own work, along with roughly 1/3 - 1/2 of the backend server code, specifically any part relating to server-client communications or API relating to server connections. I also contributed the initial layout of the homepage prior to being converted to React modules and collaborated to get both realtime chat and notification WebSockets working in the Android application using ScokJS and STOMP. Finally, I also created the entirety of the CD/CI pipeline that automatically deployed both the front and backend code to both production and development environments set up on our backend server set up by myself (Project originally hosted on GitLab).
-  
-  
-### Disclaimers
-  - This project was originally hosted on GitLab, thus not all branches and contributors were properly copied when moved ot GitHub.
-  - One contributor (Quinn Strum) is not credited with their work in this project despite spearheading the Android application development.
-  - CD/CI was implemented and all phases working properly running tests, building, and deploying to both dev and prod environments while hosted in GitLab.
 
 
 ### Final Deliverables
@@ -17,9 +11,6 @@
 - Customizable in-browser real-time game engine capable of multiple WebSocket connections and retrieving game data using REST APIs (JavaScript)
 - Backend server that managed database connections and updates over REST APIs, WebSockets with all connected clients, and OAuth2 authentification and user login and creation (Spring Boot - Java)
 - Android app that allowed users to sign in, chat with players in-game, display user data, and show live game leaderboards (Android - Java)
-- Lines contribuated as stated by GitHub (in the colaborators menu) are inflated (as I personally did not make over 11 million changes). This is most likely due to an inital .gitignore issue we had that would push chages made to the node_modules directoy when building the React frontend, thus creating so many addtions and deletions. That said, this issue persisted for all colaberators, thus ratios are overall consistent. I have included below a screenshot from git lab to try and better display group contributions thoughout the duration of the project.
-
-![](https://raw.githubusercontent.com/Mluckydwyer/Cy.io/master/GitLab%20Contributions.png)
 
 
 ### Major Features
@@ -27,7 +18,16 @@
 - Realtime player data, leaderboard, chat, and notification WebSockets between multiple clients
 - backend REST API capable of user authentification and creation, game management, server management, and admin actions
 - 20+ Unit tests covering the frontend game engine, backend management, and Android code.
-- Documentation for all parts of the project.
+- Documentation for all parts of the project [Link](https://github.com/Mluckydwyer/Cy.io/tree/master/react/public/docs).
+
+
+### Disclaimers
+  - This project was originally hosted on GitLab, thus not all branches and contributors were properly copied when moved ot GitHub.
+  - One contributor (Quinn Strum) is not credited with their work in this project despite spearheading the Android application development.
+  - CD/CI was implemented and all phases working properly running tests, building, and deploying to both dev and prod environments while hosted in GitLab.
+  - Lines contribuated as stated by GitHub (in the colaborators menu) are inflated (as I personally did not make over 11 million changes). This is most likely due to an inital .gitignore issue we had that would push chages made to the node_modules directoy when building the React frontend, thus creating so many addtions and deletions. That said, this issue persisted for all colaberators, thus ratios are overall consistent. I have included below a screenshot from git lab to try and better display group contributions thoughout the duration of the project.
+
+![](https://raw.githubusercontent.com/Mluckydwyer/Cy.io/master/GitLab%20Contributions.png)
 
 
 ### Project Missteps
