@@ -17,6 +17,9 @@
 - Customizable in-browser real-time game engine capable of multiple WebSocket connections and retrieving game data using REST APIs (JavaScript)
 - Backend server that managed database connections and updates over REST APIs, WebSockets with all connected clients, and OAuth2 authentification and user login and creation (Spring Boot - Java)
 - Android app that allowed users to sign in, chat with players in-game, display user data, and show live game leaderboards (Android - Java)
+- Lines contribuated as stated by GitHub (in the colaborators menu) are inflated (as I personally did not make over 11 million changes). This is most likely due to an inital .gitignore issue we had that would push chages made to the node_modules directoy when building the React frontend, thus creating so many addtions and deletions. That said, this issue persisted for all colaberators, thus ratios are overall consistent. I have included below a screenshot from git lab to try and better display group contributions thoughout the duration of the project.
+
+![](https://raw.githubusercontent.com/Mluckydwyer/Cy.io/master/GitLab%20Contributions.png)
 
 
 ### Major Features
