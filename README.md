@@ -1,13 +1,16 @@
 # Cy.io io Game framework [Group NV_4] COM S 309 ISU
   This project was the product of a semester-long group project for the Computer Science 309 course at Iowa State University. Out team consisted of myself and three other team members with a range of prior programming experiences. As stated below, the original concept was to allow anyone to customize and create online games with intuitive configuration files and images they would supply. That game would then be hosted on our platform, abstracting any programming and hosting needs away from the user. The final product that we completed did not ultimately live up to the intended initial dream, although each team member contributed in various ways in accordance with their skill level.
 
+
 ### Personal Contributions (Matthew Dwyer)
   My personal (Matthew Dwyer) responsibilities were on the frontend game engine written in JavaScript and the backend server hosting capabilities written in Java using the Spring Boot framework. The entirety of the frontend game engine was my own work, along with roughly 1/3 - 1/2 of the backend server code, specifically any part relating to server-client communications or API relating to server connections. I also contributed the initial layout of the homepage prior to being converted to React modules and collaborated to get both realtime chat and notification WebSockets working in the Android application using ScokJS and STOMP. Finally, I also created the entirety of the CD/CI pipeline that automatically deployed both the front and backend code to both production and development environments set up on our backend server set up by myself (Project originally hosted on GitLab).
+  
   
 ### Disclaimers
   - This project was originally hosted on GitLab, thus not all branches and contributors were properly copied when moved ot GitHub.
   - One contributor (Quinn Strum) is not credited with their work in this project despite spearheading the Android application development.
   - CD/CI was implemented and all phases working properly running tests, building, and deploying to both dev and prod environments while hosted in GitLab.
+
 
 ### Final Deliverables
 - Basic home landing page connected to the backend game database using REST APIs that displays games that can be played (REACT + CSS)
@@ -15,12 +18,14 @@
 - Backend server that managed database connections and updates over REST APIs, WebSockets with all connected clients, and OAuth2 authentification and user login and creation (Spring Boot - Java)
 - Android app that allowed users to sign in, chat with players in-game, display user data, and show live game leaderboards (Android - Java)
 
+
 ### Major Features
 - Realtime game engine capable of adapting basic game features based on loaded JSON config file
 - Realtime player data, leaderboard, chat, and notification WebSockets between multiple clients
 - backend REST API capable of user authentification and creation, game management, server management, and admin actions
 - 20+ Unit tests covering the frontend game engine, backend management, and Android code.
 - Documentation for all parts of the project.
+
 
 ### Project Missteps
   While we are very proud of what we were able to accomplish, looking back, there would be a few changes that would be made. Primarily, we would have reduced our project scope. Initially, our group members slightly overestimated the familiarity some members of our team had with various technologies and frameworks. This lead to parts of our project obe left ina an incompleted state, and team members having to deviate from their predefined tasks to complete other parts of the project. Overall, one of the biggest takeaways from this project was the continued importance of team communication and collaboration.
@@ -32,9 +37,11 @@
 - The backend server only currently supports running one server instance at a time.
 - The Android application UI is very basic and functionality is overall in a proof of concept state.
 
+
 ### Final Project Poster
 
-![Project Poster]()
+![Project Poster](https://raw.githubusercontent.com/Mluckydwyer/Cy.io/master/Cy.io%20-%20Poster.png)
+
 
 ### Initial Proposal
 
@@ -43,7 +50,7 @@
 
 ### Team Photo
 
-![Group_Picture.jpg](https://canvas.iastate.edu/groups/99987/files/8597068/preview)
+![](https://raw.githubusercontent.com/Mluckydwyer/Cy.io/master/Group_Picture.jpg)
 
 Members left to right: Cole Martin, Matt Dwyer, Tom "Jidong" Sun, Quinn Sturm.
 
