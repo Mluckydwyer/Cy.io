@@ -65,9 +65,6 @@ Members left to right: Cole Martin, Matt Dwyer, Tom "Jidong" Sun, Quinn Sturm.
         *   Senior in Com S
         *   Proficient in Java, C, C++, and JavaScript 
         *   One Internship (JavaScript, React, Git)
-    *   Contact Info:
-        *   Email: [colem@iastate.edu](mailto:colem@iastate.edu)
-        *   Phone: (712) 309-2429
 
 **Matt Dwyer (Test Lead):**
 
@@ -84,9 +81,6 @@ Members left to right: Cole Martin, Matt Dwyer, Tom "Jidong" Sun, Quinn Sturm.
             *   Python (Research)
             *   Machine Learning
             *   AWS
-    *   Contact Info:
-        *   Email: [dwyer@iastate.edu](mailto:dwyer@iastate.edu)
-        *   Phone: (651) 366-7677
 
 **Tom "Jidong" Sun (Repo Lead):**
 
@@ -97,9 +91,6 @@ Members left to right: Cole Martin, Matt Dwyer, Tom "Jidong" Sun, Quinn Sturm.
         *   C++ | 1 year 
         *   Python | Started 3 weeks ago 
         *   Newbie | Yes
-    *   Contact Info:
-        *   Email: [jidongs@iastate.edu](mailto:jidongs@iastate.edu)
-        *   Phone: (563) 650-9971
 
 **Quinn Sturm (Schedule Lead):**
 
@@ -107,9 +98,6 @@ Members left to right: Cole Martin, Matt Dwyer, Tom "Jidong" Sun, Quinn Sturm.
         *   Junior in Comp Sci
         *   Java | 2 Semesters | 227, 228
         *   Newbie | I switched majors last year so my programming knowledge is fairly limited.
-    *   Contact Info:
-        *   Email: [qdsturm@iastate.edu](mailto:qdsturm@iastate.edu)
-        *   Phone: (952) 440-3574
 
 ### Project 1: Cy.io
 
