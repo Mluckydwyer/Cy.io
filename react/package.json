@@ -16,7 +16,7 @@
     "jsdocs": "^1.0.0",
     "jsdom": "^15.2.0",
     "mocha": "^6.2.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.1.2",
